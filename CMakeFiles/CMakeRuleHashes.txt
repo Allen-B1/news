@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-95b58968a0dbafca5f3397b127dc97e5 com.github.allen-b1.news_valac.stamp
-3974f9aa670bfae17b75a541f6b84006 src/news.c
