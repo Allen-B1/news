@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=News
+GenericName=News
+Comment=Browse the news
+Categories=Utility;
+Exec=com.github.allen-b1.news
+Icon=application-default-icon
+Terminal=false
+Type=Application
+X-GNOME=Gettext-Domain=news
+Keywords=News;
+

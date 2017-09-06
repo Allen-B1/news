@@ -1,0 +1,7 @@
+/home/allen/Projects/news/CMakeFiles/install.dir
+/home/allen/Projects/news/CMakeFiles/list_install_components.dir
+/home/allen/Projects/news/CMakeFiles/rebuild_cache.dir
+/home/allen/Projects/news/CMakeFiles/com.github.allen-b1.news.dir
+/home/allen/Projects/news/CMakeFiles/edit_cache.dir
+/home/allen/Projects/news/CMakeFiles/install/strip.dir
+/home/allen/Projects/news/CMakeFiles/install/local.dir

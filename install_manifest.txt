@@ -1,0 +1,3 @@
+/usr/bin/com.github.allen-b1.news
+/usr/share/applications/com.github.allen-b1.news.desktop
+/usr/share/metainfo/com.github.allen-b1.news.appdata.xml
