@@ -81,8 +81,10 @@ int main (string args[]) {
     } else { 
         list = new Gtk.ListBox();
         foreach (Article article in s) {
+			var hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
             var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-            box.margin = 12;
+			hbox.add(box);
+            hbox.margin = 12;
 
             // Title
             var label = new Gtk.Label(null);
@@ -99,11 +101,13 @@ int main (string args[]) {
             //desc.set_line_wrap(true);
             box.add(desc);
 
-            var row = new Gtk.ListBoxRow();
-            
-            row.add(box);
-            Pid child_pid = 0;
+			hbox.add(new Gtk.Label(">"));
+
+            var row = new Gtk.ListBoxRow();            
+            row.add(hbox);
             row.button_press_event.connect((e) => {
+	            Pid child_pid = 0;
+
                 if(e.type == Gdk.EventType.DOUBLE_BUTTON_PRESS)
                     Process.spawn_async("/",
                         {"xdg-open", article.link},

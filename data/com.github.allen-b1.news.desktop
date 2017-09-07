@@ -2,7 +2,7 @@
 Name=News
 GenericName=News
 Comment=Browse the news
-Categories=Utility;
+Categories=Network;
 Exec=com.github.allen-b1.news
 Icon=application-default-icon
 Terminal=true
