@@ -5,7 +5,7 @@ A news viewer for elementary os
 ```bash
 git clone https://github.com/Allen-B1/news.git
 cd news
-cmake
+cmake /usr ./
 make
 sudo make install
 ```
