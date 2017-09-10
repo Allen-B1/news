@@ -1,0 +1,17 @@
+Source: news
+Section: x11
+Priority: extra
+Maintainer: Allen B <pingguo.ny@gmail.com>
+Build-Depends: cmake (>= 2.8),
+               debhelper (>= 9),
+               libgtk-3-dev,
+               valac (>= 0.16),
+               cmake-elementary,
+               debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+
+Package: news
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: News
+ This is a news viewer written in Vala using CMake build system.
