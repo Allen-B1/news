@@ -3,9 +3,9 @@ Name=News
 GenericName=News
 Comment=Browse the news
 Categories=Network;
-Exec=firefox https://google.com
+Exec=com.github.allen-b1.news
 Icon=application-default-icon
-Terminal=true
+Terminal=false
 Type=Application
-X-GNOME=Gettext-Domain=news
+X-GNOME-Gettext-Domain=hello-again
 Keywords=News;
