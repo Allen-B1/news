@@ -1,4 +1,4 @@
-Source: news
+Source: com.github.allen-b1.news
 Section: x11
 Priority: extra
 Maintainer: Allen B <pingguo.ny@gmail.com>
@@ -10,7 +10,7 @@ Build-Depends: cmake (>= 2.8),
                debhelper (>= 8.0.0)
 Standards-Version: 3.9.3
 
-Package: news
+Package: com.github.allen-b1.news
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: News
