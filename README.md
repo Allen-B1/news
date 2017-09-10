@@ -20,6 +20,8 @@ sudo apt-get install valac
 
 git clone https://github.com/allen-b1/news.git
 cd news/src
-valac news.vala --pkg gtk+-3.0
-./news
+valac news.vala --pkg gtk+-3.0 -o com.github.allen-b1.news
+sudo mv com.github.allen-b1.news /usr/bin
+cd ..
+cp data/com.github.allen-b1.news.desktop ~/Desktop
 ```
