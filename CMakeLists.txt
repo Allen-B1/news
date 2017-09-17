@@ -12,7 +12,7 @@ set (PKGDATADIR "${DATADIR}/com.github.allen-b1.news")
 set (EXEC_NAME "com.github.allen-b1.news")
 set (RELEASE_NAME "Browse the news")
 set (COMMENT "Browse the news")
-set (VERSION "1.0.5")
+set (VERSION "1.0")
 set (VERSION_INFO "Stuff")
 
 find_package(PkgConfig)
