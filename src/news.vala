@@ -1,10 +1,11 @@
 struct Article {
     public string title;
-    public string text;
+    public string? text;
     public string link;
 }
 
 string? rss_url = null; // if null, defaults to google news
+Gtk.ListBox list = null;
 
 Article[]? fetch_news() {
     File news_page;
@@ -49,7 +50,7 @@ Article[]? fetch_news() {
         var uEndIndex = str.index_of("</", uStartIndex);
         var uS = str[uStartIndex:uEndIndex];
 
-        string desc = "";
+        string? desc = "";
 
         if(rss_url == null) {
             // Scrape description
@@ -63,9 +64,7 @@ Article[]? fetch_news() {
             desc = dS.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ").replace("<b>", "").replace("&#39;", "'");  
             desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
         } else {
-            var dStartIndex = str.index_of("<description>", itemIndex) + "<description>".length;
-            var dEndIndex = str.index_of("</", dStartIndex);
-            desc = str.slice(dStartIndex, dEndIndex).replace("&quot;", "\"").replace("&#39;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+            desc = null;
         }
 
 
@@ -79,11 +78,56 @@ Article[]? fetch_news() {
     return articles;
 }
 
+void update_list() {
+    Article[] s = fetch_news();
+    list.forall ((element) => list.remove (element));
+
+    foreach (Article article in s) {
+        // TODO: Change to GtkSidebar
+        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        box.margin = 12;
+
+        // Title
+        var label = new Gtk.Label(null);
+        label.set_markup("<b>" + article.title + "</b>");
+        label.set_line_wrap(true);
+        box.add(label);
+
+        if(article.text != null) {
+            // Description
+            var desc = new Gtk.TextView();
+            desc.set_wrap_mode (Gtk.WrapMode.WORD);
+            desc.buffer.text = article.text;
+            desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
+            desc.editable = false;
+            box.add(desc);
+        }
+
+        var row = new Gtk.ListBoxRow();            
+        row.add(box);
+        row.button_press_event.connect((e) => {
+            Pid child_pid = 0;
+
+            if(e.type == Gdk.EventType.DOUBLE_BUTTON_PRESS)
+                Process.spawn_async("/",
+                    {"xdg-open", article.link},
+                    Environ.get(),
+                    SpawnFlags.SEARCH_PATH,
+                    null,
+                    out child_pid
+                );              
+
+            return false;
+        });
+        row.show_all();
+
+        list.add(row);
+        stdout.printf("Added row: %s\n", article.title);
+    }
+}
+
 int main (string args[]) {
     Gtk.init(ref args);
-
-    Article[] s = fetch_news();
-    stdout.printf("Hi\n");
 
     var window = new Gtk.Window();
     window.title = "News";
@@ -94,51 +138,9 @@ int main (string args[]) {
     var root = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
     root.pack_start(News.create_toolbar(window), false, false, 0);
 
-    Gtk.ListBox list = null;
-    
-    if(s == null) {
-        root.add(new Gtk.Label("An error occured"));
-    } else { 
+    { 
         list = new Gtk.ListBox();
-        foreach (Article article in s) {
-            // TODO: Change to GtkSidebar
-            var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-            box.margin = 12;
-
-            // Title
-            var label = new Gtk.Label(null);
-            label.set_markup("<b>" + article.title + "</b>");
-            label.set_line_wrap(true);
-            box.add(label);
-
-            // Description
-            var desc = new Gtk.TextView();
-            desc.set_wrap_mode (Gtk.WrapMode.WORD);
-            desc.buffer.text = article.text;
-            desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
-            desc.editable = false;
-            //desc.set_line_wrap(true);
-            box.add(desc);
-
-            var row = new Gtk.ListBoxRow();            
-            row.add(box);
-            row.button_press_event.connect((e) => {
-	            Pid child_pid = 0;
-
-                if(e.type == Gdk.EventType.DOUBLE_BUTTON_PRESS)
-                    Process.spawn_async("/",
-                        {"xdg-open", article.link},
-                        Environ.get(),
-                        SpawnFlags.SEARCH_PATH,
-                        null,
-                        out child_pid
-                    );              
-
-                return false;
-            });
-
-            list.add(row);
-        }
+        update_list();
         root.add(list);
     }
     window.add(root);
