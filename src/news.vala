@@ -83,7 +83,6 @@ void update_list() {
     list.forall ((element) => list.remove (element));
 
     foreach (Article article in s) {
-        // TODO: Change to GtkSidebar
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         box.margin = 12;
 
@@ -105,17 +104,15 @@ void update_list() {
 
         var row = new Gtk.ListBoxRow();            
         row.add(box);
-        row.button_press_event.connect((e) => {
+        row.clicked.connect((e) => {
             Pid child_pid = 0;
-
-            if(e.type == Gdk.EventType.DOUBLE_BUTTON_PRESS)
-                Process.spawn_async("/",
+            Process.spawn_async("/",
                     {"xdg-open", article.link},
                     Environ.get(),
                     SpawnFlags.SEARCH_PATH,
                     null,
                     out child_pid
-                );              
+            );         
 
             return false;
         });
