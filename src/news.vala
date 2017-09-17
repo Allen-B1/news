@@ -14,10 +14,10 @@ Gtk.Notebook notebook;
 
 RssFeed? fetch_news(string? url) {
     File news_page;
-        if(url != null)
-            news_page = File.new_for_uri(url);
-        else
-            news_page = File.new_for_uri("https://news.google.com/news/?ned=us&hl=en&output=rss");
+    if(url != null)
+        news_page = File.new_for_uri(url);
+    else
+        news_page = File.new_for_uri("https://news.google.com/news/?ned=us&hl=en&output=rss");
     
     DataInputStream data_stream = null;
     try {
@@ -87,7 +87,7 @@ RssFeed? fetch_news(string? url) {
     var titleEndIndex = str.index_of("</title>", titleStartIndex);
 
     return RssFeed() {
-        title = str[titleStartIndex:titleEndIndex],
+        title = url == null ? "Google News" : str[titleStartIndex:titleEndIndex],
         data = articles
     };
 }
