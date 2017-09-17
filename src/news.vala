@@ -6,18 +6,16 @@ struct RssItem {
 
 struct RssFeed {
     public string title;
-    public string text;
     public RssItem[] data;
 }
 
-string? rss_url = null; // if null, defaults to google news
-Gtk.ListBox current_list; // list changes, reference to current list
-Gtk.ScrolledWindow list_scroll; // For scrolling
+Gtk.Window window;
+Gtk.Notebook notebook;
 
-RssFeed? fetch_news() {
+RssFeed? fetch_news(string? url) {
     File news_page;
-        if(rss_url != null)
-            news_page = File.new_for_uri(rss_url);
+        if(url != null)
+            news_page = File.new_for_uri(url);
         else
             news_page = File.new_for_uri("https://news.google.com/news/?ned=us&hl=en&output=rss");
     
@@ -54,14 +52,14 @@ RssFeed? fetch_news() {
         
         // Find link;
         var uStartIndex = str.index_of("<link>", itemIndex) + "<link>".length;
-        if(rss_url == null)
+        if(url == null)
             uStartIndex = str.index_of("url=", uStartIndex) + 4;
         var uEndIndex = str.index_of("</", uStartIndex);
         var uS = str[uStartIndex:uEndIndex];
 
         string? desc = "";
 
-        if(rss_url == null) {
+        if(url == null) {
             // Scrape description
             var dStartIndex = str.index_of("<description>", itemIndex) + "<description>".length;
             var dEndIndex = str.index_of("</", dStartIndex);
@@ -94,71 +92,10 @@ RssFeed? fetch_news() {
     };
 }
 
-Gtk.ListBox? update_list(Gtk.Window window) {
-    RssFeed? s = fetch_news();
-
-    if(s == null) {
-        window.destroy();
-
-        var dialog = new Gtk.MessageDialog.with_markup(null, Gtk.DialogFlags.MODAL,
-            Gtk.MessageType.ERROR,
-            Gtk.ButtonsType.CLOSE,
-            "Something went wrong.");
-        dialog.title = "Error";
-        dialog.run();
-        dialog.destroy();
-        return null;
-    }
-
-    var list = new Gtk.ListBox();
-    list.forall ((element) => list.remove (element));
-
-    foreach (RssItem article in s.data) {
-        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        box.margin = 12;
-
-        // Title
-        var label = new Gtk.Label(null);
-        label.set_markup("<b>" + article.title + "</b>");
-        label.set_line_wrap(true);
-        box.add(label);
-
-        if(article.text != null) {
-            // Description
-            var desc = new Gtk.Label(article.text);
-            desc.set_line_wrap (true);
-            desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
-            box.add(desc);
-        }
-
-        var row = new Gtk.ListBoxRow();
-        row.add(box);
-
-        list.add(row);
-    }
-
-    list.row_selected.connect((row) => {
-        Pid child_pid = 0;
-        if(list.get_selected_row() != null)
-            Process.spawn_async("/",
-                {"xdg-open", s.data[list.get_selected_row().get_index()].link},
-                Environ.get(),
-                SpawnFlags.SEARCH_PATH,
-                null,
-                out child_pid
-            );   
-    });
-    list.show_all();
-
-    if(current_list != null)
-        current_list.destroy();
-    return list;
-}
-
 int main (string args[]) {
     Gtk.init(ref args);
 
-    var window = new Gtk.Window();
+    window = new Gtk.Window();
     window.title = "News";
     window.set_position(Gtk.WindowPosition.CENTER);
     window.set_default_size(950, 950);
@@ -167,14 +104,12 @@ int main (string args[]) {
     var root = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
     root.pack_start(News.create_toolbar(window), false, false, 0);
 
-    // Create listbox
-    {
-        list_scroll = new Gtk.ScrolledWindow(null, null);
-        current_list = update_list(window);
-        list_scroll.add(current_list);
+    notebook = new Gtk.Notebook();
+    root.pack_start(notebook, true, true, 0);
 
-        root.pack_start(list_scroll, true, true, 0);            
-    }
+    // Create listbox
+    News.add_page(null);
+
     window.add(root);
     window.show_all();
 
