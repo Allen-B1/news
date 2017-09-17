@@ -1,9 +1,12 @@
 # news
 A news viewer for elementary os
 
-![Screenshot](https://raw.githubusercontent.com/Allen-B1/news/master/Screenshot%20from%202017-09-09%2011.57.53.png)
+![Screenshot](screenshot.png)
 
-# Installation (on Elementary OS) (with the elementary sdk)
+# Installation
+## On elementary OS?
+Make sure that `elementary-sdk` is installed.
+
 ```bash
 git clone https://github.com/allen-b1/news.git
 cd news
@@ -11,8 +14,8 @@ cmake /usr ./
 make
 sudo make install
 ```
-## Alternate
-If the above doesn't work, try this:
+## Not on elementary OS?
+Try this:
 
 ```bash
 sudo apt-get install libgtk-3-dev
