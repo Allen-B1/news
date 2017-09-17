@@ -4,12 +4,18 @@ struct Article {
     public string link;
 }
 
-Article[] fetch_news() {
-    var youtube_page = File.new_for_uri("https://news.google.com/news/?ned=us&hl=en&output=rss");
+string? rss_url = null; // if null, defaults to google news
+
+Article[]? fetch_news() {
+    File news_page;
+        if(rss_url != null)
+            news_page = File.new_for_uri(rss_url);
+        else
+            news_page = File.new_for_uri("https://news.google.com/news/?ned=us&hl=en&output=rss");
     
     DataInputStream data_stream = null;
     try {
-        data_stream = new DataInputStream(youtube_page.read());
+        data_stream = new DataInputStream(news_page.read());
     } catch(GLib.Error err) {
         stdout.puts(err.message);
         stdout.putc('\n');
@@ -43,17 +49,27 @@ Article[] fetch_news() {
         var uEndIndex = str.index_of("</", uStartIndex);
         var uS = str[uStartIndex:uEndIndex];
 
-        // Scrape description
-        var dStartIndex = str.index_of("<description>", itemIndex) + "<description>".length;
-        var dEndIndex = str.index_of("</", dStartIndex);
-        var dS = str.slice(dStartIndex, dEndIndex).replace("&quot;", "\"").replace("&#39;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
-        
-        // Find description inside of the html table inside of the description: look at the rss feed for yourself
-        var eStartIndex = dS.index_of("</font><br><font size=\"-1\">") + "</font><br><font size=\"-1\">".length;
-        var eEndIndex = dS.index_of("</", eStartIndex);
-        var desc = dS.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ").replace("<b>", "").replace("&#39;", "'");  
-        desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
-        Article article = new Article() {
+        string desc = "";
+
+        if(rss_url == null) {
+            // Scrape description
+            var dStartIndex = str.index_of("<description>", itemIndex) + "<description>".length;
+            var dEndIndex = str.index_of("</", dStartIndex);
+            var dS = str.slice(dStartIndex, dEndIndex).replace("&quot;", "\"").replace("&#39;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+            
+            // Find description inside of the html table inside of the description: look at the rss feed for yourself
+            var eStartIndex = dS.index_of("</font><br><font size=\"-1\">") + "</font><br><font size=\"-1\">".length;
+            var eEndIndex = dS.index_of("</", eStartIndex);
+            desc = dS.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ").replace("<b>", "").replace("&#39;", "'");  
+            desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
+        } else {
+            var dStartIndex = str.index_of("<description>", itemIndex) + "<description>".length;
+            var dEndIndex = str.index_of("</", dStartIndex);
+            desc = str.slice(dStartIndex, dEndIndex).replace("&quot;", "\"").replace("&#39;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+        }
+
+
+        Article article = Article() {
             title = s,
             text = desc,
             link = uS
@@ -67,6 +83,7 @@ int main (string args[]) {
     Gtk.init(ref args);
 
     Article[] s = fetch_news();
+    stdout.printf("Hi\n");
 
     var window = new Gtk.Window();
     window.title = "News";
@@ -74,19 +91,19 @@ int main (string args[]) {
     window.set_default_size(950, 950);
     window.destroy.connect(Gtk.main_quit);
 
+    var root = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+    root.pack_start(News.create_toolbar(window), false, false, 0);
+
     Gtk.ListBox list = null;
     
     if(s == null) {
-        window.add(new Gtk.Label("An error occured"));
+        root.add(new Gtk.Label("An error occured"));
     } else { 
         list = new Gtk.ListBox();
         foreach (Article article in s) {
-            // TODO: Add hbox for arrow
-//			var hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            // TODO: Change to GtkSidebar
             var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             box.margin = 12;
-//			hbox.add(box);
-//          hbox.margin = 12;
 
             // Title
             var label = new Gtk.Label(null);
@@ -102,8 +119,6 @@ int main (string args[]) {
             desc.editable = false;
             //desc.set_line_wrap(true);
             box.add(desc);
-
-			//hbox.add(new Gtk.Label(">"));
 
             var row = new Gtk.ListBoxRow();            
             row.add(box);
@@ -124,8 +139,9 @@ int main (string args[]) {
 
             list.add(row);
         }
-        window.add(list);
+        root.add(list);
     }
+    window.add(root);
     window.show_all();
 
     window.resize(950, 950);

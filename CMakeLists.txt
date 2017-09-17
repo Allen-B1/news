@@ -27,7 +27,7 @@ ensure_vala_version("0.16" MINIMUM)
 
 include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
-    src/news.vala
+    src/news.vala src/widgets.vala
 
 PACKAGES
     gtk+-3.0
