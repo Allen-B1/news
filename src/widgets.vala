@@ -25,14 +25,16 @@ namespace News {
         }
     }
 
-    Gtk.Toolbar create_toolbar(Gtk.Window window) {
-        var toolbar = new Gtk.Toolbar();
+    Gtk.HeaderBar create_headerbar(Gtk.Window window) {
+        var headerbar = new Gtk.HeaderBar();
+        headerbar.title = "News";
+        headerbar.show_close_button = true;
   
-        var toolbar_url = new Gtk.ToolButton(new Gtk.Image.from_icon_name
+        var headerbar_url = new Gtk.ToolButton(new Gtk.Image.from_icon_name
             ("list-add",
-            Gtk.IconSize.LARGE_TOOLBAR),
+            Gtk.IconSize.SMALL_TOOLBAR),
             "RSS");
-        toolbar_url.clicked.connect(() => {
+        headerbar_url.clicked.connect(() => {
             var dialog = new Gtk.Dialog.with_buttons("Add News Source", window, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, 
                 "Done", Gtk.ResponseType.ACCEPT, 
                 "Cancel", Gtk.ResponseType.REJECT, null);
@@ -77,9 +79,9 @@ namespace News {
 
             dialog.destroy();
         });
-        toolbar.insert(toolbar_url, -1);
+        headerbar.add(headerbar_url);
       
-        return toolbar;
+        return headerbar;
     }
 
     Gtk.ScrolledWindow? create_list(RssFeed? s) {

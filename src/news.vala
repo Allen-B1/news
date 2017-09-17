@@ -100,17 +100,14 @@ int main (string args[]) {
     window.set_position(Gtk.WindowPosition.CENTER);
     window.set_default_size(950, 950);
     window.destroy.connect(Gtk.main_quit);
-
-    var root = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-    root.pack_start(News.create_toolbar(window), false, false, 0);
+    window.set_titlebar(News.create_headerbar(window));
 
     notebook = new Gtk.Notebook();
-    root.pack_start(notebook, true, true, 0);
+    window.add(notebook);
 
     // Create listbox
     News.add_page(null);
 
-    window.add(root);
     window.show_all();
 
     window.resize(950, 950);
