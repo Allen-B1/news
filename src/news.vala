@@ -1,14 +1,20 @@
-struct Article {
+struct RssItem {
     public string title;
     public string? text;
     public string link;
+}
+
+struct RssFeed {
+    public string title;
+    public string text;
+    public RssItem[] data;
 }
 
 string? rss_url = null; // if null, defaults to google news
 Gtk.ListBox current_list; // list changes, reference to current list
 Gtk.ScrolledWindow list_scroll; // For scrolling
 
-Article[]? fetch_news() {
+RssFeed? fetch_news() {
     File news_page;
         if(rss_url != null)
             news_page = File.new_for_uri(rss_url);
@@ -39,7 +45,8 @@ Article[]? fetch_news() {
     var str = text.str;
 
     int itemIndex = 0;
-    Article[] articles = new Article[0];
+    RssItem[] articles = new RssItem[0];
+
     while((itemIndex = (int)str.index_of("<item>", itemIndex + 1)) != -1) {
         var startIndex = str.index_of("<title>", itemIndex) + "<title>".length;
         var endIndex = str.index_of("</", startIndex);
@@ -70,22 +77,41 @@ Article[]? fetch_news() {
         }
 
 
-        Article article = Article() {
+        RssItem article = RssItem() {
             title = s,
             text = desc,
             link = uS
         };
         articles += article;
     }
-    return articles;
+
+    var titleStartIndex = str.index_of("<title>") + 7;
+    var titleEndIndex = str.index_of("</title>", titleStartIndex);
+
+    return RssFeed() {
+        title = str[titleStartIndex:titleEndIndex],
+        data = articles
+    };
 }
 
-Gtk.ListBox update_list() {
-    Article[] s = fetch_news();
+Gtk.ListBox? update_list(Gtk.Window window) {
+    RssFeed? s = fetch_news();
+
+    if(s == null) {
+        var dialog = new Gtk.MessageDialog.with_markup(window, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+            Gtk.MessageType.ERROR,
+            Gtk.ButtonsType.CLOSE,
+            "Something went wrong.");
+        dialog.title = "Error";
+        dialog.run();
+        dialog.destroy();
+        return null;
+    }
+
     var list = new Gtk.ListBox();
     list.forall ((element) => list.remove (element));
 
-    foreach (Article article in s) {
+    foreach (RssItem article in s.data) {
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         box.margin = 12;
 
@@ -115,7 +141,7 @@ Gtk.ListBox update_list() {
         Pid child_pid = 0;
         if(list.get_selected_row() != null)
             Process.spawn_async("/",
-                {"xdg-open", s[list.get_selected_row().get_index()].link},
+                {"xdg-open", s.data[list.get_selected_row().get_index()].link},
                 Environ.get(),
                 SpawnFlags.SEARCH_PATH,
                 null,
@@ -144,7 +170,7 @@ int main (string args[]) {
     // Create listbox
     {
         list_scroll = new Gtk.ScrolledWindow(null, null);
-        current_list = update_list();
+        current_list = update_list(window);
         list_scroll.add(current_list);
 
         root.pack_start(list_scroll, true, true, 0);            
