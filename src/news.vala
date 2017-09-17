@@ -123,11 +123,9 @@ Gtk.ListBox? update_list(Gtk.Window window) {
 
         if(article.text != null) {
             // Description
-            var desc = new Gtk.TextView();
-            desc.set_wrap_mode (Gtk.WrapMode.WORD);
-            desc.buffer.text = article.text;
+            var desc = new Gtk.Label(article.text);
+            desc.set_line_wrap (true);
             desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
-            desc.editable = false;
             box.add(desc);
         }
 
