@@ -98,7 +98,9 @@ Gtk.ListBox? update_list(Gtk.Window window) {
     RssFeed? s = fetch_news();
 
     if(s == null) {
-        var dialog = new Gtk.MessageDialog.with_markup(window, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+        window.destroy();
+
+        var dialog = new Gtk.MessageDialog.with_markup(null, Gtk.DialogFlags.MODAL,
             Gtk.MessageType.ERROR,
             Gtk.ButtonsType.CLOSE,
             "Something went wrong.");
