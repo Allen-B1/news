@@ -1,7 +1,7 @@
 # news
 A news viewer for elementary os
 
-![Screenshot](https://raw.githubusercontent.com/Allen-B1/news/master/Screenshot%20from%202017-09-09%2011.57.53.png)
+![Screenshot](screenshot.png)
 
 # Installation (on Elementary OS) (with the elementary sdk)
 ```bash
