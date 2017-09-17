@@ -5,7 +5,8 @@ struct Article {
 }
 
 string? rss_url = null; // if null, defaults to google news
-Gtk.ListBox list = null;
+Gtk.ListBox current_list; // list changes, reference to current list
+Gtk.ScrolledWindow list_scroll; // For scrolling
 
 Article[]? fetch_news() {
     File news_page;
@@ -46,7 +47,8 @@ Article[]? fetch_news() {
         
         // Find link;
         var uStartIndex = str.index_of("<link>", itemIndex) + "<link>".length;
-        uStartIndex = str.index_of("url=", uStartIndex) + 4;
+        if(rss_url == null)
+            uStartIndex = str.index_of("url=", uStartIndex) + 4;
         var uEndIndex = str.index_of("</", uStartIndex);
         var uS = str[uStartIndex:uEndIndex];
 
@@ -78,8 +80,9 @@ Article[]? fetch_news() {
     return articles;
 }
 
-void update_list() {
+Gtk.ListBox update_list() {
     Article[] s = fetch_news();
+    var list = new Gtk.ListBox();
     list.forall ((element) => list.remove (element));
 
     foreach (Article article in s) {
@@ -102,25 +105,28 @@ void update_list() {
             box.add(desc);
         }
 
-        var row = new Gtk.ListBoxRow();            
+        var row = new Gtk.ListBoxRow();
         row.add(box);
-        row.clicked.connect((e) => {
-            Pid child_pid = 0;
-            Process.spawn_async("/",
-                    {"xdg-open", article.link},
-                    Environ.get(),
-                    SpawnFlags.SEARCH_PATH,
-                    null,
-                    out child_pid
-            );         
-
-            return false;
-        });
-        row.show_all();
 
         list.add(row);
-        stdout.printf("Added row: %s\n", article.title);
     }
+
+    list.row_selected.connect((row) => {
+        Pid child_pid = 0;
+        if(list.get_selected_row() != null)
+            Process.spawn_async("/",
+                {"xdg-open", s[list.get_selected_row().get_index()].link},
+                Environ.get(),
+                SpawnFlags.SEARCH_PATH,
+                null,
+                out child_pid
+            );   
+    });
+    list.show_all();
+
+    if(current_list != null)
+        current_list.destroy();
+    return list;
 }
 
 int main (string args[]) {
@@ -135,10 +141,13 @@ int main (string args[]) {
     var root = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
     root.pack_start(News.create_toolbar(window), false, false, 0);
 
-    { 
-        list = new Gtk.ListBox();
-        update_list();
-        root.add(list);
+    // Create listbox
+    {
+        list_scroll = new Gtk.ScrolledWindow(null, null);
+        current_list = update_list();
+        list_scroll.add(current_list);
+
+        root.pack_start(list_scroll, true, true, 0);            
     }
     window.add(root);
     window.show_all();
