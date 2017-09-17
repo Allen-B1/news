@@ -11,7 +11,8 @@ set (PKGDATADIR "${DATADIR}/com.github.allen-b1.news")
 
 set (EXEC_NAME "com.github.allen-b1.news")
 set (RELEASE_NAME "Browse the news")
-set (VERSION "0.1")
+set (COMMENT "Browse the news")
+set (VERSION "1.0.5")
 set (VERSION_INFO "Stuff")
 
 find_package(PkgConfig)
@@ -38,6 +39,9 @@ install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 
 # install our .desktop file so the Applications menu will see it
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.allen-b1.news.desktop DESTINATION ${DATADIR}/applications/)
+
+# install icon
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.allen-b1.news.svg DESTINATION ${DATADIR}/icons/hicolor/128x128/apps)
 
 # install our .appdata.xml file so AppCenter will see it
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.allen-b1.news.appdata.xml DESTINATION ${DATADIR}/metainfo/)
