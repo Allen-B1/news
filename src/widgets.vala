@@ -44,14 +44,20 @@ namespace News {
 
             var google_news = new Gtk.RadioButton.with_label(null, "Google News");
             var hacker_news = new Gtk.RadioButton.with_label_from_widget(google_news, "Hacker News");
-            var other = new Gtk.RadioButton.from_widget(google_news);
-            var entry = new Gtk.Entry();
-            entry.margin = 4;
-            other.add(entry);
+            var other = new Gtk.RadioButton.with_label_from_widget(google_news, "Other");
 
             content_area.add(google_news);
             content_area.add(hacker_news);
             content_area.add(other);
+
+            var entry = new Gtk.Entry();
+            entry.margin = 4;
+            content_area.add(entry);
+
+            entry.focus_in_event.connect(() => {
+                other.active = true;
+                return true;
+            });
 
             content_area.show_all();
 
