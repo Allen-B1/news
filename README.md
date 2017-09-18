@@ -6,7 +6,8 @@ A news viewer for elementary os
 # Installation
 ## On elementary OS?
 
-<a href="https://appcenter.elementary.io/com.github.allen-b1.news"><img src="https://appcenter.elementary.io/badge.svg" alt="Get it on the AppCenter"></a>
+<!--a href="https://appcenter.elementary.io/com.github.allen-b1.news"><img src="https://appcenter.elementary.io/badge.svg" alt="Get it on the AppCenter"></a-->
+See the building instructions below.
 
 ## Not on elementary OS?
 Download [`install.sh`](https://raw.githubusercontent.com/Allen-B1/news/master/install.sh) and execute it.
