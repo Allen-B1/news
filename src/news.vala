@@ -14,10 +14,11 @@ Gtk.Notebook notebook;
 
 RssFeed? fetch_news(string? url) {
     File news_page;
-    if(url != null)
-        news_page = File.new_for_uri(url);
-    else
-        news_page = File.new_for_uri("https://news.google.com/news/?ned=us&hl=en&output=rss");
+    if(url == null) {
+        url = "https://news.google.com/news/?ned=us&hl=en&output=rss";
+    }
+
+    news_page = File.new_for_uri(url);
     
     DataInputStream data_stream = null;
     try {
@@ -52,14 +53,14 @@ RssFeed? fetch_news(string? url) {
         
         // Find link;
         var uStartIndex = str.index_of("<link>", itemIndex) + "<link>".length;
-        if(url == null)
+        if(url.index_of("news.google.com") != -1)
             uStartIndex = str.index_of("url=", uStartIndex) + 4;
         var uEndIndex = str.index_of("</", uStartIndex);
         var uS = str[uStartIndex:uEndIndex];
 
         string? desc = "";
 
-        if(url == null) {
+        if(url.index_of("news.google.com") != -1) {
             // Scrape description
             var dStartIndex = str.index_of("<description>", itemIndex) + "<description>".length;
             var dEndIndex = str.index_of("</", dStartIndex);
@@ -67,8 +68,8 @@ RssFeed? fetch_news(string? url) {
             
             // Find description inside of the html table inside of the description: look at the rss feed for yourself
             var eStartIndex = dS.index_of("</font><br><font size=\"-1\">") + "</font><br><font size=\"-1\">".length;
-            var eEndIndex = dS.index_of("</", eStartIndex);
-            desc = dS.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ").replace("<b>", "").replace("&#39;", "'");  
+            var eEndIndex = dS.index_of("</font>", eStartIndex);
+            desc = dS.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ");  
             desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
         } else {
             desc = null;
@@ -87,7 +88,7 @@ RssFeed? fetch_news(string? url) {
     var titleEndIndex = str.index_of("</title>", titleStartIndex);
 
     return RssFeed() {
-        title = url == null ? "Google News" : str[titleStartIndex:titleEndIndex],
+        title = url == "https://news.google.com/news/?ned=us&hl=en&output=rss" ? "Google News" : str[titleStartIndex:titleEndIndex],
         data = articles
     };
 }

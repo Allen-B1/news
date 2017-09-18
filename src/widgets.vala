@@ -1,8 +1,6 @@
 namespace News {
     void add_page(string? url) {
         try {
-            if(url == "https://news.google.com/news/?ned=us&hl=en&output=rss")
-                url = null;
             RssFeed? feed = fetch_news(url);
 
             if(feed == null) {
@@ -40,7 +38,9 @@ namespace News {
                 "Cancel", Gtk.ResponseType.REJECT, null);
 
             var content_area = dialog.get_content_area();
-            content_area.add(new Gtk.Label("Pick a source"));
+            var label = new Gtk.Label(null);
+            label.set_markup("<b>Pick a news source</b>");
+            content_area.add(label);
 
             var google_news = new Gtk.RadioButton.with_label(null, "Google News");
             var hacker_news = new Gtk.RadioButton.with_label_from_widget(google_news, "Hacker News");
@@ -106,7 +106,8 @@ namespace News {
 
             if(article.text != null) {
                 // Description
-                var desc = new Gtk.Label(article.text);
+                var desc = new Gtk.Label(null);
+                desc.set_markup(article.text);
                 desc.set_line_wrap (true);
                 desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
                 box.add(desc);
