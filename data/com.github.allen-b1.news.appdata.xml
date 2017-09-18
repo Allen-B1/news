@@ -20,7 +20,7 @@
     </ul>
   </description>
   <url type="homepage">https://github.com/allen-b1/news</url>
-  <url type="bugtracker">https://github.com/Allen-B1/news/issues/labels/bug</url>
+  <url type="bugtracker">https://github.com/allen-b1/news/issues/labels/bug</url>
   <url type="help">https://github.com/allen-b1/news/issues/new</url>
   <custom>
      <value key="x-appcenter-color-primary">#FF003A</value>
