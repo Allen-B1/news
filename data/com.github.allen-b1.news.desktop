@@ -7,5 +7,5 @@ Exec=com.github.allen-b1.news
 Icon=com.github.allen-b1.news
 Terminal=false
 Type=Application
-X-GNOME-Gettext-Domain=hello-again
+X-GNOME-Gettext-Domain=com.github.allen-b1.news
 Keywords=News;
