@@ -13,7 +13,15 @@
   </screenshots>
   <description>
     <p>With News, you can now browse the news.</p>
+    <p><b>Features</b></p>
+    <ul>
+      <li>Search directly from Google News</li>
+      <li>Multiple tabs at once</li>
+    </ul>
   </description>
+  <url type="homepage">https://github.com/allen-b1/news</url>
+  <url type="bugtracker">https://github.com/Allen-B1/news/issues/labels/bug</url>
+  <url type="help">https://github.com/allen-b1/news/issues/new</url>
   <custom>
      <value key="x-appcenter-color-primary">#FF003A</value>
      <value key="x-appcenter-color-primary-text">#FFF</value>
