@@ -21,3 +21,6 @@ cmake /usr ./
 make
 sudo make install
 ```
+
+# Notes
+A big thanks to [mirkobrombin](https://github.com/mirkobrombin) for designing the icon
