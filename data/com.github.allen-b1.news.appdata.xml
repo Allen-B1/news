@@ -3,6 +3,7 @@
 <component type="desktop">
   <id>com.github.allen-b1.news.desktop</id>
   <metadata_license>CC0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
   <name>News</name>
   <summary>Browse the news</summary>
   <developer_name>Allen B</developer_name>
