@@ -20,4 +20,5 @@ sudo make install
 ```
 
 # Notes
-A big thanks to [mirkobrombin](https://github.com/mirkobrombin) for designing the icon
+A big thanks to [mirkobrombin](https://github.com/mirkobrombin) for designing the icon  
+![this one](data/com.github.allen-b1.news.svg)
