@@ -10,6 +10,9 @@ namespace News {
             var list = News.create_list(feed);
             list.show_all();
             notebook.append_page(list, new Gtk.Label(feed.title)); 
+            var size = notebook.page_num(list);
+            for(var i = 0; i < size; i++)
+                notebook.next_page();
             notebook.set_tab_reorderable(list, true);
         } catch(Error err) {
             var dialog = new Gtk.MessageDialog(window, Gtk.DialogFlags.MODAL,
@@ -86,6 +89,37 @@ namespace News {
             dialog.destroy();
         });
         headerbar.add(headerbar_url);
+
+        var headerbar_search = new Gtk.Button.from_icon_name("edit-find", Gtk.IconSize.LARGE_TOOLBAR);
+        headerbar_search.tooltip_text = "Search...";
+        headerbar_search.halign = Gtk.Align.END;
+        headerbar_search.clicked.connect(() => {
+            var dialog = new Gtk.Dialog.with_buttons("Search", window, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, 
+                "Done", Gtk.ResponseType.ACCEPT, 
+                "Cancel", Gtk.ResponseType.REJECT, null);
+
+            var content_area = dialog.get_content_area();
+            var label = new Gtk.Label("Search the news");
+            content_area.add(label);
+
+            var entry = new Gtk.Entry();
+            entry.margin = 4;
+            entry.activate.connect(() => {
+                dialog.response(Gtk.ResponseType.ACCEPT);
+            });
+            content_area.add(entry);
+
+            content_area.show_all();
+
+		    int result = dialog.run();
+            switch(result) {
+                case Gtk.ResponseType.ACCEPT:
+                    News.add_page("https://news.google.com/news/?ned=us&hl=en&output=rss&q=" + Uri.escape_string(entry.text));
+                    break;
+            }
+            dialog.destroy();
+        });
+        headerbar.pack_end(headerbar_search);
       
         return headerbar;
     }
