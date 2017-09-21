@@ -2,11 +2,10 @@ Source: com.github.allen-b1.news
 Section: x11
 Priority: extra
 Maintainer: Allen B <pingguo.ny@gmail.com>
-Build-Depends: cmake (>= 2.8),
+Build-Depends: make (>= 2.8),
                debhelper (>= 9),
                libgtk-3-dev,
                valac (>= 0.16),
-               cmake-elementary,
                debhelper (>= 8.0.0)
 Standards-Version: 3.9.3
 
