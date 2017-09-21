@@ -10,7 +10,7 @@ struct RssFeed {
 }
 
 Gtk.Window window;
-Gtk.Notebook notebook;
+Granite.Widgets.DynamicNotebook notebook;
 
 RssFeed? fetch_news(string? url) {
     File news_page;
@@ -103,7 +103,7 @@ int main (string args[]) {
     window.destroy.connect(Gtk.main_quit);
     window.set_titlebar(News.create_headerbar(window));
 
-    notebook = new Gtk.Notebook();
+    notebook = new Granite.Widgets.DynamicNotebook();
     window.add(notebook);
 
     // Create listbox
