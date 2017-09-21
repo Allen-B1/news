@@ -18,7 +18,5 @@ Make sure that `elementary-sdk` is installed.
 ```bash
 git clone https://github.com/allen-b1/news.git
 cd news
-cmake /usr ./
-make
-sudo make install
+sudo make
 ```
