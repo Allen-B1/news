@@ -1,9 +1,9 @@
 struct RssItem {
     string title;
-    string about;
+    string? about;
     string link;
     string pubDate;
-    string content;
+    string? content;
 }
 
 struct RssFeed {
@@ -40,7 +40,6 @@ namespace News {
             break;
             case "item":
                 RssItem item = RssItem();
-                item.title = "Unknown";
                 for(var childitem = child->children; childitem != null; childitem = childitem->next) {
                     switch(childitem->name) {
                     case "title":
@@ -52,6 +51,9 @@ namespace News {
                     case "description":
                         item.about = childitem->get_content();
                     break;
+                    case "encoded":
+                        item.content = childitem->get_content();
+                    break;
                     }
                 }
 
@@ -62,6 +64,11 @@ namespace News {
                     var desc = item.about.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ");  
                     desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
                     item.about = desc;
+                } else if(url != null && url.index_of("rss.cnn.com") != -1) {
+                    var endIndex = item.about.index_of("<div");
+                    item.about = item.about[0:endIndex].replace("&", "&amp;");
+                    if(item.about == "") // if description is empty (sometimes is)
+                        item.about = null;
                 } else {
                     item.about = null;
                 }

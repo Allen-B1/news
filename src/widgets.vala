@@ -26,6 +26,10 @@ namespace News {
             return true;
         });
 
+        entry.activate.connect(() => {
+            dialog.response(Gtk.ResponseType.ACCEPT);
+        });
+
         content_area.show_all();
 
 	    int result = dialog.run();
@@ -63,8 +67,6 @@ namespace News {
             if(feed == null) {
                 throw new Error(Quark.from_string(""), 0, "Something went wrong.");
             }
-
-            stdout.printf("%s\n", feed.title);
 
             var list = new NewsList(feed);
             list.show_all();

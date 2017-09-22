@@ -4,9 +4,10 @@ dependecies:
 	apt install libgtk-3-dev
 	apt install libgranite-dev
 	apt install libxml2-dev
+	apt install libwebkit2gtk-4.0-dev
 
 build:
-	valac src/news.vala src/widgets.vala src/NewsHeaderBar.vala src/NewsList.vala src/NewsParse.vala --pkg gtk+-3.0 --pkg granite --pkg libxml-2.0 -o com.github.allen-b1.news
+	valac src/news.vala src/widgets.vala src/NewsHeaderBar.vala src/NewsList.vala src/NewsParse.vala --pkg gtk+-3.0 --pkg granite --pkg libxml-2.0 --pkg webkit2gtk-4.0 -o com.github.allen-b1.news
 
 install:
 	cp com.github.allen-b1.news /bin

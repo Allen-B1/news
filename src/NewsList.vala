@@ -13,6 +13,17 @@ class NewsList : Gtk.ScrolledWindow {
 
             // Title
             var title = new Gtk.LinkButton.with_label(item.link, item.title);
+            title.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
+            title.activate_link.connect(() => {
+                if(item.content == null)
+                    return false;
+
+                var label = new Gtk.Label(item.content);
+                label.show_all();
+ 
+                notebook.insert_tab(new Granite.Widgets.Tab(item.title, null, label), -1);
+                return true;
+            });
             box.add(title);
 
             if(item.about != null) {
