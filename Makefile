@@ -5,7 +5,7 @@ dependecies:
 	apt install libgranite-dev
 
 build:
-	valac src/news.vala src/widgets.vala src/NewsHeaderBar.vala --pkg gtk+-3.0 --pkg granite -o com.github.allen-b1.news
+	valac src/news.vala src/widgets.vala src/NewsHeaderBar.vala src/NewsList.vala --pkg gtk+-3.0 --pkg granite -o com.github.allen-b1.news
 
 install:
 	cp com.github.allen-b1.news /bin
