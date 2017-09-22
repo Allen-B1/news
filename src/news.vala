@@ -1,18 +1,14 @@
 struct RssItem {
     public string title;
     public string? text;
-    public string link;
-}
-
-struct RssFeed {
-    public string title;
-    public RssItem[] data;
+ 
+   public string link;
 }
 
 Gtk.Window window;
 Granite.Widgets.DynamicNotebook notebook;
 
-RssFeed? fetch_news(string? url) {
+Xml.Doc* fetch_news(string? url) {
     File news_page;
     if(url == null) {
         url = "https://news.google.com/news/?ned=us&hl=en&output=rss";
@@ -40,57 +36,8 @@ RssFeed? fetch_news(string? url) {
     } catch(GLib.IOError err) {
         return null;
     }
-    
-    var str = text.str;
 
-    int itemIndex = 0;
-    RssItem[] articles = new RssItem[0];
-
-    while((itemIndex = (int)str.index_of("<item>", itemIndex + 1)) != -1) {
-        var startIndex = str.index_of("<title>", itemIndex) + "<title>".length;
-        var endIndex = str.index_of("</", startIndex);
-        var s = str[startIndex:endIndex];
-        
-        // Find link;
-        var uStartIndex = str.index_of("<link>", itemIndex) + "<link>".length;
-        if(url.index_of("news.google.com") != -1)
-            uStartIndex = str.index_of("url=", uStartIndex) + 4;
-        var uEndIndex = str.index_of("</", uStartIndex);
-        var uS = str[uStartIndex:uEndIndex];
-
-        string? desc = "";
-
-        if(url.index_of("news.google.com") != -1) {
-            // Scrape description
-            var dStartIndex = str.index_of("<description>", itemIndex) + "<description>".length;
-            var dEndIndex = str.index_of("</", dStartIndex);
-            var dS = str.slice(dStartIndex, dEndIndex).replace("&quot;", "\"").replace("&#39;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
-            
-            // Find description inside of the html table inside of the description: look at the rss feed for yourself
-            var eStartIndex = dS.index_of("</font><br><font size=\"-1\">") + "</font><br><font size=\"-1\">".length;
-            var eEndIndex = dS.index_of("</font>", eStartIndex);
-            desc = dS.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ");  
-            desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
-        } else {
-            desc = null;
-        }
-
-
-        RssItem article = RssItem() {
-            title = s,
-            text = desc,
-            link = uS
-        };
-        articles += article;
-    }
-
-    var titleStartIndex = str.index_of("<title>") + 7;
-    var titleEndIndex = str.index_of("</title>", titleStartIndex);
-
-    return RssFeed() {
-        title = url == "https://news.google.com/news/?ned=us&hl=en&output=rss" ? "Google News" : str[titleStartIndex:titleEndIndex],
-        data = articles
-    };
+    return Xml.Parser.parse_doc(text.str);
 }
 
 int main (string args[]) {

@@ -55,15 +55,15 @@ namespace News {
 
     void add_page(string? url) {
         try {
-            RssFeed? feed = fetch_news(url);
+            Xml.Doc* feed = fetch_news(url);
 
             if(feed == null) {
                 throw new Error(Quark.from_string(""), 0, "Something went wrong.");
             }
 
-            var list = News.create_list(feed);
+            var list = new NewsList(feed);
             list.show_all();
-            var tab = new Granite.Widgets.Tab(feed.title, null, list);
+            var tab = new Granite.Widgets.Tab(list.feed.title, null, list);
             notebook.insert_tab(tab, -1); 
             notebook.new_tab_requested.connect(News.new_tab);
         } catch(Error err) {
