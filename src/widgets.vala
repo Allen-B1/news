@@ -63,7 +63,7 @@ namespace News {
 
             var list = new NewsList(feed);
             list.show_all();
-            var tab = new Granite.Widgets.Tab(list.feed.title, null, list);
+            var tab = new Granite.Widgets.Tab(list.feed.title == "Top Stories - Google News" ? "Google News" : list.feed.title, null, list);
             notebook.insert_tab(tab, -1); 
             notebook.new_tab_requested.connect(News.new_tab);
         } catch(Error err) {

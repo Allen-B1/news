@@ -36,14 +36,17 @@ class NewsList : Gtk.ScrolledWindow {
                 this.feed.link = child->get_content();
             break;
             case "item":
-                stdout.puts("Found item");
-                string title = "Unknown Title";
+                string title = "???";
                 string? about = null;
                 string link = "about:blank";
                 for(var childitem = child->children; childitem != null; childitem = childitem->next) {
                     switch(childitem->name) {
                     case "title":
                         title = childitem->get_content();
+                    break;
+                    case "link":
+                        link = childitem->get_content();
+                        links += link;
                     break;
                     }
                 }
