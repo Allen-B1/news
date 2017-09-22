@@ -28,6 +28,7 @@ class NewsList : Gtk.ScrolledWindow {
 
             if(item.about != null) {
                 // Description
+                item.about = item.about.replace("<p>", "\n").replace("</p>", "\n").replace("</span>", "").replace("<span>", "");
                 var desc = new Gtk.Label(item.about);
                 desc.set_markup(item.about);
                 desc.set_line_wrap (true);
