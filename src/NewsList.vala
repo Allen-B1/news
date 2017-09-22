@@ -28,7 +28,7 @@ class NewsList : Gtk.ScrolledWindow {
 
             if(item.about != null) {
                 // Description
-                var desc = new Gtk.Label(null);
+                var desc = new Gtk.Label(item.about);
                 desc.set_markup(item.about);
                 desc.set_line_wrap (true);
                 desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});

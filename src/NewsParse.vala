@@ -69,9 +69,9 @@ namespace News {
                     item.about = item.about[0:endIndex].replace("&", "&amp;");
                     if(item.about == "") // if description is empty (sometimes is)
                         item.about = null;
-                } else {
+                } else if(url != null && url.index_of("news.ycombinator.com") != -1 || item.about == "") {
                     item.about = null;
-                }
+                } else; // do nothing, get <description>
                 feed.items += item;
             break;
             }
