@@ -10,9 +10,6 @@ Granite.Widgets.DynamicNotebook notebook;
 
 Xml.Doc* fetch_news(string? url) {
     File news_page;
-    if(url == null) {
-        url = "https://news.google.com/news/?ned=us&hl=en&output=rss";
-    }
 
     news_page = File.new_for_uri(url);
     

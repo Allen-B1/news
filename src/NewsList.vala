@@ -9,12 +9,14 @@ class NewsList : Gtk.ScrolledWindow {
     private Xml.Doc* doc;
     public RssFeed feed;
     private string[] links;
+    private string url;
 
-	public NewsList(Xml.Doc* doc) {
+	public NewsList(Xml.Doc* doc, string url) {
         assert(doc != null);
 
         this.doc = doc;
         var list = new Gtk.ListBox();
+        this.url = url;
 
         Xml.Node* root = doc->get_root_element();
         if(root == null) {
@@ -48,14 +50,29 @@ class NewsList : Gtk.ScrolledWindow {
                         link = childitem->get_content();
                         links += link;
                     break;
+					case "description":
+						about = childitem->get_content();
+					break;
                     }
                 }
+
+                if(this.url.index_of("news.google.com") != -1) {                    
+                    // Find description inside of the html table inside of the description: look at the rss feed for yourself
+                    var eStartIndex = about.index_of("</font><br><font size=\"-1\">") + "</font><br><font size=\"-1\">".length;
+                    var eEndIndex = about.index_of("</font>", eStartIndex);
+                    var desc = about.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ");  
+                    desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
+                    about = desc;
+                } else {
+                    about = null;
+                }
+
                 var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
                 box.margin = 12;
 
                 // Title
                 var label = new Gtk.Label(null);
-                label.set_markup("<b>" + title + "</b>");
+                label.set_markup("<b>" + title.replace("&", "&amp;") + "</b>");
                 label.set_line_wrap(true);
                 box.add(label);
 

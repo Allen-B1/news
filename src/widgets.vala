@@ -54,6 +54,9 @@ namespace News {
     }
 
     void add_page(string? url) {
+        if(url == null) {
+            url = "https://news.google.com/news/?ned=us&hl=en&output=rss";
+        }
         try {
             Xml.Doc* feed = fetch_news(url);
 
@@ -61,7 +64,7 @@ namespace News {
                 throw new Error(Quark.from_string(""), 0, "Something went wrong.");
             }
 
-            var list = new NewsList(feed);
+            var list = new NewsList(feed, url);
             list.show_all();
             var tab = new Granite.Widgets.Tab(list.feed.title == "Top Stories - Google News" ? "Google News" : list.feed.title, null, list);
             notebook.insert_tab(tab, -1); 
