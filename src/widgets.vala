@@ -64,6 +64,8 @@ namespace News {
                 throw new Error(Quark.from_string(""), 0, "Something went wrong.");
             }
 
+            stdout.printf("%s\n", feed.title);
+
             var list = new NewsList(feed);
             list.show_all();
             var tab = new Granite.Widgets.Tab(feed.title == "Top Stories - Google News" ? "Google News" : feed.title, null, list);
