@@ -1,6 +1,5 @@
 class NewsList : Gtk.ScrolledWindow {
     public RssFeed feed;
-    private string[] links;
     private string[] contents;
     private string url;
 
@@ -12,13 +11,9 @@ class NewsList : Gtk.ScrolledWindow {
             var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             box.margin = 12;
 
-            links += item.links;
-
             // Title
-            var label = new Gtk.Label(null);
-            label.set_markup("<b>" + item.title.replace("&", "&amp;") + "</b>");
-            label.set_line_wrap(true);
-            box.add(label);
+            var title = new Gtk.LinkButton.with_label(item.link, item.title);
+            box.add(title);
 
             if(item.about != null) {
                 // Description
@@ -31,18 +26,6 @@ class NewsList : Gtk.ScrolledWindow {
 
             list.add(box);
         }
-
-        list.row_activated.connect((row) => {
-            Pid child_pid = 0;
-            if(row != null)
-                Process.spawn_async("/",
-                    {"xdg-open", row.get_index()},
-                    Environ.get(),
-                    SpawnFlags.SEARCH_PATH,
-                    null,
-                    out child_pid
-                );   
-        });
 
         this.add(list);
         this.show_all();
