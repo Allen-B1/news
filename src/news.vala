@@ -1,10 +1,3 @@
-struct RssItem {
-    public string title;
-    public string? text;
- 
-   public string link;
-}
-
 Gtk.Window window;
 Granite.Widgets.DynamicNotebook notebook;
 
@@ -48,6 +41,7 @@ int main (string args[]) {
     window.set_titlebar(new NewsHeaderBar(window));
 
     notebook = new Granite.Widgets.DynamicNotebook();
+    notebook.new_tab_requested.connect(News.new_tab);
     window.add(notebook);
 
     // Create listbox
