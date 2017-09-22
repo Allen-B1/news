@@ -13,3 +13,9 @@ install:
 	cp data/com.github.allen-b1.news.desktop /usr/share/applications/
 	cp data/com.github.allen-b1.news.svg /usr/share/icons/hicolor/128x128/apps
 	cp data/com.github.allen-b1.news.appdata.xml /usr/share/metainfo
+
+clean:
+	rm /bin/com.github.allen-b1.news
+	rm /usr/share/applications/com.github.allen-b1.news.desktop
+	rm /usr/share/icons/hicolor/128x128/apps/com.github.allen-b1.news.svg
+	rm /usr/share/metainfo/com.github.allen-b1.news.appdata.xml
