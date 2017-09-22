@@ -101,7 +101,7 @@ int main (string args[]) {
     window.set_position(Gtk.WindowPosition.CENTER);
     window.set_default_size(950, 950);
     window.destroy.connect(Gtk.main_quit);
-    window.set_titlebar(News.create_headerbar(window));
+    window.set_titlebar(new NewsHeaderBar(window));
 
     notebook = new Granite.Widgets.DynamicNotebook();
     window.add(notebook);
