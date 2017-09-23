@@ -7,13 +7,13 @@ class NewsPanel : Gtk.Paned {
         this.orientation = Gtk.Orientation.HORIZONTAL;
         this.add1(list);
         this.add2(webview);
+        this.set_position(500);
     }
 
     public NewsPanel.from_feed(RssFeed feed) throws Error {
         var webview = new WebKit.WebView();
 
         var list = new NewsList(feed, webview);
-        webview.load_uri("https://google.com");
 
         this(list, webview);
     }

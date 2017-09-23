@@ -18,6 +18,7 @@ class NewsList : Gtk.ScrolledWindow {
         foreach(var item in feed.items) {
             var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             box.margin = 12;
+            box.halign = Gtk.Align.START;
 
             // Title
             var title = new Gtk.Label(null);
@@ -29,7 +30,7 @@ class NewsList : Gtk.ScrolledWindow {
             title.justify = Gtk.Justification.LEFT;
             title.set_line_wrap(true);
  
-            box.add(title);
+            box.pack_start(title, false, false, 0);
 
             if(item.about != null) {
                 // Description
@@ -46,7 +47,7 @@ class NewsList : Gtk.ScrolledWindow {
                 desc.set_line_wrap (true);
                 
                 desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
-                box.add(desc);
+                box.pack_start(desc, false, false, 0);
             }
 
             list.add(box);
@@ -55,8 +56,10 @@ class NewsList : Gtk.ScrolledWindow {
         this.add(list);
 
         list.row_selected.connect((row) => {
-            var data = this.feed.items[row.get_index()];
-            this.webview.load_uri(data.link);
+            if(row != null) {
+                var data = this.feed.items[row.get_index()];
+                this.webview.load_uri(data.link);
+            }
         });
     }
 }
