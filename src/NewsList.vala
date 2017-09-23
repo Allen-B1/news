@@ -13,7 +13,12 @@ class NewsList : Gtk.ScrolledWindow {
 
             // Title
             var title = new Gtk.LinkButton.with_label(item.link, item.title);
-            title.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
+
+            // Align to start
+            title.halign = Gtk.Align.START;
+            title.hexpand = false;
+
+            // When link clicked
             title.activate_link.connect(() => {
                 if(item.content == null)
                     return false;
@@ -30,6 +35,13 @@ class NewsList : Gtk.ScrolledWindow {
                 // Description
                 item.about = item.about.replace("<p>", "\n").replace("</p>", "\n").replace("</span>", "").replace("<span>", "");
                 var desc = new Gtk.Label(item.about);
+
+                // Align to left
+                desc.halign = Gtk.Align.START;
+                desc.justify = Gtk.Justification.LEFT;
+                desc.hexpand = false;
+                desc.margin = 0;
+                
                 desc.set_markup(item.about);
                 desc.set_line_wrap (true);
                 desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
