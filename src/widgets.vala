@@ -57,7 +57,7 @@ namespace News {
         dialog.destroy();
     }
 
-    void add_page(string? url) {
+    void add_page(string? url) throws Error {
         if(url == null) {
             url = "https://news.google.com/news/?ned=us&hl=en&output=rss";
         }
@@ -68,9 +68,10 @@ namespace News {
                 throw new Error(Quark.from_string(""), 0, "Something went wrong.");
             }
 
-            var list = new NewsList(feed);
-            list.show_all();
-            var tab = new Granite.Widgets.Tab(feed.title == "Top Stories - Google News" ? "Google News" : feed.title, null, list);
+            var panel = new NewsPanel.from_feed(feed);
+            panel.show_all();
+
+            var tab = new Granite.Widgets.Tab(feed.title == "Top Stories - Google News" ? "Google News" : feed.title, null, panel);
             notebook.insert_tab(tab, -1); 
         } catch(Error err) {
             var dialog = new Gtk.MessageDialog(window, Gtk.DialogFlags.MODAL,

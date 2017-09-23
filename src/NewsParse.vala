@@ -43,7 +43,7 @@ namespace News {
                 for(var childitem = child->children; childitem != null; childitem = childitem->next) {
                     switch(childitem->name) {
                     case "title":
-                        item.title = childitem->get_content();
+                        item.title = childitem->get_content().replace("&", "&amp;");
                     break;
                     case "link":
                         item.link = childitem->get_content();

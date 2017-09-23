@@ -2,33 +2,33 @@ class NewsList : Gtk.ScrolledWindow {
     public RssFeed feed;
     private string[] contents;
     private string url;
+    private WebKit.WebView webview; // to store the contents
 
-	public NewsList(RssFeed feed) {
+	public NewsList(RssFeed feed, WebKit.WebView webview) {
         this.feed = feed;
+        this.webview = webview;
+        this.vexpand = true;
+
+        // disable horizontal scrollbar
+        this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+
         var list = new Gtk.ListBox();
-       
+        list.set_size_request(0,0);
+
         foreach(var item in feed.items) {
             var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             box.margin = 12;
 
             // Title
-            var title = new Gtk.LinkButton.with_label(item.link, item.title);
+            var title = new Gtk.Label(null);
+            title.set_markup("<span size=\"large\"><b>" + item.title + "</b></span>");
 
             // Align to start
             title.halign = Gtk.Align.START;
             title.hexpand = false;
-
-            // When link clicked
-            title.activate_link.connect(() => {
-                if(item.content == null)
-                    return false;
-
-                var label = new Gtk.Label(item.content);
-                label.show_all();
+            title.justify = Gtk.Justification.LEFT;
+            title.set_line_wrap(true);
  
-                notebook.insert_tab(new Granite.Widgets.Tab(item.title, null, label), -1);
-                return true;
-            });
             box.add(title);
 
             if(item.about != null) {
@@ -41,9 +41,10 @@ class NewsList : Gtk.ScrolledWindow {
                 desc.justify = Gtk.Justification.LEFT;
                 desc.hexpand = false;
                 desc.margin = 0;
-                
+               
                 desc.set_markup(item.about);
                 desc.set_line_wrap (true);
+                
                 desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
                 box.add(desc);
             }
@@ -52,6 +53,10 @@ class NewsList : Gtk.ScrolledWindow {
         }
 
         this.add(list);
-        this.show_all();
+
+        list.row_selected.connect((row) => {
+            var data = this.feed.items[row.get_index()];
+            this.webview.load_uri(data.link);
+        });
     }
 }
