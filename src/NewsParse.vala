@@ -57,21 +57,7 @@ namespace News {
                     }
                 }
 
-                if(url != null && url.index_of("news.google.com") != -1) {                    
-                    // Find description inside of the html table inside of the description: look at the rss feed for yourself
-                    var eStartIndex = item.about.index_of("</font><br><font size=\"-1\">") + "</font><br><font size=\"-1\">".length;
-                    var eEndIndex = item.about.index_of("</font>", eStartIndex);
-                    var desc = item.about.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ");  
-                    desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
-                    item.about = desc;
-                } else if(url != null && url.index_of("rss.cnn.com") != -1) {
-                    var endIndex = item.about.index_of("<div");
-                    item.about = item.about[0:endIndex].replace("&", "&amp;");
-                    if(item.about == "") // if description is empty (sometimes is)
-                        item.about = null;
-                } else if(url != null && url.index_of("news.ycombinator.com") != -1 || item.about == "") {
-                    item.about = null;
-                } else; // do nothing, get <description>
+                item.about = News.parse_rules(url, item.about);
                 feed.items += item;
             break;
             }
@@ -104,6 +90,31 @@ namespace News {
         }
 
         return News.parse(text.str, uri);
+    }
+
+    // special exceptions (has a lot)
+    string? parse_rules(owned string url, owned string? about) {
+        if(url != null) url = url.ascii_down();
+
+        if(url == null); // make url null
+        else if(url.index_of("news.google.com") != -1) {                    
+            // Find description inside of the html table inside of the description: look at the rss feed for yourself
+            var eStartIndex = about.index_of("</font><br><font size=\"-1\">") + "</font><br><font size=\"-1\">".length;
+            var eEndIndex = about.index_of("</font>", eStartIndex);
+            var desc = about.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ");  
+            desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
+            about = desc;
+        } else if(url.index_of("rss.cnn.com") != -1) {
+            var endIndex = about.index_of("<div");
+            about = about[0:endIndex].replace("&", "&amp;");
+            if(about == "") // if description is empty (sometimes is)
+                about = null;
+        } else if(url.index_of("news.ycombinator.com") != -1 || about == "") {
+            about = null;
+        } else if(url.index_of("feeds.kinja.com/lifehacker") != -1) {
+            about = about.slice(about.index_of("<p>"), about.index_of("</p>"));
+        }
+        return about;
     }
 }
 
