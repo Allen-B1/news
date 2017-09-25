@@ -2,6 +2,7 @@ class NewsHeaderBar : Gtk.HeaderBar {
 	public NewsHeaderBar(Gtk.Window window) {
         this.title = "News";
         this.show_close_button = true;
+        this.override_background_color(Gtk.StateFlags.NORMAL, {255,0,170,1});
 
         var search = new Gtk.Button.from_icon_name("edit-find", Gtk.IconSize.LARGE_TOOLBAR);
         search.tooltip_text = "Search...";
