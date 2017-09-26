@@ -1,8 +1,6 @@
 Gtk.Window window;
 Granite.Widgets.DynamicNotebook notebook;
 
-
-
 int main (string args[]) {
     Gtk.init(ref args);
 
@@ -19,6 +17,14 @@ int main (string args[]) {
         notebook = new Granite.Widgets.DynamicNotebook();
         notebook.new_tab_requested.connect(News.new_tab);
         window.add(notebook);
+        // Contestual stylesheet
+        string STYLESHEET = """
+            @define-color colorPrimary #FF00AA;
+            @define-color textColorPrimary #f2f2f2;
+            @define-color textColorPrimaryShadow #b20077;""";
+        var provider = new Gtk.CssProvider();
+        provider.load_from_data(STYLESHEET, -1);
+        Gtk.StyleContext.add_provider_for_screen(window.get_screen(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         // Create listbox
         News.add_page(null);
