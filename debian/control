@@ -6,7 +6,9 @@ Build-Depends: make (>= 2.8),
                debhelper (>= 9),
                libgtk-3-dev,
                valac (>= 0.16),
-               debhelper (>= 8.0.0)
+               debhelper (>= 8.0.0),
+               libwebkit2gtk-4.0-dev,
+               libgranite-dev
 Standards-Version: 3.9.3
 
 Package: com.github.allen-b1.news
