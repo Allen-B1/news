@@ -1,6 +1,6 @@
-all: dependecies build install
+all: dependencies build install
 
-dependecies:
+dependencies:
 	apt install libgtk-3-dev
 	apt install libgranite-dev
 	apt install libxml2-dev
@@ -21,5 +21,5 @@ clean:
 	rm /usr/share/icons/hicolor/128x128/apps/com.github.allen-b1.news.svg || true
 	rm /usr/share/metainfo/com.github.allen-b1.news.appdata.xml || true
 
-build-dependecy:
+build-dependency:
 	mk-build-deps debian/control
