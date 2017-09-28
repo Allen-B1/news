@@ -20,3 +20,6 @@ clean:
 	rm /usr/share/applications/com.github.allen-b1.news.desktop || true
 	rm /usr/share/icons/hicolor/128x128/apps/com.github.allen-b1.news.svg || true
 	rm /usr/share/metainfo/com.github.allen-b1.news.appdata.xml || true
+
+build-dependecy:
+	mk-build-deps debian/control
