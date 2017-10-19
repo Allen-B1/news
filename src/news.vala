@@ -1,10 +1,13 @@
 Gtk.Window window;
 Granite.Widgets.DynamicNotebook notebook;
 
-int main (string args[]) {
-    Gtk.init(ref args);
+int main (owned string args[]) {
+    string[] fakeargs = {};
+    unowned string[] fakeargs_s = fakeargs;
+    Gtk.init(ref fakeargs_s);
 
-    if(args.length > 1) {
+    if(args.length > 2) {
+        stdout.puts(args.length.to_string());
         News.AboutDialog();
     } else {
         window = new Gtk.Window();
