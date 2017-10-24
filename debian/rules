@@ -9,39 +9,15 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-#%:
-#	dh $@ 
-build:
-	valac src/news.vala src/widgets.vala src/NewsHeaderBar.vala src/NewsList.vala src/NewsParse.vala src/NewsPanel.vala src/NewsAboutDialog.vala --pkg gtk+-3.0 --pkg granite --pkg libxml-2.0 --pkg webkit2gtk-4.0 -o com.github.allen-b1.news
+# Enable additional explot mitigation
+# (PIE and *full* RELRO at the time of this writing)
+#export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
-build-arch:
+%:
+	dh $@  --with autotools-dev
 
-build-indep:
+override_dh_builddeb:
+	dh_builddeb -- -Zxz
 
-clean:
-	dh_testdir
-	dh_testroot
-	dh_clean
-
-install: build
-	dh_install src/com.github.allen-b1.news usr/bin/
-	dh_install src/com.github.allen-b1.news.desktop usr/share/applications
-	dh_testdir
-	dh_testroot
-
-binary-arch:
-
-binary-indep: install
-	dh_testdir
-	dh_testroot
-	#dh_installchangelogs
-	dh_installdocs
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb -- -Z xz
-
-binary: binary-indep binary-arch
-
-.PHONY: clean install binary-arch binary-indep binary
+override_dh_install:
+	dh_install --fail-missing
