@@ -57,7 +57,7 @@ PACKAGES
     gtk+-3.0
     granite
     webkit2gtk-4.0
-    libxml-2.0 
+    libxml-2.0
 )
 
 # tell cmake what to call the executable we just made
