@@ -66,5 +66,9 @@ add_executable(${EXEC_NAME} ${VALA_C})
 # install the binaries we just made
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.allen-b1.news.desktop DESTINATION ${DATADIR}/applications/)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.allen-b1.news.svg DESTINATION ${DATADIR}/icons/hicolor/128x128/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.allen-b1.news.appdata.xml DESTINATION ${DATADIR}/metainfo/)
+
 #add the data directory and activated the cmakelists in that folder
 add_subdirectory (data)
