@@ -3,6 +3,8 @@ A news viewer for elementary os
 
 ![Screenshot](screenshot.png)
 
+Progress has stalled, because I don't know cmake.
+
 ## Installation
 ### On elementary OS?
 
