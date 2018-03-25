@@ -98,12 +98,7 @@ namespace News {
 
         if(url == null); // make url null
         else if(url.index_of("news.google.com") != -1) {                    
-            // Find description inside of the html table inside of the description: look at the rss feed for yourself
-            var eStartIndex = about.index_of("</font><br><font size=\"-1\">") + "</font><br><font size=\"-1\">".length;
-            var eEndIndex = about.index_of("</font>", eStartIndex);
-            var desc = about.slice(eStartIndex, eEndIndex).replace("&nbsp;", " ");  
-            desc = desc.replace("&quot;", "\"").replace("&middot;", ".");
-            about = desc;
+            about = null;
         } else if(url.index_of("rss.cnn.com") != -1) {
             var endIndex = about.index_of("<div");
             about = about[0:endIndex].replace("&", "&amp;");

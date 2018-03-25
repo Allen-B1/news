@@ -27,7 +27,8 @@ class NewsHeaderBar : Gtk.HeaderBar {
 		    int result = dialog.run();
             switch(result) {
                 case Gtk.ResponseType.ACCEPT:
-                    News.add_page("https://news.google.com/news/?ned=us&hl=en&output=rss&q=" + Uri.escape_string(entry.text));
+                    string escaped_string = Uri.escape_string(entry.text);
+                    News.add_page("https://news.google.com/news/rss/search/section/q/" + escaped_string + "/" + escaped_string + "?hl=en&gl=US&ned=us");
                     break;
             }
             dialog.destroy();
