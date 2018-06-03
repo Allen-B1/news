@@ -3,11 +3,11 @@
  */
 
 class NewsPanel : Gtk.Paned {
-    public NewsPanel(NewsList list, WebKit.WebView webview) {
+    protected NewsPanel(NewsList list, WebKit.WebView webview) {
         this.orientation = Gtk.Orientation.HORIZONTAL;
         this.add1(list);
         this.add2(webview);
-        this.set_position(500);
+        this.set_position(200);
     }
 
     public NewsPanel.from_feed(RssFeed feed) throws Error {

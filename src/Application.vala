@@ -9,9 +9,8 @@ class NewsApp : Gtk.Application {
     protected override void activate() {
         var window = new Gtk.ApplicationWindow(this);
         window.title = "News";
-        window.default_width = 700;
-        window.default_height = 500;
-        window.destroy.connect(Gtk.main_quit);
+        window.default_width = 900;
+        window.default_height = 700;
 
         window.set_titlebar(new NewsHeaderBar(window));
         window.add(new NewsPanel.from_feed(new GoogleNewsFeed()));
