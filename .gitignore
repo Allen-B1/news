@@ -1,0 +1,14 @@
+*~
+*.c
+CMakeFiles/
+data/CMakeFiles
+*.cmake
+*.log
+Makefile
+data/Makefile
+data/com.github.allen-b1.news
+install_manifest.txt
+CMakeCache.txt
+com.github.allen-b1.news
+debian/com.github.allen-b1.news/
+*.stamp
