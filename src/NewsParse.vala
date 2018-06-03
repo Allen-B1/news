@@ -36,6 +36,8 @@ class RssFeed : Feed {
         var channel = root->children;
         for(; channel->name != "channel"; channel = channel->next);
 
+        FeedItem[] items = this.items;
+
         // loop through elements
         for(var child = channel->children; child != null; child = child->next) {
             switch(child->name) {
@@ -67,10 +69,11 @@ class RssFeed : Feed {
                     }
                 }
 
-                this.items += item;
+                items += item;
                 break;
             }
         }
+        this.items = items;
     }
 
     /* Creates feed from uri */

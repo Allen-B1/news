@@ -24,7 +24,7 @@ class NewsList : Gtk.ScrolledWindow {
             title.set_markup("<span size=\"large\"><b>" + item.title + "</b></span>");
 
             // Align to start
-            title.halign = Gtk.Align.START;
+            title.halign = Gtk.Align.END;
             title.hexpand = false;
             title.justify = Gtk.Justification.LEFT;
             title.set_line_wrap(true);

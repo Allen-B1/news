@@ -30,12 +30,13 @@ int main (string[] args) {
         window.set_default_size(950, 950);
         window.destroy.connect(Gtk.main_quit);
 
-        window.set_titlebar(new NewsHeaderBar(window, notebook));
+        window.set_titlebar(new NewsHeaderBar(window));
         window.add(new NewsPanel.from_feed(new GoogleNewsFeed()));
 
         // Contestual stylesheet
         string STYLESHEET = """
-            @define-color colorPrimary #ff8c82;""";
+            @define-color colorPrimary #c6262e;
+            @define-color textColorPrimary #fafafa;""";
         var provider = new Gtk.CssProvider();
         provider.load_from_data(STYLESHEET, -1);
         Gtk.StyleContext.add_provider_for_screen(window.get_screen(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);

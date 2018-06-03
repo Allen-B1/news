@@ -1,5 +1,5 @@
 class NewsHeaderBar : Gtk.HeaderBar {
-	public NewsHeaderBar(Gtk.Window window, Granite.Widgets.DynamicNotebook notebook) {
+	public NewsHeaderBar(Gtk.Window window) {
         this.title = "News";
         this.show_close_button = true;
 
