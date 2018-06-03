@@ -3,12 +3,10 @@ A news viewer for elementary os
 
 ![Screenshot](screenshot.png)
 
-Progress has stalled, because I don't know how to use cmake.
-
 ## Installation
 ### On elementary OS?
 
-<a href="https://appcenter.elementary.io/com.github.allen-b1.news"><img src="https://appcenter.elementary.io/badge.svg" alt="Get it on the AppCenter"></a>
+<a href="https://appcenter.elementary.io/com.github.allen-b1.news"><img src="https://appcenter.elementary.io/badge.svg" alt="Get it on AppCenter"></a>
 
 ## Notes
 A big thanks to [mirkobrombin](https://github.com/mirkobrombin) for designing the icon  
