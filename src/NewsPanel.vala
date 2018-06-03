@@ -13,7 +13,10 @@ class NewsPanel : Gtk.Paned {
     public NewsPanel.from_feed(RssFeed feed) throws Error {
         var webview = new WebKit.WebView();
 
-        var list = new NewsList(feed, webview);
+        var list = new NewsList(feed);
+        list.item_selected.connect((item) => {
+            webview.load_uri(item.link);
+        });
 
         this(list, webview);
     }

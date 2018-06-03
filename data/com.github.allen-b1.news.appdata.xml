@@ -27,4 +27,12 @@
      <value key="x-appcenter-color-primary">#FF00AA</value>
      <value key="x-appcenter-color-primary-text">#FFF</value>
   </custom>
+
+  <releases>
+​    <release version="1.2.0" date="?">
+​      <description>
+​        <p>Design changes</p>
+​      </description>
+​    </release>
+​  </releases>
 </component>

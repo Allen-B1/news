@@ -1,9 +1,9 @@
 class NewsHeaderBar : Gtk.HeaderBar {
-	public NewsHeaderBar(Gtk.Window window) {
+	public NewsHeaderBar(Gtk.Window window, Granite.Widgets.DynamicNotebook notebook) {
         this.title = "News";
         this.show_close_button = true;
 
-        var search = new Gtk.Button.from_icon_name("edit-find", Gtk.IconSize.LARGE_TOOLBAR);
+/*        var search = new Gtk.Button.from_icon_name("edit-find", Gtk.IconSize.LARGE_TOOLBAR);
         search.tooltip_text = "Search...";
         search.halign = Gtk.Align.END;
         search.clicked.connect(() => {
@@ -28,12 +28,12 @@ class NewsHeaderBar : Gtk.HeaderBar {
             switch(result) {
                 case Gtk.ResponseType.ACCEPT:
                     string escaped_string = Uri.escape_string(entry.text);
-                    News.add_page("https://news.google.com/news/rss/search/section/q/" + escaped_string + "/" + escaped_string + "?hl=en&gl=US&ned=us");
+                    News.add_page(notebook, "https://news.google.com/news/rss/search/section/q/" + escaped_string + "/" + escaped_string + "?hl=en&gl=US&ned=us");
                     break;
             }
             dialog.destroy();
         });
         this.pack_end(search);
-      
+       */
     }
 }

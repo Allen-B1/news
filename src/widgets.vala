@@ -1,5 +1,6 @@
 namespace News {
-    void new_tab() {
+/*
+    void new_tab(Gtk.Window window, Granite.Widgets.DynamicNotebook notebook) {
         var dialog = new Gtk.Dialog.with_buttons("Add News Source", window, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, 
             "Done", Gtk.ResponseType.ACCEPT, 
             "Cancel", Gtk.ResponseType.REJECT, null);
@@ -47,14 +48,14 @@ namespace News {
                 url = "https://news.ycombinator.com/rss";
             else
                 url = entry.text;
-            News.add_page(url);
+            News.add_page(notebook, url);
             break;
         }
 
         dialog.destroy();
     }
 
-    void add_page(string? url) throws Error {
+    void add_page(Granite.Widgets.DynamicNotebook notebook, string? url) throws Error {
         if(url == null) {
             url = "https://news.google.com/news/rss/?ned=us&gl=US&hl=en";
         }
@@ -68,7 +69,7 @@ namespace News {
             var panel = new NewsPanel.from_feed(feed);
             panel.show_all();
 
-            var tab = new Granite.Widgets.Tab(feed.title == "Top Stories - Google News" ? "Google News" : feed.title, null, panel);
+            var tab = new Granite.Widgets.Tab(feed.title, null, panel);
             notebook.insert_tab(tab, -1); 
         } catch(Error err) {
             var dialog = new Gtk.MessageDialog(window, Gtk.DialogFlags.MODAL,
@@ -81,4 +82,5 @@ namespace News {
             return;
         }
     }
+*/
 }

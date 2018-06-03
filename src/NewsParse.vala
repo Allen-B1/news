@@ -1,99 +1,104 @@
-struct RssItem {
-    string title;
+struct FeedItem {
+    string? title;
     string? about;
-    string link;
-    string pubDate;
+    string? link;
+    string? pubDate;
     string? content;
 }
 
-struct RssFeed {
-    string title;
-    string about;
-    string link;
-    string? copyright;
-    RssItem[] items;
+abstract class Feed {
+    [Description(nick = "Feed items", blurb = "This is the list of feed entries.")]
+    public abstract FeedItem[] items { get; protected set; }
+    [Description(nick = "Feed title", blurb = "This is the title of the feed.")]
+    public abstract string? title { get; protected set; }
+    [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
+    public abstract string? link { get; protected set; }
 }
 
-namespace News {
-    RssFeed? parse(string str, string? url=null) {
+class RssFeed : Feed {
+    public string? about { get; protected set; default = null; }
+    public override string? title { get; protected set; default = null; }
+    public override string? link { get; protected set; default = null; }
+    public override FeedItem[] items { get; protected set; default = new FeedItem[0]; }
+
+    private RssFeed() {}
+
+    /* Creates feed from xml */
+    public RssFeed.from_xml(string str) {
         var doc = Xml.Parser.parse_doc(str);
-        RssFeed feed = {};
     
         Xml.Node* root = doc->get_root_element();
         if(root == null) {
             stderr.puts("Error parsing Xml.Doc: doc->get_root_element() is null");
-            return null;
         }
 
+        // find channel element
         var channel = root->children;
         for(; channel->name != "channel"; channel = channel->next);
+
+        // loop through elements
         for(var child = channel->children; child != null; child = child->next) {
             switch(child->name) {
             case "title":
-                feed.title = child->get_content();
-            break;
+                this.title = child->get_content();
+                break;
             case "description":
-                feed.about = child->get_content();
-            break;
+                this.about = child->get_content();
+                break;
             case "link":
-                feed.link = child->get_content();
-            break;
+                this.link = child->get_content();
+                break;
             case "item":
-                RssItem item = RssItem();
+                FeedItem item = FeedItem();
                 for(var childitem = child->children; childitem != null; childitem = childitem->next) {
                     switch(childitem->name) {
                     case "title":
                         item.title = childitem->get_content().replace("&", "&amp;");
-                    break;
+                        break;
                     case "link":
                         item.link = childitem->get_content();
-                    break;
+                        break;
                     case "description":
                         item.about = childitem->get_content();
-                    break;
+                        break;
                     case "encoded":
                         item.content = childitem->get_content();
-                    break;
+                        break;
                     }
                 }
 
-                item.about = News.parse_rules(url, item.about);
-                feed.items += item;
-            break;
+                this.items += item;
+                break;
             }
         }
-        return feed;
     }
 
-    RssFeed? parse_from_uri(string uri) {
+    /* Creates feed from uri */
+    public RssFeed.from_uri(string uri) throws Error {
         var news_page = File.new_for_uri(uri);
     
         DataInputStream data_stream = null;
         try {
             data_stream = new DataInputStream(news_page.read());
-        } catch(GLib.Error err) {
+        } catch(Error err) {
             stdout.puts(err.message);
             stdout.putc('\n');
-            return null;
+            throw err;
         }
         data_stream.set_byte_order(DataStreamByteOrder.LITTLE_ENDIAN);
 
         string line = null;
         var text = new StringBuilder();
-        try {
-            while((line = data_stream.read_line()) != null) {
-                text.append(line);
-                text.append_c('\n');
-            }
-        } catch(GLib.IOError err) {
-            return null;
+        while((line = data_stream.read_line()) != null) {
+            text.append(line);
+            text.append_c('\n');
         }
 
-        return News.parse(text.str, uri);
+        this.from_xml(text.str);
     }
 
-    // special exceptions (has a lot)
-    string? parse_rules(owned string url, owned string? about) {
+/*    // special exceptions (has a lot)
+    private static string? parse_rules(owned string url, owned string? about) {
         if(url != null) url = url.ascii_down();
 
         if(url == null); // make url null
@@ -110,6 +115,13 @@ namespace News {
             about = about.slice(about.index_of("<p>"), about.index_of("</p>"));
         }
         return about;
+    }
+*/
+}
+
+class GoogleNewsFeed : RssFeed {
+    public GoogleNewsFeed() throws Error {
+        base.from_uri("https://news.google.com/news/rss/?ned=us&gl=US&hl=en");
     }
 }
 

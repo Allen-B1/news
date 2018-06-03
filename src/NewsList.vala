@@ -1,12 +1,11 @@
 class NewsList : Gtk.ScrolledWindow {
-    public RssFeed feed;
+    public Feed feed;
     private string[] contents;
-    private string url;
-    private WebKit.WebView webview; // to store the contents
 
-	public NewsList(RssFeed feed, WebKit.WebView webview) {
+    public signal void item_selected(FeedItem item);
+
+	public NewsList(Feed feed) {
         this.feed = feed;
-        this.webview = webview;
         this.vexpand = true;
 
         // disable horizontal scrollbar
@@ -32,24 +31,6 @@ class NewsList : Gtk.ScrolledWindow {
  
             box.pack_start(title, false, false, 0);
 
-            if(item.about != null) {
-                // Description
-                item.about = item.about.replace("<p>", "\n").replace("</p>", "\n").replace("</span>", "").replace("<span>", "");
-                var desc = new Gtk.Label(item.about);
-
-                // Align to left
-                desc.halign = Gtk.Align.START;
-                desc.justify = Gtk.Justification.LEFT;
-                desc.hexpand = false;
-                desc.margin = 0;
-               
-                desc.set_markup(item.about);
-                desc.set_line_wrap (true);
-                
-                desc.override_background_color(Gtk.StateFlags.NORMAL, {0,0,0,0});
-                box.pack_start(desc, false, false, 0);
-            }
-
             list.add(box);
         }
 
@@ -57,8 +38,7 @@ class NewsList : Gtk.ScrolledWindow {
 
         list.row_selected.connect((row) => {
             if(row != null) {
-                var data = this.feed.items[row.get_index()];
-                this.webview.load_uri(data.link);
+                this.item_selected(this.feed.items[row.get_index()]);
             }
         });
     }
