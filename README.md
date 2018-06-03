@@ -1,12 +1,9 @@
-# com.github.allen-b1.news
+# News
 A news viewer for elementary os
 
-![Screenshot](screenshot.png)
-
-## Installation
-### On elementary OS?
-
 <a href="https://appcenter.elementary.io/com.github.allen-b1.news"><img src="https://appcenter.elementary.io/badge.svg" alt="Get it on AppCenter"></a>
+
+![Screenshot](screenshot.png)
 
 ## Notes
 A big thanks to [mirkobrombin](https://github.com/mirkobrombin) for designing the icon  
