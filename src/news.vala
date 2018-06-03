@@ -1,33 +1,16 @@
-void show_about_dialog() {
-    Granite.Widgets.AboutDialog dialog = new Granite.Widgets.AboutDialog();
-	dialog.program_name = "News";
-    dialog.title = dialog.program_name;
-	dialog.artists = {"mirkobromin"};
-	dialog.authors = {"Allen B"};
-	dialog.comments = "View the news easily & quickly";
-	dialog.website = dialog.help = "https://github.com/Allen-B1/news/";
-    dialog.bug = "https://github.com/Allen-B1/news/issues";    
-	dialog.website_label = "Website";		
-	dialog.run();
-	dialog.destroy();
-}
+class NewsApp : Gtk.Application {
+    public NewsApp () {
+        Object (
+            application_id: "com.github.allen-b1.news",
+            flags: ApplicationFlags.FLAGS_NONE
+        );
+    }
 
-static Gtk.Window window;
-static Granite.Widgets.DynamicNotebook notebook;
-
-int main (string[] args) {
-    stdout.printf("%d\n", args.length);
-    stdout.printf("%s\n", args[0]);
-
-    Gtk.init(ref args);
-
-    if(args.length >= 2) {
-        show_about_dialog();
-        Process.exit(0);
-    } else {
-        window = new Gtk.Window();
+    protected override void activate() {
+        var window = new Gtk.ApplicationWindow(this);
         window.title = "News";
-        window.set_default_size(950, 950);
+        window.default_width = 700;
+        window.default_height = 500;
         window.destroy.connect(Gtk.main_quit);
 
         window.set_titlebar(new NewsHeaderBar(window));
@@ -42,10 +25,32 @@ int main (string[] args) {
         Gtk.StyleContext.add_provider_for_screen(window.get_screen(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         window.show_all();
-
-        window.resize(950, 950);
     }
-    Gtk.main();
 
-    return 0;
+    private static void show_about_dialog() {
+        Granite.Widgets.AboutDialog dialog = new Granite.Widgets.AboutDialog();
+	    dialog.program_name = "News";
+        dialog.title = "About " + dialog.program_name;
+	    dialog.artists = {"mirkobromin"};
+	    dialog.authors = {"Allen B"};
+	    dialog.comments = "View the news easily & quickly";
+	    dialog.website = "https://github.com/Allen-B1/news/";
+        dialog.help = "https://github.com/Allen-B1/news/issues";
+        dialog.bug = "https://github.com/Allen-B1/news/issues/new";
+	    dialog.website_label = "Website";		
+	    dialog.run();
+	    dialog.destroy();
+    }
+
+    public static int main (string[] args) {
+        if("--about" in args) {
+            Gtk.init(ref args);
+            show_about_dialog();
+            Gtk.main();
+            return 0;
+        } else {
+            var app = new NewsApp();
+            return app.run(args);
+        }
+    }
 }
