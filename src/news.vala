@@ -46,7 +46,6 @@ class NewsApp : Gtk.Application {
         if("--about" in args) {
             Gtk.init(ref args);
             show_about_dialog();
-            Gtk.main();
             return 0;
         } else {
             var app = new NewsApp();
