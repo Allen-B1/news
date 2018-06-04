@@ -5,7 +5,7 @@
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>News</name>
-  <summary>Browse the news</summary>
+  <summary>See top headlines</summary>
   <developer_name>Allen B</developer_name>
   <screenshots>
       <screenshot type="default">
@@ -13,11 +13,10 @@
       </screenshot>
   </screenshots>
   <description>
-    <p>Browse the news easily &amp; quickly</p>
+    <p>See the news</p>
     <p><b>Features</b></p>
     <ul>
-      <li>Search directly from Google News</li>
-      <li>Multiple news feeds at once</li>
+      <li>Custom RSS feeds</li>
     </ul>
   </description>
   <url type="homepage">https://github.com/allen-b1/news</url>
@@ -29,9 +28,9 @@
   </custom>
 
   <releases>
-​    <release version="1.2.0" date="?">
+​    <release version="1.2" date="?">
 ​      <description>
-​        <p>Design changes</p>
+​        <p>Bug fixes. Removed about dialog.</p>
 ​      </description>
 ​    </release>
 ​  </releases>
