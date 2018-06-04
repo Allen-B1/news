@@ -26,29 +26,8 @@ class NewsApp : Gtk.Application {
         window.show_all();
     }
 
-    private static void show_about_dialog() {
-        Granite.Widgets.AboutDialog dialog = new Granite.Widgets.AboutDialog();
-	    dialog.program_name = "News";
-        dialog.title = "About " + dialog.program_name;
-	    dialog.artists = {"mirkobromin"};
-	    dialog.authors = {"Allen B"};
-	    dialog.comments = "View the news easily & quickly";
-	    dialog.website = "https://github.com/Allen-B1/news/";
-        dialog.help = "https://github.com/Allen-B1/news/issues";
-        dialog.bug = "https://github.com/Allen-B1/news/issues/new";
-	    dialog.website_label = "Website";		
-	    dialog.run();
-	    dialog.destroy();
-    }
-
     public static int main (string[] args) {
-        if("--about" in args) {
-            Gtk.init(ref args);
-            show_about_dialog();
-            return 0;
-        } else {
-            var app = new NewsApp();
-            return app.run(args);
-        }
+        var app = new NewsApp();
+        return app.run(args);
     }
 }
