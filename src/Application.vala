@@ -15,7 +15,9 @@ class NewsApp : Gtk.Application {
         window.set_titlebar(new NewsHeaderBar(window));
 
         var notebook = new NewsNotebook();
-        notebook.add_feed(new GoogleNewsFeed());
+        notebook.add_feed(new RssFeed.from_uri("https://news.google.com/news/rss/?ned=us&gl=US&hl=e"));
+        notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
+
 
         window.add(notebook);
 

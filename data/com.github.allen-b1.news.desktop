@@ -9,10 +9,4 @@ Terminal=false
 Type=Application
 X-GNOME-Gettext-Domain=com.github.allen-b1.news
 Keywords=News;
-Actions=About;
-
-[Desktop Action About]
-Name=About News
-Exec=com.github.allen-b1.news --about
-Icon=com.github.allen-b1.news
 
