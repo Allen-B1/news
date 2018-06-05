@@ -13,7 +13,11 @@ class NewsApp : Gtk.Application {
         window.default_height = 700;
 
         window.set_titlebar(new NewsHeaderBar(window));
-        window.add(new NewsPanel.from_feed(new GoogleNewsFeed()));
+
+        var notebook = new NewsNotebook();
+        notebook.add_feed(new GoogleNewsFeed());
+
+        window.add(notebook);
 
         // Contestual stylesheet
         string STYLESHEET = """

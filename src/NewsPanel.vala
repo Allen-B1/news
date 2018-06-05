@@ -10,7 +10,8 @@ class NewsPanel : Gtk.Paned {
         this.set_position(200);
     }
 
-    public NewsPanel.from_feed(RssFeed feed) throws Error {
+    
+    public NewsPanel.from_feed(Feed feed) throws Error {
         var webview = new WebKit.WebView();
 
         var list = new NewsList(feed);
