@@ -17,14 +17,15 @@ class NewsList : Gtk.ScrolledWindow {
         foreach(var item in feed.items) {
             var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             box.margin = 12;
+            box.halign = Gtk.Align.START;
 
             // Title
             var title = new Gtk.Label(item.title);
 
             // Align to start
             title.set_line_wrap(true);
-            title.hexpand = true;
             title.halign = Gtk.Align.START;
+            title.xalign = 0;
             title.justify = Gtk.Justification.LEFT;
  
             box.pack_start(title, false, false, 0);

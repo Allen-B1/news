@@ -18,7 +18,6 @@ class NewsApp : Gtk.Application {
         notebook.add_feed(new RssFeed.from_uri("https://news.google.com/news/rss/?ned=us&gl=US&hl=e"));
         notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
 
-
         window.add(notebook);
 
         // Contestual stylesheet
