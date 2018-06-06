@@ -122,3 +122,10 @@ class RssFeed : Feed {
 */
 }
 
+class GoogleNewsFeed : RssFeed {
+    public GoogleNewsFeed() {
+        base.from_uri("https://news.google.com/news/rss/?ned=us&gl=US&hl=e");
+    }
+    public
+}
+
