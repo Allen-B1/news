@@ -30,7 +30,11 @@
   <releases>
 ​    <release version="1.1.2" date="?">
 ​      <description>
-​        <p>Bug fixes. Removed about dialog.</p>
+​        <ul>
+            <li>Removed about dialog</li>
+            <li>Change color of header bar</li>
+            <li>Fixed issue where text wouldn't always align to the left</li>
+        </ul>
 ​      </description>
 ​    </release>
 ​  </releases>
