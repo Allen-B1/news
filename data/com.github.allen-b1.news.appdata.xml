@@ -13,11 +13,7 @@
       </screenshot>
   </screenshots>
   <description>
-    <p>Watch what's going around all over the world.</p>
-    <p><b>Features</b></p>
-    <ul>
-      <li>Custom RSS feeds</li>
-    </ul>
+    <p>See what's going around all over the world.</p>
   </description>
   <url type="homepage">https://github.com/allen-b1/news</url>
   <url type="bugtracker">https://github.com/allen-b1/news/issues/labels/bug</url>
