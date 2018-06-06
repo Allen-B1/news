@@ -13,7 +13,7 @@
       </screenshot>
   </screenshots>
   <description>
-    <p>See the news</p>
+    <p>Watch what's going around all over the world.</p>
     <p><b>Features</b></p>
     <ul>
       <li>Custom RSS feeds</li>
@@ -23,12 +23,12 @@
   <url type="bugtracker">https://github.com/allen-b1/news/issues/labels/bug</url>
   <url type="help">https://github.com/allen-b1/news/issues/new</url>
   <custom>
-     <value key="x-appcenter-color-primary">#FF00AA</value>
+     <value key="x-appcenter-color-primary">#c6262e</value>
      <value key="x-appcenter-color-primary-text">#FFF</value>
   </custom>
 
   <releases>
-​    <release version="1.2" date="?">
+​    <release version="1.1.2" date="?">
 ​      <description>
 ​        <p>Bug fixes. Removed about dialog.</p>
 ​      </description>
