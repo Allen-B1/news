@@ -11,7 +11,7 @@ class NewsPanel : Gtk.Paned {
     }
 
     
-    public NewsPanel.from_feed(Feed feed) throws Error {
+    public NewsPanel.from_feed(Feed feed) {
         var webview = new WebKit.WebView();
 
         var list = new NewsList(feed);

@@ -22,7 +22,12 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 			dialog.destroy();
 			switch(result) {
 				case Gtk.ResponseType.OK:
-					add_feed(new RssFeed.from_uri(text));
+					try {
+						add_feed(new RssFeed.from_uri(text));
+					} catch(Error err) {
+						stdout.puts(err.message);
+						this.error();
+					}
 					break;
 				case Gtk.ResponseType.CANCEL:
 					break;
@@ -30,8 +35,11 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 		});
 	}
 
+	// thrown when on new_tab_requested the new feed fails
+	public signal void error();
+
 	public void add_feed(Feed feed) {
 		var tab = new Granite.Widgets.Tab(feed.title, null, new NewsPanel.from_feed(feed));
 		this.insert_tab(tab, -1);
-	}			
+	}
 }

@@ -14,11 +14,27 @@ class NewsApp : Gtk.Application {
 
         window.set_titlebar(new NewsHeaderBar(window));
 
-        var notebook = new NewsNotebook();
-        notebook.add_feed(new GoogleNewsFeed());
-        notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
+        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        window.add(box);
 
-        window.add(notebook);
+        var notebook = new NewsNotebook();
+        notebook.error.connect(() => {
+            var info_bar = new Gtk.InfoBar();
+            info_bar.set_message_type(Gtk.MessageType.ERROR);
+            info_bar.get_content_area().add(new Gtk.Label("Something went wrong."));
+            info_bar.set_show_close_button(true);
+
+            box.add(info_bar);
+        });
+        try {
+            notebook.add_feed(new GoogleNewsFeed());
+            notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
+        } catch(Error err) {
+            notebook.error();
+        }
+
+        box.add(notebook);
+
 
         // Contestual stylesheet
         string STYLESHEET = """

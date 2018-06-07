@@ -24,7 +24,7 @@ class RssFeed : Feed {
     private RssFeed() {}
 
     /* Creates feed from xml */
-    public RssFeed.from_xml(string str) {
+    public RssFeed.from_xml(string str) throws Error {
         var doc = Xml.Parser.parse_doc(str);
     
         Xml.Node* root = doc->get_root_element();
@@ -80,17 +80,11 @@ class RssFeed : Feed {
     }
 
     /* Creates feed from uri */
-    public RssFeed.from_uri(string uri) throws Error {
+    public RssFeed.from_uri(string uri) throws FileError, IOError, Error {
         var news_page = File.new_for_uri(uri);
-    
+
         DataInputStream data_stream = null;
-        try {
-            data_stream = new DataInputStream(news_page.read());
-        } catch(Error err) {
-            stdout.puts(err.message);
-            stdout.putc('\n');
-            throw err;
-        }
+        data_stream = new DataInputStream(news_page.read());
         data_stream.set_byte_order(DataStreamByteOrder.LITTLE_ENDIAN);
 
         string line = null;
