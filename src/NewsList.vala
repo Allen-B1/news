@@ -20,15 +20,24 @@ class NewsList : Gtk.ScrolledWindow {
             box.halign = Gtk.Align.START;
 
             // Title
-            var title = new Gtk.Label(item.title);
+            var title = new Gtk.Label(null);
+            title.set_markup("<b>" + Markup.escape_text(item.title) + "</b>");
 
             // Align to start
             title.set_line_wrap(true);
             title.halign = Gtk.Align.START;
             title.xalign = 0;
             title.justify = Gtk.Justification.LEFT;
- 
+
             box.pack_start(title, false, false, 0);
+
+            if(item.pubDate != null) {
+                var pub_date_label = new Gtk.Label(item.pubDate);
+                pub_date_label.halign = Gtk.Align.START;
+                pub_date_label.xalign = 0;
+                box.pack_end(pub_date_label, false, false, 0);
+            }
+ 
 
             list.add(box);
         }

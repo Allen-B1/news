@@ -66,6 +66,9 @@ class RssFeed : Feed {
                     case "encoded":
                         item.content = childitem->get_content();
                         break;
+                    case "pubDate":
+                        item.pubDate = childitem->get_content();
+                        break;
                     }
                 }
 
@@ -123,9 +126,12 @@ class RssFeed : Feed {
 }
 
 class GoogleNewsFeed : RssFeed {
-    public GoogleNewsFeed() {
+    public GoogleNewsFeed() throws Error {
         base.from_uri("https://news.google.com/news/rss/?ned=us&gl=US&hl=e");
     }
-    public
+    public override string? title {
+        get { return "Google News"; }
+        protected set {}
+    }
 }
 
