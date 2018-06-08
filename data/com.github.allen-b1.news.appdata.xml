@@ -30,7 +30,9 @@
             <li>Removed about dialog</li>
             <li>Change color of header bar</li>
             <li>Fixed issue where text wouldn't always align to the left</li>
-            <li>Added dates</li>
+            <li>Added dates for RSS entries</li>
+            <li>Simplified new RSS feed dialog</li>
+            <li>Added infobars</li>
         </ul>
 ​      </description>
 ​    </release>
