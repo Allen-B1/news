@@ -23,18 +23,22 @@ class NewsApp : Gtk.Application {
             info_bar.set_message_type(Gtk.MessageType.ERROR);
             info_bar.get_content_area().add(new Gtk.Label("Something went wrong."));
             info_bar.set_show_close_button(true);
+            info_bar.response.connect((res) => { 
+                if(res == Gtk.ResponseType.CLOSE)
+                    info_bar.destroy();
+            });
+            info_bar.show_all();    
 
             box.add(info_bar);
         });
+        box.add(notebook);
+
         try {
             notebook.add_feed(new GoogleNewsFeed());
             notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
         } catch(Error err) {
             notebook.error();
         }
-
-        box.add(notebook);
-
 
         // Contestual stylesheet
         string STYLESHEET = """

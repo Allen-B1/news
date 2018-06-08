@@ -80,7 +80,7 @@ class RssFeed : Feed {
     }
 
     /* Creates feed from uri */
-    public RssFeed.from_uri(string uri) throws FileError, IOError, Error {
+    public RssFeed.from_uri(string uri) throws Error {
         var news_page = File.new_for_uri(uri);
 
         DataInputStream data_stream = null;

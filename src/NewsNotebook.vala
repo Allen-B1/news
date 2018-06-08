@@ -10,7 +10,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 
 			var entry = new Gtk.Entry();
 			entry.activate.connect(() => {
-			    dialog.response(Gtk.ResponseType.ACCEPT);
+			    dialog.response(Gtk.ResponseType.OK);
 			});
 			entry.margin_start = entry.margin_end = entry.margin_top = 6;
 			dialog.get_content_area().add(entry);
@@ -25,7 +25,6 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 					try {
 						add_feed(new RssFeed.from_uri(text));
 					} catch(Error err) {
-						stdout.puts(err.message);
 						this.error();
 					}
 					break;
