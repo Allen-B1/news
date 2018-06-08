@@ -23,7 +23,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 			switch(result) {
 				case Gtk.ResponseType.OK:
 					try {
-						add_feed(new RssFeed.from_uri(text));
+						this.current = add_feed(new RssFeed.from_uri(text));
 					} catch(Error err) {
 						this.error();
 					}
@@ -37,8 +37,9 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	// thrown when on new_tab_requested the new feed fails
 	public signal void error();
 
-	public void add_feed(Feed feed) {
+	public Granite.Widgets.Tab add_feed(Feed feed) {
 		var tab = new Granite.Widgets.Tab(feed.title, null, new NewsPanel.from_feed(feed));
 		this.insert_tab(tab, -1);
+		return tab;
 	}
 }
