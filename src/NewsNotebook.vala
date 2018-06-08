@@ -1,5 +1,5 @@
 class NewsNotebook : Granite.Widgets.DynamicNotebook {
-	public NewsNotebook() {
+	construct {
 		this.new_tab_requested.connect(() => {
 			var dialog = new Gtk.Dialog.with_buttons(null, (this.get_toplevel() is Gtk.Window) ? (Gtk.Window)this.get_toplevel() : null, Gtk.DialogFlags.MODAL, 
 					"Add", Gtk.ResponseType.OK,	
@@ -13,6 +13,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 			    dialog.response(Gtk.ResponseType.OK);
 			});
 			entry.margin_start = entry.margin_end = entry.margin_top = 6;
+			entry.placeholder_text = "Feed URL";
 			dialog.get_content_area().add(entry);
 			
 			dialog.get_content_area().show_all();
