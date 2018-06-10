@@ -1,3 +1,4 @@
+
 class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	construct {
 		this.new_tab_requested.connect(() => {

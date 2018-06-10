@@ -31,6 +31,11 @@ class NewsApp : Gtk.Application {
 
             box.add(info_bar);
         });
+        notebook.tab_removed.connect(() => {
+            if(notebook.n_tabs == 0) {
+                window.close();
+            }
+        });
         box.add(notebook);
 
         try {
@@ -52,7 +57,6 @@ class NewsApp : Gtk.Application {
     }
 
     public static int main (string[] args) {
-        var app = new NewsApp();
-        return app.run(args);
+        return new NewsApp().run(args);
     }
 }
