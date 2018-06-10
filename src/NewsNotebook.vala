@@ -2,7 +2,7 @@
 class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	construct {
 		this.new_tab_requested.connect(() => {
-			var dialog = new Granite.MessageDialog.with_image_from_icon_name("Add RSS feed",  "Enter the link to an RSS feed.", "dialog-question", Gtk.ButtonsType.NONE);
+			var dialog = new Granite.MessageDialog.with_image_from_icon_name("Add RSS feed",  "Enter RSS feed url", "dialog-question", Gtk.ButtonsType.NONE);
 
 			dialog.add_button("Cancel", Gtk.ResponseType.CANCEL);
 			dialog.add_button("Add", Gtk.ResponseType.OK).get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
