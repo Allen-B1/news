@@ -25,6 +25,8 @@ class RssFeed : Feed {
     public override string? link { get; protected set; default = null; }
     public override FeedItem[] items { get; protected set; default = new FeedItem[0]; }
 
+    public string source { get; private set; }
+
     private RssFeed() {}
 
     /* Creates feed from xml */
@@ -98,6 +100,7 @@ class RssFeed : Feed {
             text.append_c('\n');
         }
 
+        this.source = uri;
         this.from_xml(text.str);
     }
 
