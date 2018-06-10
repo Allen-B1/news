@@ -44,13 +44,6 @@ class NewsApp : Gtk.Application {
 
         box.add(notebook);
 
-        try {
-            notebook.add_feed(new GoogleNewsFeed());
-            notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
-        } catch(Error err) {
-            notebook.error();
-        }
-
         // Contestual stylesheet
         string STYLESHEET = """
             @define-color colorPrimary #c6262e;
