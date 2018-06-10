@@ -19,7 +19,7 @@
   <url type="bugtracker">https://github.com/allen-b1/news/issues/labels/bug</url>
   <url type="help">https://github.com/allen-b1/news/issues/new</url>
   <custom>
-     <value key="x-appcenter-color-primary">#c6262e</value>
+     <value key="x-appcenter-color-primary">#f20050</value>
      <value key="x-appcenter-color-primary-text">#FFF</value>
   </custom>
 
