@@ -39,9 +39,20 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	// thrown when on new_tab_requested the new feed fails
 	public signal void error();
 
+	[Description(nick="adds feed", blurb="Adds a tab with the given feed and sets it as the current tab")]
 	public Granite.Widgets.Tab add_feed(Feed feed) {
 		var tab = new Granite.Widgets.Tab(feed.title, null, new NewsPanel.from_feed(feed));
 		this.insert_tab(tab, -1);
+		this.current = tab;
 		return tab;
+	}
+
+	public Granite.Widgets.Tab? add_gnews(string query) {
+		try {
+			return this.add_feed(new GoogleNewsFeed.with_search(query));
+		} catch(Error err) {
+			this.error();
+			return null;
+		}
 	}
 }

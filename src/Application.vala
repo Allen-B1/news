@@ -12,7 +12,8 @@ class NewsApp : Gtk.Application {
         window.default_width = 900;
         window.default_height = 700;
 
-        window.set_titlebar(new NewsHeaderBar(window));
+        var headerbar = new NewsHeaderBar();
+        window.set_titlebar(headerbar);
 
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         window.add(box);
@@ -36,6 +37,11 @@ class NewsApp : Gtk.Application {
                 window.close();
             }
         });
+
+        headerbar.search.connect((query) => {
+            notebook.add_gnews(query);
+        });
+
         box.add(notebook);
 
         try {
