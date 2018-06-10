@@ -25,7 +25,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 			switch(result) {
 				case Gtk.ResponseType.OK:
 					try {
-						this.current = add_feed(new RssFeed.from_uri(text));
+						add_feed(new RssFeed.from_uri(text));
 					} catch(Error err) {
 						this.error();
 					}
