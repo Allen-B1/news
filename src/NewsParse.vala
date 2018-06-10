@@ -120,27 +120,24 @@ class RssFeed : Feed {
 }
 
 class GoogleNewsFeed : RssFeed {
-    private string query = "";
+    private string query = null;
+
     public GoogleNewsFeed() throws Error {
         base.from_uri("https://news.google.com/news/rss/?ned=us&gl=US&hl=e");
     }
 
-    public GoogleNewsFeed.with_search(string query) throws Error {
-		stdout.puts("Hi\n");
-
-        // Segfault occurs here
-        this.query = query;
-
-        base.from_uri("https://news.google.com/news/rss/search/section/q/" + query + "?ned=us&gl=US&hl=en");
+    public GoogleNewsFeed.with_search(string q) throws Error {
+        base.from_uri("https://news.google.com/news/rss/search/section/q/" + q + "?ned=us&gl=US&hl=en");
+        this.query = q;
     }
 
     private string _title;
     public override string? title {
         get {
-            if(query == null) {
+            if(this.query == null) {
                 return "Google News";
             } else {
-                _title = "\"" + query + "\" - Google News";
+                _title = "\"" + this.query + "\" - Google News";
                 return _title;
             }
         }

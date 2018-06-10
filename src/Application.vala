@@ -28,7 +28,7 @@ class NewsApp : Gtk.Application {
                 if(res == Gtk.ResponseType.CLOSE)
                     info_bar.destroy();
             });
-            info_bar.show_all();    
+            info_bar.show_all();
 
             box.add(info_bar);
         });
