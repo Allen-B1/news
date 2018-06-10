@@ -11,6 +11,7 @@ class NewsHeaderBar : Gtk.HeaderBar {
         this.search_entry.placeholder_text = "Search Google News";
         this.search_entry.activate.connect(() => {
             this.search(this.search_entry.text);
+			this.search_entry.text = "";
         });
         this.pack_end(this.search_entry);
     }
