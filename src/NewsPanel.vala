@@ -7,7 +7,7 @@ class NewsPanel : Gtk.Paned {
         this.orientation = Gtk.Orientation.HORIZONTAL;
         this.add1(list);
         this.add2(webview);
-        this.set_position(200);
+        this.set_position(300);
     }
 
     
