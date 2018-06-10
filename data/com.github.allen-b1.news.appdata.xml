@@ -19,7 +19,7 @@
   <url type="bugtracker">https://github.com/allen-b1/news/issues/labels/bug</url>
   <url type="help">https://github.com/allen-b1/news/issues/new</url>
   <custom>
-     <value key="x-appcenter-color-primary">#c6262e</value>
+     <value key="x-appcenter-color-primary">#f20050</value>
      <value key="x-appcenter-color-primary-text">#FFF</value>
   </custom>
 
@@ -31,8 +31,8 @@
             <li>Change color of header bar</li>
             <li>Fixed issue where text wouldn't always align to the left</li>
             <li>Added dates for RSS entries</li>
-            <li>Simplified new RSS feed dialog</li>
-            <li>Added infobars</li>
+            <li>Simplified "Add RSS feed" dialog</li>
+            <li>Changed error reporting to info bars instead of dialogs</li>
         </ul>
 ​      </description>
 ​    </release>

@@ -46,8 +46,9 @@ class NewsApp : Gtk.Application {
 
         // Contestual stylesheet
         string STYLESHEET = """
-            @define-color colorPrimary #c6262e;
-            @define-color textColorPrimary #fafafa;""";
+            @define-color colorPrimary #f20050;
+            @define-color textColorPrimary #fafafa;
+            @define-color colorAccent #68b723;""";
         var provider = new Gtk.CssProvider();
         provider.load_from_data(STYLESHEET, -1);
         Gtk.StyleContext.add_provider_for_screen(window.get_screen(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);

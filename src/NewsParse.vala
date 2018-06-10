@@ -15,6 +15,10 @@ abstract class Feed {
     public abstract string? link { get; protected set; }
 }
 
+errordomain FeedError {
+    INVALID_DOCUMENT
+}
+
 class RssFeed : Feed {
     public string? about { get; protected set; default = null; }
     public override string? title { get; protected set; default = null; }
@@ -29,7 +33,7 @@ class RssFeed : Feed {
     
         Xml.Node* root = doc->get_root_element();
         if(root == null) {
-            stderr.puts("Error parsing Xml.Doc: doc->get_root_element() is null");
+            throw new FeedError.INVALID_DOCUMENT("get_root_element() is null");
         }
 
         // find channel element
@@ -137,7 +141,7 @@ class GoogleNewsFeed : RssFeed {
             if(this.query == null) {
                 return "Google News";
             } else {
-                _title = "\"" + this.query + "\" - Google News";
+                _title = this.query + " - Google News";
                 return _title;
             }
         }
