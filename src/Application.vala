@@ -43,6 +43,13 @@ class NewsApp : Gtk.Application {
             notebook.add_gnews(query);
         });
 
+	    try {
+		    notebook.add_feed(new GoogleNewsFeed());
+	        notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
+	    } catch(Error err) {
+	        notebook.error();
+		}
+
         box.add(notebook);
 
         // Contestual stylesheet
