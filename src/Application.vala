@@ -23,7 +23,8 @@ class NewsApp : Gtk.Application {
             var info_bar = new Gtk.InfoBar();
             info_bar.set_message_type(Gtk.MessageType.ERROR);
             info_bar.get_content_area().add(new Gtk.Label("Something went wrong."));
-            info_bar.set_show_close_button(true);
+            if(notebook.n_tabs > 0)
+                info_bar.set_show_close_button(true);
             info_bar.response.connect((res) => { 
                 if(res == Gtk.ResponseType.CLOSE)
                     info_bar.destroy();

@@ -33,13 +33,15 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 			}
 		});
 
-		if(this.n_tabs == 0) {
-		    try {
-		        this.add_feed(new GoogleNewsFeed());
-		        this.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
-		    } catch(Error err) {
-		        this.error();
-		    }
+		add_default_tabs();
+	}
+
+	private void add_default_tabs() {
+	    try {
+		    this.add_feed(new GoogleNewsFeed());
+	        this.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
+	    } catch(Error err) {
+	        this.error();
 		}
 	}
 
