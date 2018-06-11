@@ -33,6 +33,7 @@
             <li>Added dates for RSS entries</li>
             <li>Simplified "Add RSS feed" dialog</li>
             <li>Changed error reporting to info bars instead of dialogs</li>
+            <li>Simplified searching; added Ctrl+F shortcut</li>
         </ul>
 ​      </description>
 ​    </release>
