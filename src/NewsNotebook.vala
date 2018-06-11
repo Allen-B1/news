@@ -33,8 +33,6 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 			}
 		});
 
-		this.allow_restoring = true;
-
 		if(this.n_tabs == 0) {
 		    try {
 		        this.add_feed(new GoogleNewsFeed());
