@@ -6,6 +6,12 @@ class NewsApp : Gtk.Application {
         );
     }
 
+    const string STYLESHEET = """
+        @define-color colorPrimary #f20050;
+        @define-color textColorPrimary #fafafa;
+        @define-color colorAccent #68b723;""";
+
+
     protected override void activate() {
         var window = new Gtk.ApplicationWindow(this);
         window.title = "News";
@@ -52,11 +58,6 @@ class NewsApp : Gtk.Application {
 
         box.add(notebook);
 
-        // Contestual stylesheet
-        string STYLESHEET = """
-            @define-color colorPrimary #f20050;
-            @define-color textColorPrimary #fafafa;
-            @define-color colorAccent #68b723;""";
         var provider = new Gtk.CssProvider();
         provider.load_from_data(STYLESHEET, -1);
         Gtk.StyleContext.add_provider_for_screen(window.get_screen(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
