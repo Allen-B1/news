@@ -15,7 +15,11 @@ class NewsHeaderBar : Gtk.HeaderBar {
         });
         this.pack_end(this.search_entry);
 
-/*        this.key_press_event.connect((event) => {
+        // Ctrl+F code is not working
+        var window = this.get_window();
+        if(window != null)
+            window.set_events(window.get_events() | Gdk.EventMask.KEY_PRESS_MASK);
+        this.get_toplevel().key_press_event.connect((event) => {
             stdout.puts("Cnonect");
             stdout.flush();
 
@@ -25,6 +29,5 @@ class NewsHeaderBar : Gtk.HeaderBar {
             }
             return false;
         }); 
-*/
     }
 }
