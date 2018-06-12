@@ -100,8 +100,8 @@ class RssFeed : Feed {
             text.append_c('\n');
         }
 
-        this.source = uri;
         this.from_xml(text.str);
+        this.source = uri;
     }
 
 /*    // special exceptions (has a lot)

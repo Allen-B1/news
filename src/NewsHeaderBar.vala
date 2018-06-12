@@ -14,5 +14,17 @@ class NewsHeaderBar : Gtk.HeaderBar {
 			this.search_entry.text = "";
         });
         this.pack_end(this.search_entry);
+
+/*        this.key_press_event.connect((event) => {
+            stdout.puts("Cnonect");
+            stdout.flush();
+
+            if(event.state == Gdk.ModifierType.CONTROL_MASK && (event.keyval == Gdk.Key.f || event.keyval == Gdk.Key.F)) {
+                this.search_entry.grab_focus();
+                return true;
+            }
+            return false;
+        }); 
+*/
     }
 }
