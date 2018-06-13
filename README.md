@@ -1,5 +1,5 @@
 # News
-A news viewer for elementary os
+An RSS aggreagator for elementary os
 
 <a href="https://appcenter.elementary.io/com.github.allen-b1.news"><img src="https://appcenter.elementary.io/badge.svg" alt="Get it on AppCenter"></a>
 
