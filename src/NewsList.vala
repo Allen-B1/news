@@ -35,9 +35,9 @@ class NewsList : Gtk.ScrolledWindow {
                 var pub_date_label = new Gtk.Label(item.pubDate);
                 pub_date_label.halign = Gtk.Align.START;
                 pub_date_label.xalign = 0;
+                pub_date_label.ellipsize = Pango.EllipsizeMode.END;
                 box.pack_end(pub_date_label, false, false, 0);
             }
- 
 
             list.add(box);
         }
