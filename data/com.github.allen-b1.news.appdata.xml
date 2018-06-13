@@ -24,7 +24,7 @@
   </custom>
 
   <releases>
-​    <release version="1.2" date="?">
+​    <release version="1.2" date="2018-06-13">
 ​      <description>
 ​        <ul>
             <li>Removed about dialog</li>
