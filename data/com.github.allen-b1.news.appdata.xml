@@ -29,11 +29,11 @@
 ​        <ul>
             <li>Removed about dialog</li>
             <li>Change color of header bar</li>
-            <li>Fixed issue where text wouldn't always align to the left</li>
-            <li>Added dates for RSS entries</li>
+            <li>Feed entry titles always align to the left</li>
+            <li>Added dates</li>
             <li>Simplified "Add RSS feed" dialog</li>
             <li>Changed error reporting to info bars instead of dialogs</li>
-            <li>Simplified searching; added Ctrl+F shortcut</li>
+            <li>Simplified searching via Google News; added Ctrl+F shortcut</li>
         </ul>
 ​      </description>
 ​    </release>
