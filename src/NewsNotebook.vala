@@ -44,9 +44,6 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	public Granite.Widgets.Tab add_feed(Feed feed) {
 		var tab = new Granite.Widgets.Tab(feed.title, null, new NewsPanel.from_feed(feed));
 		this.insert_tab(tab, -1);
-		if(feed is RssFeed) {
-			tab.restore_data = ((RssFeed)feed).source;
-		}
 		this.current = tab;
 		return tab;
 	}
