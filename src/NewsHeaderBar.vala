@@ -14,20 +14,9 @@ class NewsHeaderBar : Gtk.HeaderBar {
 			this.search_entry.text = "";
         });
         this.pack_end(this.search_entry);
-
-        // Ctrl+F code is not working
-        var window = this.get_window();
-        if(window != null)
-            window.set_events(window.get_events() | Gdk.EventMask.KEY_PRESS_MASK);
-        this.get_toplevel().key_press_event.connect((event) => {
-            stdout.puts("Cnonect");
-            stdout.flush();
-
-            if(event.state == Gdk.ModifierType.CONTROL_MASK && (event.keyval == Gdk.Key.f || event.keyval == Gdk.Key.F)) {
-                this.search_entry.grab_focus();
-                return true;
-            }
-            return false;
-        }); 
+   }
+    
+    public void focus_search() {
+        this.search_entry.grab_focus();
     }
 }

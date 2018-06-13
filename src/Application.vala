@@ -62,6 +62,14 @@ class NewsApp : Gtk.Application {
         provider.load_from_data(STYLESHEET, -1);
         Gtk.StyleContext.add_provider_for_screen(window.get_screen(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+        // Ctrl+F shortcut
+        var accel_group = new Gtk.AccelGroup();
+        accel_group.connect(Gdk.Key.f,  Gdk.ModifierType.CONTROL_MASK,  Gtk.AccelFlags.VISIBLE,  () => {
+            headerbar.focus_search();
+            return true;
+        });
+        window.add_accel_group(accel_group); 
+
         window.show_all();
     }
 
