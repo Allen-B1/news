@@ -1,7 +1,9 @@
 # News
+[![Built by Developers](https://forthebadge.com/images/badges/built-by-developers.svg)](https://forthebadge.com)
 An RSS aggreagator for elementary os
 
-<a href="https://appcenter.elementary.io/com.github.allen-b1.news"><img src="https://appcenter.elementary.io/badge.svg" alt="Get it on AppCenter"></a>
+[![Get it on Appcenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.allen-b1.news)
+
 
 ![Screenshot](screenshot.png)
 
