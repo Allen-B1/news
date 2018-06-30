@@ -4,6 +4,8 @@ class MainWindow : Gtk.ApplicationWindow {
         @define-color textColorPrimary #fafafa;
         @define-color colorAccent #68b723;""";
 
+    private NewsNotebook notebook;
+
     public MainWindow(Gtk.Application app) {
         Object (application: app,
             title: "News");
@@ -19,8 +21,8 @@ class MainWindow : Gtk.ApplicationWindow {
         var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         this.add(box);
 
-        var notebook = new NewsNotebook();
-        notebook.error.connect(() => {
+        this.notebook = new NewsNotebook();
+        this.notebook.error.connect(() => {
             var info_bar = new Gtk.InfoBar();
             info_bar.set_message_type(Gtk.MessageType.ERROR);
             info_bar.get_content_area().add(new Gtk.Label("Something went wrong."));
@@ -34,21 +36,21 @@ class MainWindow : Gtk.ApplicationWindow {
 
             box.add(info_bar);
         });
-        notebook.tab_removed.connect(() => {
-            if(notebook.n_tabs == 0) {
+        this.notebook.tab_removed.connect(() => {
+            if(this.notebook.n_tabs == 0) {
                 this.close();
             }
         });
 
         headerbar.search.connect((query) => {
-            notebook.add_gnews(query);
+            this.notebook.add_gnews(query);
         });
 
 	    try {
-		    notebook.add_feed(new GoogleNewsFeed());
-	        notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
+		    this.notebook.add_feed(new GoogleNewsFeed());
+	        this.notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
 	    } catch(Error err) {
-	        notebook.error();
+	        this.notebook.error();
 		}
 
         box.add(notebook);
@@ -64,5 +66,13 @@ class MainWindow : Gtk.ApplicationWindow {
             return true;
         });
         this.add_accel_group(accel_group); 
+    }
+
+    private void add_feed(Feed feed) {
+        try {
+            this.notebook.add_feed(feed);
+        } catch(Error err) {
+            this.notebook.error();
+        }
     }
 }

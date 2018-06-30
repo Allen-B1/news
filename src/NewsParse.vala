@@ -85,13 +85,9 @@ class RssFeed : Feed {
         this.items = items;
     }
 
-    /* Creates feed from uri */
-    public RssFeed.from_uri(string uri) throws Error {
-        var news_page = File.new_for_uri(uri);
-
-        DataInputStream data_stream = null;
-        data_stream = new DataInputStream(news_page.read());
-        data_stream.set_byte_order(DataStreamByteOrder.LITTLE_ENDIAN);
+    /* Creates feed from file */
+    public RssFeed.from_file(File file) {
+        DataInputStream data_stream = new DataInputStream(file.read());
 
         string line = null;
         var text = new StringBuilder();
@@ -101,6 +97,11 @@ class RssFeed : Feed {
         }
 
         this.from_xml(text.str);
+    }
+
+    /* Creates feed from uri */
+    public RssFeed.from_uri(string uri) throws Error {
+        this.from_file(File.new_for_uri(uri));
         this.source = uri;
     }
 
