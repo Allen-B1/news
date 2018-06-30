@@ -34,6 +34,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/NewsPanel.vala
     src/NewsParse.vala
     src/NewsNotebook.vala
+    src/MainWindow.vala
 
 PACKAGES
     gtk+-3.0
