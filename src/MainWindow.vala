@@ -26,7 +26,12 @@ class MainWindow : Gtk.ApplicationWindow {
 
         var errortoast = new Granite.Widgets.Toast("Something went wrong");
         box.add_overlay(errortoast);
-        this.notebook.error.connect(() => {
+        this.notebook.error.connect((error) => {
+            if(error is NewsNotebookError) {
+                errortoast.title = error.message;
+            } else {
+                errortoast.title = "Something went wrong";
+            }
             errortoast.send_notification();
             stdout.printf("Log\n");
         });
@@ -44,7 +49,7 @@ class MainWindow : Gtk.ApplicationWindow {
 		    this.notebook.add_feed(new GoogleNewsFeed());
 	        this.notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
 	    } catch(Error err) {
-	        this.notebook.error();
+	        this.notebook.error(null);
 		}
 
         var provider = new Gtk.CssProvider();

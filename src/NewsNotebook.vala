@@ -1,3 +1,7 @@
+errordomain NewsNotebookError {
+	ADD_FEED_ERROR
+}
+
 
 class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	construct {
@@ -28,7 +32,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 					try {
 						add_feed(new RssFeed.from_uri(text));
 					} catch(Error err) {
-						this.error();
+						this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not fetch RSS feed"));
 					}
 					break;
 				case Gtk.ResponseType.CANCEL:
@@ -38,7 +42,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	}
 
 	// thrown when on new_tab_requested the new feed fails
-	public signal void error();
+	public signal void error(Error? error);
 
 	[Description(nick="adds feed", blurb="Adds a tab with the given feed and sets it as the current tab")]
 	public Granite.Widgets.Tab add_feed(Feed feed) {
@@ -52,7 +56,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 		try {
 			return this.add_feed(new GoogleNewsFeed.with_search(query));
 		} catch(Error err) {
-			this.error();
+			this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not reach Google News"));
 			return null;
 		}
 	}
