@@ -86,7 +86,7 @@ class RssFeed : Feed {
     }
 
     /* Creates feed from file */
-    public RssFeed.from_file(File file) {
+    public RssFeed.from_file(File file) throws Error {
         DataInputStream data_stream = new DataInputStream(file.read());
 
         string line = null;

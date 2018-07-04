@@ -18,23 +18,17 @@ class MainWindow : Gtk.ApplicationWindow {
         var headerbar = new NewsHeaderBar();
         this.set_titlebar(headerbar);
 
-        var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        var box = new Gtk.Overlay();
         this.add(box);
 
         this.notebook = new NewsNotebook();
-        this.notebook.error.connect(() => {
-            var info_bar = new Gtk.InfoBar();
-            info_bar.set_message_type(Gtk.MessageType.ERROR);
-            info_bar.get_content_area().add(new Gtk.Label("Something went wrong."));
-            if(notebook.n_tabs > 0)
-                info_bar.set_show_close_button(true);
-            info_bar.response.connect((res) => { 
-                if(res == Gtk.ResponseType.CLOSE)
-                    info_bar.destroy();
-            });
-            info_bar.show_all();
+        box.add_overlay(notebook);
 
-            box.add(info_bar);
+        var errortoast = new Granite.Widgets.Toast("Something went wrong");
+        box.add_overlay(errortoast);
+        this.notebook.error.connect(() => {
+            errortoast.send_notification();
+            stdout.printf("Log\n");
         });
         this.notebook.tab_removed.connect(() => {
             if(this.notebook.n_tabs == 0) {
@@ -53,8 +47,6 @@ class MainWindow : Gtk.ApplicationWindow {
 	        this.notebook.error();
 		}
 
-        box.add(notebook);
-
         var provider = new Gtk.CssProvider();
         provider.load_from_data(STYLESHEET, -1);
         Gtk.StyleContext.add_provider_for_screen(this.get_screen(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -68,11 +60,7 @@ class MainWindow : Gtk.ApplicationWindow {
         this.add_accel_group(accel_group); 
     }
 
-    private void add_feed(Feed feed) {
-        try {
-            this.notebook.add_feed(feed);
-        } catch(Error err) {
-            this.notebook.error();
-        }
+    public void add_feed(Feed feed) {
+        this.notebook.add_feed(feed);
     }
 }

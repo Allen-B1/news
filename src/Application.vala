@@ -6,8 +6,22 @@ class NewsApp : Gtk.Application {
         );
     }
 
+    protected override void open(File[] files, string hint) {
+        var window = this.get_active_window();
+        if(window is MainWindow) {
+            foreach (var file in files) {
+                ((MainWindow)window).add_feed(new RssFeed.from_file(file));
+            }
+        }
+    }
+    
+    construct {
+        this.flags |= ApplicationFlags.HANDLES_OPEN;
+    }
+
     protected override void activate() {
         var window = new MainWindow(this);
+        this.add_window(window);
         window.show_all();
     }
 
