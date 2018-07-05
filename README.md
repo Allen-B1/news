@@ -1,7 +1,7 @@
 [![Built by Developers](https://forthebadge.com/images/badges/built-by-developers.svg)](https://forthebadge.com)
 
 # News
-An RSS aggreagator for elementary os
+A feed reader for elementary os
 
 [![Get it on Appcenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.allen-b1.news)
 
