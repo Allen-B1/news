@@ -30,6 +30,7 @@
         <ul>
           <li>Allowed other applications to open RSS feeds in News</li>
           <li>Added the ability to view feed information</li>
+          <li>Toasts will show up instead of info bars</li>
         </ul>
       </description>
     </release>
