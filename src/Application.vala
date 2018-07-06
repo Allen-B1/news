@@ -2,7 +2,7 @@ class NewsApp : Gtk.Application {
     public NewsApp () {
         Object (
             application_id: "com.github.allen-b1.news",
-            flags: ApplicationFlags.FLAGS_NONE
+            flags: ApplicationFlags.HANDLES_OPEN
         );
     }
 
@@ -11,12 +11,9 @@ class NewsApp : Gtk.Application {
         if(window is MainWindow) {
             foreach (var file in files) {
                 ((MainWindow)window).add_feed(new RssFeed.from_file(file));
+                window.accept_focus = true;
             }
         }
-    }
-    
-    construct {
-        this.flags |= ApplicationFlags.HANDLES_OPEN;
     }
 
     protected override void activate() {
