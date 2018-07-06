@@ -27,7 +27,7 @@ class MainWindow : Gtk.ApplicationWindow {
         var errortoast = new Granite.Widgets.Toast("Something went wrong");
         box.add_overlay(errortoast);
         this.notebook.error.connect((error) => {
-            if(error is NewsNotebookError) {
+            if(error != null && error is NewsNotebookError) {
                 errortoast.title = error.message;
             } else {
                 errortoast.title = "Something went wrong";
