@@ -5,10 +5,16 @@ class MainWindow : Gtk.ApplicationWindow {
         @define-color colorAccent #68b723;""";
 
     private NewsNotebook notebook;
+    private Granite.Widgets.Toast errortoast;
 
     public MainWindow(Gtk.Application app) {
         Object (application: app,
             title: "News");
+    }
+
+    public void show_error(string msg = "Something went wrong") {
+        this.errortoast.title = msg;
+        this.errortoast.send_notification();
     }
 
     construct {
@@ -21,20 +27,16 @@ class MainWindow : Gtk.ApplicationWindow {
         var box = new Gtk.Overlay();
         this.add(box);
 
+        this.errortoast = new Granite.Widgets.Toast("Something went wrong");
+        box.add_overlay(errortoast);
+
         this.notebook = new NewsNotebook();
         box.add_overlay(notebook);
 
-        var errortoast = new Granite.Widgets.Toast("Something went wrong");
-        box.add_overlay(errortoast);
         this.notebook.error.connect((error) => {
-            if(error != null && error is NewsNotebookError) {
-                errortoast.title = error.message;
-            } else {
-                errortoast.title = "Something went wrong";
-            }
-            errortoast.send_notification();
-            stdout.printf("Log\n");
+            this.show_error(error == null ? "Something went wrong" : error.message);
         });
+
         this.notebook.tab_removed.connect(() => {
             if(this.notebook.n_tabs == 0) {
                 this.close();
@@ -49,7 +51,7 @@ class MainWindow : Gtk.ApplicationWindow {
 		    this.notebook.add_feed(new GoogleNewsFeed());
 	        this.notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
 	    } catch(Error err) {
-	        this.notebook.error(null);
+	        this.show_error();
 		}
 
         var provider = new Gtk.CssProvider();
@@ -62,7 +64,7 @@ class MainWindow : Gtk.ApplicationWindow {
             headerbar.focus_search();
             return true;
         });
-        this.add_accel_group(accel_group); 
+        this.add_accel_group(accel_group);
     }
 
     public void add_feed(Feed feed) {
