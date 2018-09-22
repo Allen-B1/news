@@ -1,6 +1,5 @@
 class NewsList : Gtk.ScrolledWindow {
     public Feed feed;
-    private string[] contents;
 
     public signal void item_selected(FeedItem item);
 
