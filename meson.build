@@ -9,11 +9,13 @@ executable(
 	'src/NewsPanel.vala',
 	'src/NewsParse.vala',
 	'src/NewsNotebook.vala',
+	'src/rfc822.vala',
 	dependencies: [
 		dependency('gtk+-3.0'),
 		dependency('webkit2gtk-4.0'),
     	dependency('granite'),
-    	dependency('libxml-2.0')
+    	dependency('libxml-2.0'),
+		dependency('gee-0.8')
 	],
 	install: true
 )

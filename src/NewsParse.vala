@@ -2,7 +2,7 @@ struct FeedItem {
     string? title;
     string? about;
     string? link;
-    string? pubDate;
+    DateTime? pubDate;
     string? content;
 }
 
@@ -35,7 +35,7 @@ class RssFeed : Feed {
     
         Xml.Node* root = doc->get_root_element();
         if(root == null) {
-            throw new FeedError.INVALID_DOCUMENT("get_root_element() is null");
+            throw new FeedError.INVALID_DOCUMENT("no root element");
         }
 
         // find channel element
@@ -73,7 +73,7 @@ class RssFeed : Feed {
                         item.content = childitem->get_content();
                         break;
                     case "pubDate":
-                        item.pubDate = childitem->get_content();
+                        item.pubDate = parse_rfc822_date(childitem->get_content());
                         break;
                     }
                 }
