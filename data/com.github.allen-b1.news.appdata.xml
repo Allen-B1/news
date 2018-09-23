@@ -28,8 +28,9 @@
     <release version="1.2.3" date="?">
       <description>
         <ul>
-          <li>Allowed other applications to open RSS feeds in News</li>
+          <li>Allowed opening a feed from the command line</li>
           <li>Added the ability to view feed information</li>
+          <li>Switched to relative date time strings (e.g. now, 5m ago)</li>
           <li>Toasts will show up instead of info bars</li>
         </ul>
       </description>
