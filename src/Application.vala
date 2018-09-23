@@ -11,6 +11,7 @@ class NewsApp : Gtk.Application {
         if(window == null || !(window is MainWindow)) {
             window = new MainWindow(this);
             this.add_window(window);
+            window.show_all();
         }
 
         foreach (var file in files) {
