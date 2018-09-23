@@ -20,8 +20,8 @@ class NewsApp : Gtk.Application {
                 stderr.puts("Could not open file\n");
                 ((MainWindow)window).show_error("Could not open file");
             }
-            window.accept_focus = true;
         }
+        window.present();
     }
 
     protected override void activate() {
