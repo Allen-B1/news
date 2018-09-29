@@ -47,13 +47,6 @@ class MainWindow : Gtk.ApplicationWindow {
             this.notebook.add_gnews(query);
         });
 
-	    try {
-		    this.notebook.add_feed(new GoogleNewsFeed());
-	        this.notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
-	    } catch(Error err) {
-	        this.show_error();
-		}
-
         var provider = new Gtk.CssProvider();
         provider.load_from_data(STYLESHEET, -1);
         Gtk.StyleContext.add_provider_for_screen(this.get_screen(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);

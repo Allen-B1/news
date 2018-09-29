@@ -29,6 +29,13 @@ class NewsApp : Gtk.Application {
         var window = new MainWindow(this);
         this.add_window(window);
         window.show_all();
+
+	    try {
+		    window.add_feed(new GoogleNewsFeed());
+	        window.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
+	    } catch(Error err) {
+	        window.show_error();
+		}
     }
 
     public static int main (string[] args) {
