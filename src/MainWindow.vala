@@ -46,6 +46,25 @@ class MainWindow : Gtk.ApplicationWindow {
         headerbar.search.connect((query) => {
             this.notebook.add_gnews(query);
         });
+        headerbar.view_info_clicked.connect(() => {
+            var dialog = new Gtk.Dialog.with_buttons("Feed information", this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, "Close", Gtk.ResponseType.ACCEPT, null);
+            dialog.border_width = 18;
+
+            var feed = this.notebook.get_active_feed();
+            var title = new Granite.HeaderLabel(feed.title);
+            dialog.get_content_area().add(title);
+
+            var desc = new Gtk.Label(feed.about == null ? "No description provided." : feed.about);
+            desc.set_line_wrap(true);
+            desc.halign = Gtk.Align.START;
+            desc.xalign = 0;
+            desc.justify = Gtk.Justification.LEFT;
+            dialog.get_content_area().add(desc);
+
+            dialog.show_all();
+            dialog.run();
+            dialog.destroy();
+        });
 
         var provider = new Gtk.CssProvider();
         provider.load_from_data(STYLESHEET, -1);

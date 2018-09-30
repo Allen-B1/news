@@ -14,7 +14,7 @@ abstract class Feed {
     [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
     public abstract string? link { get; protected set; }
     [Description(nick = "Feed information", blurb = "This is the description of the feed.")]
-    public string? about { get; protected set; default = null; }
+    public abstract string? about { get; protected set; default = null; }
 }
 
 errordomain FeedError {
@@ -22,7 +22,7 @@ errordomain FeedError {
 }
 
 class RssFeed : Feed {
-    public string? about { get; protected set; default = null; }
+    public override string? about { get; protected set; default = null; }
     public override string? title { get; protected set; default = null; }
     public override string? link { get; protected set; default = null; }
     public override FeedItem[] items { get; protected set; default = new FeedItem[0]; }
