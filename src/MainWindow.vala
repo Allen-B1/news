@@ -27,11 +27,11 @@ class MainWindow : Gtk.ApplicationWindow {
         var box = new Gtk.Overlay();
         this.add(box);
 
-        this.errortoast = new Granite.Widgets.Toast("Something went wrong");
-        box.add_overlay(errortoast);
-
         this.notebook = new NewsNotebook();
         box.add_overlay(notebook);
+
+        this.errortoast = new Granite.Widgets.Toast("Something went wrong");
+        box.add_overlay(errortoast);
 
         this.notebook.error.connect((error) => {
             this.show_error(error == null ? "Something went wrong" : error.message);
