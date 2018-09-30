@@ -34,7 +34,6 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 					} catch(Error err) {
 						this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not fetch RSS feed"));
 					}
-					stdout.flush();
 					break;
 				case Gtk.ResponseType.CANCEL:
 					break;
