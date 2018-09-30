@@ -61,6 +61,15 @@ class MainWindow : Gtk.ApplicationWindow {
             desc.justify = Gtk.Justification.LEFT;
             dialog.get_content_area().add(desc);
 
+            if(feed.copyright != null) {
+                var copyr = new Gtk.Label(feed.copyright);
+                copyr.set_line_wrap(true);
+                copyr.halign = Gtk.Align.START;
+                copyr.xalign = 0;
+                copyr.justify = Gtk.Justification.LEFT;
+                dialog.get_content_area().add(copyr);
+            }
+
             dialog.show_all();
             dialog.run();
             dialog.destroy();

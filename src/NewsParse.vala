@@ -14,7 +14,9 @@ abstract class Feed {
     [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
     public abstract string? link { get; protected set; }
     [Description(nick = "Feed information", blurb = "This is the description of the feed.")]
-    public abstract string? about { get; protected set; default = null; }
+    public abstract string? about { get; protected set; }
+    [Description(nick = "Copyright", blurb = "This is the copyright information of the feed.")]
+    public abstract string? copyright { get; protected set; }
 }
 
 errordomain FeedError {
@@ -22,6 +24,7 @@ errordomain FeedError {
 }
 
 class RssFeed : Feed {
+    public override string? copyright { get; protected set; default = null; }
     public override string? about { get; protected set; default = null; }
     public override string? title { get; protected set; default = null; }
     public override string? link { get; protected set; default = null; }
@@ -58,6 +61,9 @@ class RssFeed : Feed {
             case "link":
                 this.link = child->get_content();
                 break;
+            case "copyright":
+                this.copyright = child->get_content();
+                break;
             case "item":
                 FeedItem item = FeedItem();
                 for(var childitem = child->children; childitem != null; childitem = childitem->next) {
@@ -70,6 +76,8 @@ class RssFeed : Feed {
                         break;
                     case "description":
                         item.about = childitem->get_content();
+                        if(item.about.length == 0)
+                            item.about = null;
                         break;
                     case "encoded":
                         item.content = childitem->get_content();
