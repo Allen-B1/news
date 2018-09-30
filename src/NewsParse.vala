@@ -13,6 +13,8 @@ abstract class Feed {
     public abstract string? title { get; protected set; }
     [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
     public abstract string? link { get; protected set; }
+    [Description(nick = "Feed information", blurb = "This is the description of the feed.")]
+    public string? about { get; protected set; default = null; }
 }
 
 errordomain FeedError {

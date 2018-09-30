@@ -2,6 +2,14 @@ errordomain NewsNotebookError {
 	ADD_FEED_ERROR
 }
 
+class NewsTab : Granite.Widgets.Tab {
+	private Feed _feed;
+	public Feed feed { get { return _feed; }}
+	public NewsTab(Feed feed) {
+		base(feed.title, null, new NewsPanel.from_feed(feed));
+		this._feed = feed;
+	}
+}
 
 class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	construct {
@@ -45,8 +53,8 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	public signal void error(Error? error);
 
 	[Description(nick="adds feed", blurb="Adds a tab with the given feed and sets it as the current tab")]
-	public Granite.Widgets.Tab add_feed(Feed feed) {
-		var tab = new Granite.Widgets.Tab(feed.title, null, new NewsPanel.from_feed(feed));
+	public NewsTab add_feed(Feed feed) {
+		var tab = new NewsTab(feed);
 		this.insert_tab(tab, -1);
 		this.current = tab;
 		return tab;
@@ -59,5 +67,9 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 			this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not reach Google News"));
 			return null;
 		}
+	}
+
+	public Feed get_active_feed() {
+		return ((NewsTab)this.current).feed;
 	}
 }
