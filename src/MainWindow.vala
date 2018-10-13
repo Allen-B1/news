@@ -55,14 +55,18 @@ class MainWindow : Gtk.ApplicationWindow {
             dialog.get_content_area().add(title);
 
             var desc = new Gtk.Label(feed.about == null ? "No description provided." : feed.about);
+            desc.use_markup = true;
             desc.set_line_wrap(true);
             desc.halign = Gtk.Align.START;
             desc.xalign = 0;
             desc.justify = Gtk.Justification.LEFT;
+            desc.selectable = true;
             dialog.get_content_area().add(desc);
 
             if(feed.copyright != null) {
                 var copyr = new Gtk.Label(feed.copyright);
+                copyr.use_markup = true;
+                copyr.selectable = true;
                 copyr.set_line_wrap(true);
                 copyr.halign = Gtk.Align.START;
                 copyr.xalign = 0;
