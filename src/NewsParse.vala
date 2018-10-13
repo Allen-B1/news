@@ -162,6 +162,6 @@ class GoogleNewsFeed : RssFeed {
         protected set {}
     }
 
-    public override string? link { get; protected set; default = "https://news.google.com/"; }
+    public override string? link { get { return "https://news.google.com/"; } protected set{} }
 }
 
