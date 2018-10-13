@@ -49,6 +49,7 @@ class MainWindow : Gtk.ApplicationWindow {
         headerbar.view_info_clicked.connect(() => {
             var dialog = new Gtk.Dialog.with_buttons("Feed information", this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, "Close", Gtk.ResponseType.ACCEPT, null);
             dialog.border_width = 18;
+            dialog.get_content_area().spacing = 12;
 
             var feed = this.notebook.get_active_feed();
             var title = new Granite.HeaderLabel(feed.title);
@@ -72,6 +73,11 @@ class MainWindow : Gtk.ApplicationWindow {
                 copyr.xalign = 0;
                 copyr.justify = Gtk.Justification.LEFT;
                 dialog.get_content_area().add(copyr);
+            }
+
+            if(feed.link != null) {
+                var website = new Gtk.LinkButton.with_label(feed.link, "Website");
+                dialog.get_content_area().add(website);
             }
 
             dialog.show_all();
