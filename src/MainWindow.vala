@@ -5,10 +5,16 @@ class MainWindow : Gtk.ApplicationWindow {
         @define-color colorAccent #68b723;""";
 
     private NewsNotebook notebook;
+    private Granite.Widgets.Toast errortoast;
 
     public MainWindow(Gtk.Application app) {
         Object (application: app,
             title: "News");
+    }
+
+    public void show_error(string msg = "Something went wrong") {
+        this.errortoast.title = msg;
+        this.errortoast.send_notification();
     }
 
     construct {
@@ -24,17 +30,13 @@ class MainWindow : Gtk.ApplicationWindow {
         this.notebook = new NewsNotebook();
         box.add_overlay(notebook);
 
-        var errortoast = new Granite.Widgets.Toast("Something went wrong");
+        this.errortoast = new Granite.Widgets.Toast("Something went wrong");
         box.add_overlay(errortoast);
+
         this.notebook.error.connect((error) => {
-            if(error != null && error is NewsNotebookError) {
-                errortoast.title = error.message;
-            } else {
-                errortoast.title = "Something went wrong";
-            }
-            errortoast.send_notification();
-            stdout.printf("Log\n");
+            this.show_error(error == null ? "Something went wrong" : error.message);
         });
+
         this.notebook.tab_removed.connect(() => {
             if(this.notebook.n_tabs == 0) {
                 this.close();
@@ -44,13 +46,44 @@ class MainWindow : Gtk.ApplicationWindow {
         headerbar.search.connect((query) => {
             this.notebook.add_gnews(query);
         });
+        headerbar.view_info_clicked.connect(() => {
+            var dialog = new Gtk.Dialog.with_buttons("Feed information", this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, "Close", Gtk.ResponseType.ACCEPT, null);
+            dialog.border_width = 18;
+            dialog.get_content_area().spacing = 12;
 
-	    try {
-		    this.notebook.add_feed(new GoogleNewsFeed());
-	        this.notebook.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
-	    } catch(Error err) {
-	        this.notebook.error(null);
-		}
+            var feed = this.notebook.get_active_feed();
+            var title = new Granite.HeaderLabel(feed.title);
+            dialog.get_content_area().add(title);
+
+            var desc = new Gtk.Label(feed.about == null ? "No description provided." : feed.about);
+            desc.use_markup = true;
+            desc.set_line_wrap(true);
+            desc.halign = Gtk.Align.START;
+            desc.xalign = 0;
+            desc.justify = Gtk.Justification.LEFT;
+            desc.selectable = true;
+            dialog.get_content_area().add(desc);
+
+            if(feed.copyright != null) {
+                var copyr = new Gtk.Label(feed.copyright);
+                copyr.use_markup = true;
+                copyr.selectable = true;
+                copyr.set_line_wrap(true);
+                copyr.halign = Gtk.Align.START;
+                copyr.xalign = 0;
+                copyr.justify = Gtk.Justification.LEFT;
+                dialog.get_content_area().add(copyr);
+            }
+
+            if(feed.link != null) {
+                var website = new Gtk.LinkButton.with_label(feed.link, "Website");
+                dialog.get_content_area().add(website);
+            }
+
+            dialog.show_all();
+            dialog.run();
+            dialog.destroy();
+        });
 
         var provider = new Gtk.CssProvider();
         provider.load_from_data(STYLESHEET, -1);
@@ -62,7 +95,7 @@ class MainWindow : Gtk.ApplicationWindow {
             headerbar.focus_search();
             return true;
         });
-        this.add_accel_group(accel_group); 
+        this.add_accel_group(accel_group);
     }
 
     public void add_feed(Feed feed) {

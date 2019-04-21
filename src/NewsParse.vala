@@ -2,7 +2,7 @@ struct FeedItem {
     string? title;
     string? about;
     string? link;
-    string? pubDate;
+    DateTime? pubDate;
     string? content;
 }
 
@@ -13,6 +13,10 @@ abstract class Feed {
     public abstract string? title { get; protected set; }
     [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
     public abstract string? link { get; protected set; }
+    [Description(nick = "Feed information", blurb = "This is the description of the feed.")]
+    public abstract string? about { get; protected set; }
+    [Description(nick = "Copyright", blurb = "This is the copyright information of the feed.")]
+    public abstract string? copyright { get; protected set; }
 }
 
 errordomain FeedError {
@@ -20,7 +24,8 @@ errordomain FeedError {
 }
 
 class RssFeed : Feed {
-    public string? about { get; protected set; default = null; }
+    public override string? copyright { get; protected set; default = null; }
+    public override string? about { get; protected set; default = null; }
     public override string? title { get; protected set; default = null; }
     public override string? link { get; protected set; default = null; }
     public override FeedItem[] items { get; protected set; default = new FeedItem[0]; }
@@ -35,7 +40,7 @@ class RssFeed : Feed {
     
         Xml.Node* root = doc->get_root_element();
         if(root == null) {
-            throw new FeedError.INVALID_DOCUMENT("get_root_element() is null");
+            throw new FeedError.INVALID_DOCUMENT("no root element");
         }
 
         // find channel element
@@ -56,6 +61,9 @@ class RssFeed : Feed {
             case "link":
                 this.link = child->get_content();
                 break;
+            case "copyright":
+                this.copyright = child->get_content();
+                break;
             case "item":
                 FeedItem item = FeedItem();
                 for(var childitem = child->children; childitem != null; childitem = childitem->next) {
@@ -68,12 +76,14 @@ class RssFeed : Feed {
                         break;
                     case "description":
                         item.about = childitem->get_content();
+                        if(item.about.length == 0)
+                            item.about = null;
                         break;
                     case "encoded":
                         item.content = childitem->get_content();
                         break;
                     case "pubDate":
-                        item.pubDate = childitem->get_content();
+                        item.pubDate = parse_rfc822_date(childitem->get_content());
                         break;
                     }
                 }
@@ -151,5 +161,7 @@ class GoogleNewsFeed : RssFeed {
         }
         protected set {}
     }
+
+    public override string? link { get { return "https://news.google.com/"; } protected set{} }
 }
 

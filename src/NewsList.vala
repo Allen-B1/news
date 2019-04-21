@@ -1,6 +1,5 @@
 class NewsList : Gtk.ScrolledWindow {
     public Feed feed;
-    private string[] contents;
 
     public signal void item_selected(FeedItem item);
 
@@ -32,7 +31,7 @@ class NewsList : Gtk.ScrolledWindow {
             box.pack_start(title, false, false, 0);
 
             if(item.pubDate != null) {
-                var pub_date_label = new Gtk.Label(item.pubDate);
+                var pub_date_label = new Gtk.Label(Granite.DateTime.get_relative_datetime(item.pubDate));
                 pub_date_label.halign = Gtk.Align.START;
                 pub_date_label.xalign = 0;
                 pub_date_label.ellipsize = Pango.EllipsizeMode.END;

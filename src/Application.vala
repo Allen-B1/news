@@ -2,27 +2,40 @@ class NewsApp : Gtk.Application {
     public NewsApp () {
         Object (
             application_id: "com.github.allen-b1.news",
-            flags: ApplicationFlags.FLAGS_NONE
+            flags: ApplicationFlags.HANDLES_OPEN
         );
     }
 
     protected override void open(File[] files, string hint) {
         var window = this.get_active_window();
-        if(window is MainWindow) {
-            foreach (var file in files) {
+        if(window == null || !(window is MainWindow)) {
+            window = new MainWindow(this);
+            this.add_window(window);
+            window.show_all();
+        }
+
+        foreach (var file in files) {
+            try {
                 ((MainWindow)window).add_feed(new RssFeed.from_file(file));
+            } catch(Error err) {
+                stderr.puts("Could not open file\n");
+                ((MainWindow)window).show_error("Could not open file");
             }
         }
-    }
-    
-    construct {
-        this.flags |= ApplicationFlags.HANDLES_OPEN;
+        window.present();
     }
 
     protected override void activate() {
         var window = new MainWindow(this);
         this.add_window(window);
         window.show_all();
+
+	    try {
+		    window.add_feed(new GoogleNewsFeed());
+	        window.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
+	    } catch(Error err) {
+	        window.show_error();
+		}
     }
 
     public static int main (string[] args) {

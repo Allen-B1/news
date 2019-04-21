@@ -2,17 +2,16 @@ Source: com.github.allen-b1.news
 Section: x11
 Priority: extra
 Maintainer: Allen B <pingguo.ny@gmail.com>
-Build-Depends: cmake (>= 2.6),
+Build-Depends: meson,
                debhelper (>= 9),
                libgranite-dev,
                libgtk-3-dev,
                valac-0.26 | valac (>= 0.26),
 	       libwebkit2gtk-4.0-dev,
 	       libxml2
-Standards-Version: 3.9.3            
+Standards-Version: 3.9.3
 
 Package: com.github.allen-b1.news
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Description: A news viewer
- Insert description here
+Description: Read RSS feeds
