@@ -11,12 +11,14 @@ abstract class Feed {
     public abstract FeedItem[] items { get; protected set; }
     [Description(nick = "Feed title", blurb = "This is the title of the feed.")]
     public abstract string? title { get; protected set; }
-    [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
+    [Description(nick = "Feed link", blurb = "The website of the news source.")]
     public abstract string? link { get; protected set; }
     [Description(nick = "Feed information", blurb = "This is the description of the feed.")]
     public abstract string? about { get; protected set; }
     [Description(nick = "Copyright", blurb = "This is the copyright information of the feed.")]
     public abstract string? copyright { get; protected set; }
+    [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
+    public abstract string source { get; protected set; }
 }
 
 errordomain FeedError {
@@ -30,7 +32,7 @@ class RssFeed : Feed {
     public override string? link { get; protected set; default = null; }
     public override FeedItem[] items { get; protected set; default = new FeedItem[0]; }
 
-    public string source { get; private set; }
+    public override string source { get; protected set; }
 
     private RssFeed() {}
 
@@ -155,7 +157,7 @@ class GoogleNewsFeed : RssFeed {
             if(this.query == null) {
                 return "Google News";
             } else {
-                _title = this.query + " - Google News";
+                _title = "\"" + this.query + "\" - Google News";
                 return _title;
             }
         }

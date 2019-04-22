@@ -39,6 +39,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 				case Gtk.ResponseType.OK:
 					try {
 						add_feed(new RssFeed.from_uri(text));
+                        source_add(text);
 					} catch(Error err) {
 						this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not fetch RSS feed"));
 					}
@@ -47,10 +48,19 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 					break;
 			}
 		});
+
+		this.tab_removed.connect((tab) => {
+			this.source_remove(((NewsTab)tab).feed.source);
+		});
 	}
 
 	// thrown when on new_tab_requested the new feed fails
 	public signal void error(Error? error);
+
+    // called when a source is added via the dialog
+    public signal void source_add(string source);
+    // called when a source is removed
+    public signal void source_remove(string source);
 
 	[Description(nick="adds feed", blurb="Adds a tab with the given feed and sets it as the current tab")]
 	public NewsTab add_feed(Feed feed) {
@@ -60,7 +70,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 		return tab;
 	}
 
-	public Granite.Widgets.Tab? add_gnews(string query) {
+	public NewsTab? add_gnews(string query) {
 		try {
 			return this.add_feed(new GoogleNewsFeed.with_search(query));
 		} catch(Error err) {

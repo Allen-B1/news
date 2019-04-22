@@ -7,6 +7,9 @@ class MainWindow : Gtk.ApplicationWindow {
     private NewsNotebook notebook;
     private Granite.Widgets.Toast errortoast;
 
+    public signal void source_add(string source);
+    public signal void source_remove(string source);
+
     public MainWindow(Gtk.Application app) {
         Object (application: app,
             title: "News");
@@ -43,8 +46,16 @@ class MainWindow : Gtk.ApplicationWindow {
             }
         });
 
+        this.notebook.source_add.connect((src) => {
+            debug("Added source: " + src);
+            this.source_add(src); });
+        this.notebook.source_remove.connect((src) => {
+            debug("Removed source: " + src);
+            this.source_remove(src); });
+
         headerbar.search.connect((query) => {
-            this.notebook.add_gnews(query);
+            var feed = this.notebook.add_gnews(query).feed;
+            this.source_add(feed.source);
         });
         headerbar.view_info_clicked.connect(() => {
             var dialog = new Gtk.Dialog.with_buttons("Feed information", this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, "Close", Gtk.ResponseType.ACCEPT, null);

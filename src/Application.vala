@@ -6,6 +6,35 @@ class NewsApp : Gtk.Application {
         );
     }
 
+    private SourceKeeper sources;
+    construct {
+        this.sources = new SourceKeeper();
+    }
+
+    private void add_sources(MainWindow window) {
+        try {
+            foreach (var url in this.sources.list()) {
+                if (url.has_prefix("https://news.google.com/news/rss/?"))
+                    window.add_feed(new GoogleNewsFeed());
+                else
+        	        window.add_feed(new RssFeed.from_uri(url));
+            }
+        } catch(Error err) {
+            window.show_error("Couldn't load sources");
+        }
+    }
+
+    private void init_window(MainWindow window) {
+        window.source_add.connect((source) => {
+            this.sources.add(source);
+        });
+        window.source_remove.connect((source) => {
+            this.sources.remove(source);
+        });
+
+        this.add_sources(window);
+    }
+
     protected override void open(File[] files, string hint) {
         var window = this.get_active_window();
         if(window == null || !(window is MainWindow)) {
@@ -13,6 +42,8 @@ class NewsApp : Gtk.Application {
             this.add_window(window);
             window.show_all();
         }
+
+        this.init_window((MainWindow)window);
 
         foreach (var file in files) {
             try {
@@ -28,14 +59,8 @@ class NewsApp : Gtk.Application {
     protected override void activate() {
         var window = new MainWindow(this);
         this.add_window(window);
+        this.init_window(window);
         window.show_all();
-
-	    try {
-		    window.add_feed(new GoogleNewsFeed());
-	        window.add_feed(new RssFeed.from_uri("https://news.ycombinator.com/rss"));
-	    } catch(Error err) {
-	        window.show_error();
-		}
     }
 
     public static int main (string[] args) {
