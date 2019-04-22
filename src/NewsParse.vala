@@ -116,27 +116,6 @@ class RssFeed : Feed {
         this.from_file(File.new_for_uri(uri));
         this.source = uri;
     }
-
-/*    // special exceptions (has a lot)
-    private static string? parse_rules(owned string url, owned string? about) {
-        if(url != null) url = url.ascii_down();
-
-        if(url == null); // make url null
-        else if(url.index_of("news.google.com") != -1) {                    
-            about = null;
-        } else if(url.index_of("rss.cnn.com") != -1) {
-            var endIndex = about.index_of("<div");
-            about = about[0:endIndex].replace("&", "&amp;");
-            if(about == "") // if description is empty (sometimes is)
-                about = null;
-        } else if(url.index_of("news.ycombinator.com") != -1 || about == "") {
-            about = null;
-        } else if(url.index_of("feeds.kinja.com/lifehacker") != -1) {
-            about = about.slice(about.index_of("<p>"), about.index_of("</p>"));
-        }
-        return about;
-    }
-*/
 }
 
 class GoogleNewsFeed : RssFeed {

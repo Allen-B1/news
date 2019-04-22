@@ -4,19 +4,18 @@ class SourceKeeper {
     public SourceKeeper() {
         this.path = Environment.get_home_dir() + "/.config/com.github.allen-b1.news.txt";
 
-        var f = File.new_for_path(this.path);
-        if (f.query_exists()) {
-            // Return if not empty
-            var line = new DataInputStream(f.read()).read_line();
-            if (line != null && line.strip().length != 0) {
-                debug("SourceKeeper / line: " + line);
-                return;
-            } else {
-                f.delete();
-            }
-        }
-
         try {
+            var f = File.new_for_path(this.path);
+            if (f.query_exists()) {
+                // Return if not empty
+                var line = new DataInputStream(f.read()).read_line();
+                if (line != null && line.strip().length != 0) {
+                    debug("SourceKeeper / line: " + line);
+                    return;
+                } else {
+                    f.delete();
+                }
+            }
 
             f.create(FileCreateFlags.NONE).write("https://news.google.com/news/rss/?ned=us&gl=US&hl=e\nhttps://news.ycombinator.com/rss\n".data);
         } catch (Error err) {
