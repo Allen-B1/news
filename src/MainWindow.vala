@@ -54,9 +54,13 @@ class MainWindow : Gtk.ApplicationWindow {
             this.source_remove(src); });
 
         headerbar.search.connect((query) => {
-            var feed = Feed.from_uri("https://news.google.com/news/rss/search/section/q/" + query + "?ned=us&gl=US&hl=en");
-            this.add_feed(feed);
-            this.source_add(feed.source);
+            try {
+                var feed = Feed.from_uri("https://news.google.com/news/rss/search/section/q/" + query + "?ned=us&gl=US&hl=en");
+                this.add_feed(feed);
+                this.source_add(feed.source);
+            } catch (Error err) {
+                this.show_error("Couldn't reach Google News");
+            }
         });
         headerbar.view_info_clicked.connect(() => {
             var dialog = new Gtk.Dialog.with_buttons("Feed information", this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, "Close", Gtk.ResponseType.ACCEPT, null);
