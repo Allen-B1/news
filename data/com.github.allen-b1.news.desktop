@@ -9,4 +9,4 @@ Icon=com.github.allen-b1.news
 Terminal=false
 Type=Application
 X-GNOME-Gettext-Domain=com.github.allen-b1.news
-MimeType=application/rss+xml;application/rdf+xml;
+MimeType=application/rss+xml;application/rdf+xml;application/atom+xml;
