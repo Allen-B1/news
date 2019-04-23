@@ -54,7 +54,8 @@ class MainWindow : Gtk.ApplicationWindow {
             this.source_remove(src); });
 
         headerbar.search.connect((query) => {
-            var feed = this.notebook.add_gnews(query).feed;
+            var feed = Feed.from_uri("https://news.google.com/news/rss/search/section/q/" + query + "?ned=us&gl=US&hl=en");
+            this.add_feed(feed);
             this.source_add(feed.source);
         });
         headerbar.view_info_clicked.connect(() => {

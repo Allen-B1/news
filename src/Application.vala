@@ -14,10 +14,7 @@ class NewsApp : Gtk.Application {
     private void add_sources(MainWindow window) {
         try {
             foreach (var url in this.sources.list()) {
-                if (url.has_prefix("https://news.google.com/news/rss/?"))
-                    window.add_feed(new GoogleNewsFeed());
-                else
-        	        window.add_feed(new RssFeed.from_uri(url));
+    	        window.add_feed(Feed.from_uri(url));
             }
         } catch(Error err) {
             window.show_error("Couldn't load sources");
@@ -47,7 +44,7 @@ class NewsApp : Gtk.Application {
 
         foreach (var file in files) {
             try {
-                ((MainWindow)window).add_feed(new RssFeed.from_file(file));
+                ((MainWindow)window).add_feed(Feed.from_file(file));
             } catch(Error err) {
                 stderr.puts("Could not open file\n");
                 ((MainWindow)window).show_error("Could not open file");

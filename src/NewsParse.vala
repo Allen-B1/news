@@ -6,6 +6,11 @@ struct FeedItem {
     string? content;
 }
 
+errordomain FeedError {
+    INVALID_DOCUMENT,
+    UNKNOWN_FORMAT
+}
+
 abstract class Feed {
     [Description(nick = "Feed items", blurb = "This is the list of feed entries.")]
     public abstract FeedItem[] items { get; protected set; }
@@ -19,10 +24,43 @@ abstract class Feed {
     public abstract string? copyright { get; protected set; }
     [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
     public abstract string source { get; protected set; }
-}
 
-errordomain FeedError {
-    INVALID_DOCUMENT
+    public static Feed from_uri(string uri) throws Error {
+        var file = File.new_for_uri(uri);
+        var feed = Feed.from_file(file);
+        if (feed.source == null || feed.source == "") {
+            feed.source = uri;
+        }
+        return feed;
+    }
+
+    public static Feed from_file(File file) throws Error {
+        DataInputStream data_stream = new DataInputStream(file.read());
+
+        string line = null;
+        var text = new StringBuilder();
+        while((line = data_stream.read_line()) != null) {
+            text.append(line);
+            text.append_c('\n');
+        }
+
+        var doc = Xml.Parser.parse_doc(text.str);
+        Xml.Node* root = doc->get_root_element();
+        if (root == null)
+            throw new FeedError.INVALID_DOCUMENT("No root element");
+        Feed feed = null;
+        switch (root->name) {
+        case "rss":
+            feed = new RssFeed.from_xml(doc);
+            break;
+        case "feed":
+            feed = new AtomFeed.from_xml(doc);
+            break;
+        default:
+            throw new FeedError.UNKNOWN_FORMAT("root tag is <" + root->name + ">");
+        }
+        return feed;
+    }
 }
 
 class RssFeed : Feed {
@@ -37,19 +75,13 @@ class RssFeed : Feed {
     private RssFeed() {}
 
     /* Creates feed from xml */
-    public RssFeed.from_xml(string str) throws Error {
-        var doc = Xml.Parser.parse_doc(str);
-    
+    public RssFeed.from_xml(Xml.Doc* doc) {
         Xml.Node* root = doc->get_root_element();
-        if(root == null) {
-            throw new FeedError.INVALID_DOCUMENT("no root element");
-        }
-
         // find channel element
         var channel = root->children;
         for(; channel->name != "channel"; channel = channel->next);
 
-        FeedItem[] items = this.items;
+        FeedItem[] items = new FeedItem[0];
 
         // loop through elements
         for(var child = channel->children; child != null; child = child->next) {
@@ -96,53 +128,61 @@ class RssFeed : Feed {
         }
         this.items = items;
     }
-
-    /* Creates feed from file */
-    public RssFeed.from_file(File file) throws Error {
-        DataInputStream data_stream = new DataInputStream(file.read());
-
-        string line = null;
-        var text = new StringBuilder();
-        while((line = data_stream.read_line()) != null) {
-            text.append(line);
-            text.append_c('\n');
-        }
-
-        this.from_xml(text.str);
-    }
-
-    /* Creates feed from uri */
-    public RssFeed.from_uri(string uri) throws Error {
-        this.from_file(File.new_for_uri(uri));
-        this.source = uri;
-    }
 }
 
-class GoogleNewsFeed : RssFeed {
-    private string query = null;
+class AtomFeed : Feed {
+    public override string? copyright { get; protected set; default = null; }
+    public override string? about { get; protected set; default = null; }
+    public override string? title { get; protected set; default = null; }
+    public override string? link { get; protected set; default = null; }
+    public override FeedItem[] items { get; protected set; default = new FeedItem[0]; }
+    public override string source { get; protected set; }
 
-    public GoogleNewsFeed() throws Error {
-        base.from_uri("https://news.google.com/news/rss/?ned=us&gl=US&hl=e");
-    }
+    private AtomFeed() {}
 
-    public GoogleNewsFeed.with_search(string q) throws Error {
-        base.from_uri("https://news.google.com/news/rss/search/section/q/" + q + "?ned=us&gl=US&hl=en");
-        this.query = q;
-    }
+    public AtomFeed.from_xml(Xml.Doc* doc) {
+        Xml.Node* root = doc->get_root_element();
 
-    private string _title;
-    public override string? title {
-        get {
-            if(this.query == null) {
-                return "Google News";
-            } else {
-                _title = "\"" + this.query + "\" - Google News";
-                return _title;
+        FeedItem[] items = new FeedItem[0];
+        for(var child = root->children; child != null; child = child->next) {
+            switch (child->name) {
+            case "title":
+                this.title = child->get_content();
+                break;
+            case "subtitle":
+                this.about = child->get_content();
+                break;
+            case "link":
+                if (child->get_prop("rel") == "self") {
+                    this.source = child->get_prop("href");
+                } else {
+                    this.link = child->get_prop("href");
+                }
+                break;
+            case "entry":
+                FeedItem item = FeedItem();
+                for(var childitem = child->children; childitem != null; childitem = childitem->next) {
+                    switch(childitem->name) {
+                    case "title":
+                        item.title = childitem->get_content();
+                        break;
+                    case "summary":
+                        item.about = childitem->get_content();
+                        break;
+                    case "link":
+                        if (item.link == null) {
+                            item.link = childitem->get_prop("href");
+                        }
+                        break;
+                    case "updated":
+                        item.pubDate = new DateTime.from_iso8601(childitem->get_content(), new TimeZone.utc ());
+                        break;
+                    }
+                }
+                items += item;
+                break;
             }
         }
-        protected set {}
+        this.items = items;
     }
-
-    public override string? link { get { return "https://news.google.com/"; } protected set{} }
 }
-

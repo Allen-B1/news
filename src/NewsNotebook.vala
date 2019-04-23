@@ -38,8 +38,9 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 			switch(result) {
 				case Gtk.ResponseType.OK:
 					try {
-						add_feed(new RssFeed.from_uri(text));
-                        source_add(text);
+						var feed = Feed.from_uri(text);
+						add_feed(feed);
+                        this.source_add(feed.source);
 					} catch(Error err) {
 						this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not fetch RSS feed"));
 					}
@@ -68,15 +69,6 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 		this.insert_tab(tab, -1);
 		this.current = tab;
 		return tab;
-	}
-
-	public NewsTab? add_gnews(string query) {
-		try {
-			return this.add_feed(new GoogleNewsFeed.with_search(query));
-		} catch(Error err) {
-			this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not reach Google News"));
-			return null;
-		}
 	}
 
 	public Feed get_active_feed() {
