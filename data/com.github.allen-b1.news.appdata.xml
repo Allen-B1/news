@@ -5,7 +5,7 @@
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>News</name>
-  <summary>Read RSS feeds</summary>
+  <summary>Read Atom and RSS feeds</summary>
   <developer_name>Allen B</developer_name>
   <screenshots>
       <screenshot type="default">
@@ -13,8 +13,8 @@
       </screenshot>
   </screenshots>
   <description>
-    <p>Read the contents of RSS feeds.</p>
-    <p>Supports RSS 2.0 only</p>
+    <p>Read the contents of Atom and RSS feeds.</p>
+    <p>Supports RSS 2.0 and Atom only</p>
   </description>
   <url type="homepage">https://github.com/allen-b1/news</url>
   <url type="bugtracker">https://github.com/allen-b1/news/issues/labels/bug</url>
@@ -25,13 +25,15 @@
   </custom>
 
   <releases>
-    <release version="1.3" date="?">
+    <release version="1.3" date="2019-04-28">
       <description>
         <ul>
           <li>Allowed opening a feed from the command line</li>
           <li>Added the ability to view feed information</li>
           <li>Switched to relative date time strings (e.g. now, 5m ago)</li>
           <li>Toasts will show up instead of info bars</li>
+          <li>Sources will stay after closing and reopening the app</li>
+          <li>Added support for Atom feeds</li>
         </ul>
       </description>
     </release>

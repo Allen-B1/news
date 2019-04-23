@@ -15,7 +15,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 	construct {
 		this.new_tab_requested.connect(() => {
 			/* Show 'Add RSS Feed' dialog */
-			var dialog = new Granite.MessageDialog.with_image_from_icon_name("Add RSS feed",  "Enter the RSS feed url", "dialog-question", Gtk.ButtonsType.NONE);
+			var dialog = new Granite.MessageDialog.with_image_from_icon_name("Add feed",  "Enter the Atom or RSS feed url", "dialog-question", Gtk.ButtonsType.NONE);
 
 			dialog.add_button("Cancel", Gtk.ResponseType.CANCEL);
 			dialog.add_button("Add", Gtk.ResponseType.OK).get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
@@ -42,7 +42,7 @@ class NewsNotebook : Granite.Widgets.DynamicNotebook {
 						add_feed(feed);
                         this.source_add(feed.source);
 					} catch(Error err) {
-						this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not fetch RSS feed"));
+						this.error(new NewsNotebookError.ADD_FEED_ERROR("Could not fetch feed"));
 					}
 					break;
 				case Gtk.ResponseType.CANCEL:
