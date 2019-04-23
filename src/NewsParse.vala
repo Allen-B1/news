@@ -174,6 +174,7 @@ class AtomFeed : Feed {
                             item.link = childitem->get_prop("href");
                         }
                         break;
+                    case "published":
                     case "updated":
                         item.pubDate = new DateTime.from_iso8601(childitem->get_content(), new TimeZone.utc ());
                         break;
