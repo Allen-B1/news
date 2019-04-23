@@ -46,8 +46,8 @@ class NewsApp : Gtk.Application {
             try {
                 ((MainWindow)window).add_feed(Feed.from_file(file));
             } catch(Error err) {
-                stderr.puts("Could not open file\n");
-                ((MainWindow)window).show_error("Could not open file");
+                stderr.puts("Could not open file: " + file.get_basename() + "\n");
+                ((MainWindow)window).show_error("Could not open file: " + file.get_basename());
             }
         }
         window.present();
