@@ -8,7 +8,7 @@ executable(
 	'src/NewsList.vala',
 	'src/NewsPanel.vala',
 	'src/NewsParse.vala',
-	'src/NewsNotebook.vala',
+	'src/NewsSourceList.vala',
 	'src/rfc822.vala',
     'src/Sources.vala',
 	dependencies: [

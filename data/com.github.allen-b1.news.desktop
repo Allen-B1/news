@@ -1,9 +1,9 @@
 [Desktop Entry]
 Name=News
 GenericName=News
-Comment=Read RSS feeds
+Comment=Read Atom and RSS feeds
 Categories=Network;Feed;News;
-Keywords=RSS;Feed;News;
+Keywords=Atom;RSS;Feed;News;
 Exec=com.github.allen-b1.news %U
 Icon=com.github.allen-b1.news
 Terminal=false

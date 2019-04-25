@@ -3,22 +3,33 @@
  */
 
 class NewsPanel : Gtk.Paned {
-    protected NewsPanel(NewsList list, WebKit.WebView webview) {
-        this.orientation = Gtk.Orientation.HORIZONTAL;
-        this.add1(list);
-        this.add2(webview);
-        this.set_position(300);
+    private Feed _feed;
+    public Feed feed {
+        get {
+            return _feed;
+        }
+        set {
+            var list = (NewsList)this.get_child1();
+            var webview = (WebKit.WebView)this.get_child2();
+
+            list.feed = value;
+            webview.load_uri("about:blank");
+
+            _feed = value;
+        }
     }
 
-    
-    public NewsPanel.from_feed(Feed feed) {
-        var webview = new WebKit.WebView();
+    public NewsPanel() {
+        this.orientation = Gtk.Orientation.HORIZONTAL;
 
-        var list = new NewsList(feed);
+        var webview = new WebKit.WebView();
+        var list = new NewsList();
         list.item_selected.connect((item) => {
             webview.load_uri(item.link);
         });
 
-        this(list, webview);
+        this.add1(list);
+        this.add2(webview);
+        this.set_position(300);
     }
 }
