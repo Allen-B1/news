@@ -90,6 +90,9 @@ class MainWindow : Gtk.ApplicationWindow {
         this.newssourcelist.feed_selected.connect((feed) => {
             newspanel.feed = feed;
         });
+        this.newssourcelist.feed_removed.connect((feed) => {
+            this.source_remove(feed.source);
+        });
 
         var provider = new Gtk.CssProvider();
         provider.load_from_data("""
