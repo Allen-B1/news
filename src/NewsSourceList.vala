@@ -33,7 +33,7 @@ class NewsSourceList : Gtk.Box {
         this.toolbar.insert(rbtn, 1);
 
         addbtn.clicked.connect(() => {
-        
+            this.feed_added();
         });
         rbtn.clicked.connect(() => {
             this.feed_removed(this.active_feed);
@@ -48,6 +48,7 @@ class NewsSourceList : Gtk.Box {
         var item = new Granite.Widgets.SourceList.Item(feed.title);
         this.sources[item] = feed;
         this.sourcelist.root.add(item);
+        this.sourcelist.selected = item;
     }
 
     public Feed? active_feed {

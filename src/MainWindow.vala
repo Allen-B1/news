@@ -15,6 +15,42 @@ class MainWindow : Gtk.ApplicationWindow {
         this.errortoast.send_notification();
     }
 
+    protected Feed? add_feed_dialog() {
+        var dialog = new Granite.MessageDialog.with_image_from_icon_name("Add feed",  "Enter the Atom or RSS feed url", "dialog-question", Gtk.ButtonsType.NONE);
+
+		dialog.add_button("Cancel", Gtk.ResponseType.CANCEL);
+		dialog.add_button("Add", Gtk.ResponseType.OK).get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+
+		/* Create Entry */
+		var entry = new Gtk.Entry();
+		entry.activate.connect(() => {
+		    dialog.response(Gtk.ResponseType.OK);
+		});
+		entry.margin_start = entry.margin_end = entry.margin_top = 12;
+		entry.placeholder_text = "Feed URL";
+		dialog.get_content_area().add(entry);
+		
+		dialog.get_content_area().show_all();
+
+		/* Collect response */
+		int result = dialog.run();
+		string text = entry.text;
+		dialog.destroy();
+		switch(result) {
+			case Gtk.ResponseType.OK:
+				try {
+					var feed = Feed.from_uri(text);
+                    return feed;
+				} catch(Error err) {
+					this.show_error("Couldn't add feed");
+				}
+				break;
+			case Gtk.ResponseType.CANCEL:
+				break;
+		}
+        return null;
+    }
+
     protected void show_feed_info(Feed feed) {
         var dialog = new Gtk.Dialog.with_buttons("Feed information", this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, "Close", Gtk.ResponseType.ACCEPT, null);
         dialog.border_width = 18;
@@ -92,6 +128,13 @@ class MainWindow : Gtk.ApplicationWindow {
         });
         this.newssourcelist.feed_removed.connect((feed) => {
             this.source_remove(feed.source);
+        });
+        this.newssourcelist.feed_added.connect(() => {
+            var feed = this.add_feed_dialog();
+            if (feed != null) {
+    			this.add_feed(feed);
+                this.source_add(feed.source);
+            }
         });
 
         var provider = new Gtk.CssProvider();
