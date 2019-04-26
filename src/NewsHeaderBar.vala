@@ -16,7 +16,7 @@ class NewsHeaderBar : Gtk.HeaderBar {
         });
         this.pack_end(this.search_entry);
 
-        var view_info_button = new Gtk.Button.from_icon_name("document-properties");
+        var view_info_button = new Gtk.Button.from_icon_name("document-properties-symbolic");
         view_info_button.clicked.connect(() => {
             this.view_info_clicked();
         });
