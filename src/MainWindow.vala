@@ -7,19 +7,19 @@ class MainWindow : Gtk.ApplicationWindow {
 
     public MainWindow(Gtk.Application app) {
         Object (application: app,
-            title: "News");
+            title: _("News"));
     }
 
-    public void show_error(string msg = "Something went wrong") {
+    public void show_error(string msg = _("Something went wrong")) {
         this.errortoast.title = msg;
         this.errortoast.send_notification();
     }
 
     protected Feed? add_feed_dialog() {
-        var dialog = new Granite.MessageDialog.with_image_from_icon_name("Add feed",  "Enter the Atom or RSS feed url", "dialog-question", Gtk.ButtonsType.NONE);
+        var dialog = new Granite.MessageDialog.with_image_from_icon_name(_("Add feed"),  _("Enter the Atom or RSS feed url"), "dialog-question", Gtk.ButtonsType.NONE);
 
-		dialog.add_button("Cancel", Gtk.ResponseType.CANCEL);
-		dialog.add_button("Add", Gtk.ResponseType.OK).get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+		dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
+		dialog.add_button(_("Add"), Gtk.ResponseType.OK).get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
 		/* Create Entry */
 		var entry = new Gtk.Entry();
@@ -27,7 +27,7 @@ class MainWindow : Gtk.ApplicationWindow {
 		    dialog.response(Gtk.ResponseType.OK);
 		});
 		entry.margin_start = entry.margin_end = entry.margin_top = 12;
-		entry.placeholder_text = "Feed URL";
+		entry.placeholder_text = _("Feed URL");
 		dialog.get_content_area().add(entry);
 		
 		dialog.get_content_area().show_all();
@@ -52,14 +52,14 @@ class MainWindow : Gtk.ApplicationWindow {
     }
 
     protected void show_feed_info(Feed feed) {
-        var dialog = new Gtk.Dialog.with_buttons("Feed information", this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, "Close", Gtk.ResponseType.ACCEPT, null);
+        var dialog = new Gtk.Dialog.with_buttons(_("Feed information"), this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, _("Close"), Gtk.ResponseType.ACCEPT, null);
         dialog.border_width = 18;
         dialog.get_content_area().spacing = 12;
 
         var title = new Granite.HeaderLabel(feed.title);
         dialog.get_content_area().add(title);
 
-        var desc = new Gtk.Label(feed.about == null ? "No description provided." : feed.about);
+        var desc = new Gtk.Label(feed.about == null ? _("No description provided.") : feed.about);
         desc.use_markup = true;
         desc.set_line_wrap(true);
         desc.halign = Gtk.Align.START;
@@ -80,7 +80,7 @@ class MainWindow : Gtk.ApplicationWindow {
         }
 
         if(feed.link != null) {
-            var website = new Gtk.LinkButton.with_label(feed.link, "Website");
+            var website = new Gtk.LinkButton.with_label(feed.link, _("Website"));
             dialog.get_content_area().add(website);
         }
 
@@ -99,7 +99,7 @@ class MainWindow : Gtk.ApplicationWindow {
         var box = new Gtk.Overlay();
         this.add(box);
 
-        this.errortoast = new Granite.Widgets.Toast("Something went wrong");
+        this.errortoast = new Granite.Widgets.Toast(_("Something went wrong"));
         box.add_overlay(errortoast);
 
         this.newssourcelist = new NewsSourceList();

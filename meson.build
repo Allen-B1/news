@@ -1,4 +1,14 @@
-project('com.github.allen-b1.news', 'vala', 'c')
+project('com.github.allen-b1.news',
+		'vala', 'c',
+		version: '1.3.0'
+)
+
+i18n = import('i18n')
+
+add_global_arguments(
+	'-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()),
+	language:'c'
+)
 
 executable(
 	meson.project_name(),
@@ -21,14 +31,5 @@ executable(
 	install: true
 )
 
-install_data(
-	'data/' + meson.project_name() + '.desktop',
-	install_dir: join_paths(get_option('datadir'), 'applications'))
-
-install_data(
-	'data/' + meson.project_name() + '.appdata.xml',
-	install_dir: join_paths(get_option('datadir'), 'metainfo'))
-
-install_data(
-	'data/' +  meson.project_name() + '.svg',
-	install_dir: join_paths(get_option('datadir'), 'icons/hicolor/128x128/apps'))
+subdir('data')
+subdir('po')

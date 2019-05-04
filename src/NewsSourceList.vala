@@ -25,9 +25,9 @@ class NewsSourceList : Gtk.Box {
         });
 
         this.toolbar = new Gtk.Toolbar();
-        var addbtn = new Gtk.ToolButton(null, "Add");
+        var addbtn = new Gtk.ToolButton(null, _("Add"));
         addbtn.icon_name = "list-add";
-        var rbtn = new Gtk.ToolButton(null, "Remove");
+        var rbtn = new Gtk.ToolButton(null, _("Remove"));
         rbtn.icon_name = "list-remove";
         this.toolbar.insert(addbtn, 1);
         this.toolbar.insert(rbtn, 1);

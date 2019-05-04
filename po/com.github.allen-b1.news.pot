@@ -1,0 +1,70 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.allen-b1.news package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.allen-b1.news\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-04 17:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/MainWindow.vala:10 src/NewsHeaderBar.vala:8
+msgid "News"
+msgstr ""
+
+#: src/MainWindow.vala:13 src/MainWindow.vala:102
+msgid "Something went wrong"
+msgstr ""
+
+#: src/MainWindow.vala:19
+msgid "Add feed"
+msgstr ""
+
+#: src/MainWindow.vala:19
+msgid "Enter the Atom or RSS feed url"
+msgstr ""
+
+#: src/MainWindow.vala:21
+msgid "Cancel"
+msgstr ""
+
+#: src/MainWindow.vala:22 src/NewsSourceList.vala:28
+msgid "Add"
+msgstr ""
+
+#: src/MainWindow.vala:30
+msgid "Feed URL"
+msgstr ""
+
+#: src/MainWindow.vala:55
+msgid "Feed information"
+msgstr ""
+
+#: src/MainWindow.vala:55
+msgid "Close"
+msgstr ""
+
+#: src/MainWindow.vala:62
+msgid "No description provided."
+msgstr ""
+
+#: src/MainWindow.vala:83
+msgid "Website"
+msgstr ""
+
+#: src/NewsHeaderBar.vala:12
+msgid "Search Google News"
+msgstr ""
+
+#: src/NewsSourceList.vala:30
+msgid "Remove"
+msgstr ""
