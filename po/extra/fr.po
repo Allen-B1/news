@@ -1,0 +1,101 @@
+# French translations for extra package.
+# Copyright (C) 2019 THE extra'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# NathanBnm, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-04 17:21+0200\n"
+"PO-Revision-Date: 2019-05-04 17:21+0200\n"
+"Last-Translator: NathanBnm\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: data/com.github.allen-b1.news.desktop.in:3
+#: data/com.github.allen-b1.news.desktop.in:4
+#: data/com.github.allen-b1.news.appdata.xml.in:7
+msgid "News"
+msgstr "Actualités"
+
+#: data/com.github.allen-b1.news.desktop.in:5
+#: data/com.github.allen-b1.news.appdata.xml.in:8
+msgid "Read Atom and RSS feeds"
+msgstr "Lisez des flux Atom et RSS"
+
+#: data/com.github.allen-b1.news.desktop.in:7
+msgid "Atom;RSS;Feed;News;"
+msgstr "Atom;RSS;Flux;Actualités;"
+
+#: data/com.github.allen-b1.news.desktop.in:9
+msgid "com.github.allen-b1.news"
+msgstr "com.github.allen-b1.news"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:9
+msgid "Allen B"
+msgstr "Allen B"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:16
+msgid "Read the contents of Atom and RSS feeds."
+msgstr "Lisez les contenus de flux Atom ou RSS."
+
+#: data/com.github.allen-b1.news.appdata.xml.in:17
+msgid "Supports RSS 2.0 and Atom only"
+msgstr "Prend en charge uniquement le RSS 2.0 et Atom"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:31
+msgid "Allowed opening a feed from the command line"
+msgstr "Ajout de la possibilité d'ouvrir un flux depuis l'invite de commande"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:32
+msgid "Added the ability to view feed information"
+msgstr "Ajout de la possibilité de visualiser les informations sur un flux"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:33
+msgid "Switched to relative date time strings (e.g. now, 5m ago)"
+msgstr "Passage au format de date relatif (ex. maintenant, il y a 5m)"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:34
+msgid "Toasts will show up instead of info bars"
+msgstr "Les barres d'info ont été remplacées par des notifications toast"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:35
+msgid "Sources will stay after closing and reopening the app"
+msgstr "Les sources vont rester après avoir fermé et réouvert l'application"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:36
+msgid "Added support for Atom feeds"
+msgstr "Ajout de la prise en charge des flux Atom"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:43
+msgid "Removed about dialog"
+msgstr "Suppression de la boîte de dialogue à propos"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:44
+msgid "Change color of header bar"
+msgstr "Modification de la couleur de la barre de titre"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:45
+msgid "Feed entry titles always align to the left"
+msgstr "Le titre des flux sera toujours aligné à gauche"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:46
+msgid "Added dates"
+msgstr "Ajout des dates"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:47
+msgid "Simplified \"Add RSS feed\" dialog"
+msgstr "Simplification de la boîte de dialogue « Ajouter un flux RSS »"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:48
+msgid "Changed error reporting to info bars instead of dialogs"
+msgstr "Modification des rapports d'erreur en barres d'infos au lieu de boîtes de dialogue"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:49
+msgid "Simplified searching via Google News; added Ctrl+F shortcut"
+msgstr "Recherche simplifiée via Google News, ajout du raccourci Ctrl + F"

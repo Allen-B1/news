@@ -1,0 +1,70 @@
+# French translations for com.github.allen-b1.news package.
+# Copyright (C) 2019 THE com.github.allen-b1.news'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.allen-b1.news package.
+# NathanBnm, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.allen-b1.news\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-04 17:21+0200\n"
+"PO-Revision-Date: 2019-05-04 17:21+0200\n"
+"Last-Translator: NathanBnm\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/MainWindow.vala:10 src/NewsHeaderBar.vala:8
+msgid "News"
+msgstr "Actualités"
+
+#: src/MainWindow.vala:13 src/MainWindow.vala:102
+msgid "Something went wrong"
+msgstr "Une erreur s'est produite"
+
+#: src/MainWindow.vala:19
+msgid "Add feed"
+msgstr "Ajouter un flux"
+
+#: src/MainWindow.vala:19
+msgid "Enter the Atom or RSS feed url"
+msgstr "Entrez l'URL d'un flux Atom ou RSS"
+
+#: src/MainWindow.vala:21
+msgid "Cancel"
+msgstr "Annuler"
+
+#: src/MainWindow.vala:22 src/NewsSourceList.vala:28
+msgid "Add"
+msgstr "Ajouter"
+
+#: src/MainWindow.vala:30
+msgid "Feed URL"
+msgstr "URL du flux"
+
+#: src/MainWindow.vala:55
+msgid "Feed information"
+msgstr "Information du flux"
+
+#: src/MainWindow.vala:55
+msgid "Close"
+msgstr "Fermer"
+
+#: src/MainWindow.vala:62
+msgid "No description provided."
+msgstr "Pas de description fournie."
+
+#: src/MainWindow.vala:83
+msgid "Website"
+msgstr "Site Web"
+
+#: src/NewsHeaderBar.vala:12
+msgid "Search Google News"
+msgstr "Rechercher dans Google News"
+
+#: src/NewsSourceList.vala:30
+msgid "Remove"
+msgstr "Supprimer"
