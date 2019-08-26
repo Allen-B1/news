@@ -17,7 +17,10 @@ class SourceKeeper {
 				}
 			}
 
-			f.create(FileCreateFlags.NONE).write("https://news.google.com/news/rss/?ned=us&gl=US&hl=e\nhttps://news.ycombinator.com/rss\n".data);
+			var langs = Intl.get_language_names();
+			string lang = langs.length > 0 ? langs[0] : "en";
+
+			f.create(FileCreateFlags.NONE).write(("https://news.google.com/news/rss/?hl=" + lang + "\nhttps://news.ycombinator.com/rss\n").data);
 		} catch (Error err) {
 			warning("SourceKeeper: " + err.message);
 		}
