@@ -7,6 +7,7 @@ struct FeedItem {
 }
 
 errordomain FeedError {
+	AUTODISCOVERY_FAILED,
 	INVALID_DOCUMENT,
 	IOERR,
 }
@@ -132,21 +133,8 @@ class XmlFeed: Object, Feed {
 	    this.items = items;
 	}
 
-	public XmlFeed.from_file(File file) throws FeedError {
-		// Read file into `text`
-	    var text = new StringBuilder();
-		try {
-		    DataInputStream data_stream = new DataInputStream(file.read());
-		    string line = null;
-		    while((line = data_stream.read_line()) != null) {
-		        text.append(line);
-		        text.append_c('\n');
-		    }
-		} catch {
-			throw new FeedError.IOERR("Error opening '" + file.get_basename() + "'");
-		}
-
-	    var doc = Xml.Parser.parse_doc(text.str);
+	private XmlFeed.from_text(string text) throws FeedError {
+	    var doc = Xml.Parser.parse_doc(text);
 	    Xml.Node* root = doc->get_root_element();
 	    if (root == null)
 	        throw new FeedError.INVALID_DOCUMENT("Invalid document: no root element");
@@ -162,11 +150,94 @@ class XmlFeed: Object, Feed {
 	    }
 	}
 
+	public XmlFeed.from_file(File file) throws FeedError {
+		// Read file into `text`
+	    var text = new StringBuilder();
+		try {
+		    DataInputStream data_stream = new DataInputStream(file.read());
+		    string line = null;
+		    while((line = data_stream.read_line()) != null) {
+		        text.append(line);
+		        text.append_c('\n');
+		    }
+		} catch (Error e) {
+			debug(e.message);
+			throw new FeedError.IOERR("Error opening '" + file.get_basename() + "'");
+		}
+
+		this.from_text(text.str);
+	}
+
 	public XmlFeed(string uri) throws FeedError {
+		var source = uri;
 		var file = File.new_for_uri(uri);
-		this.from_file(file);
+		var stream = file.read();
+	    var data_stream = new DataInputStream(stream);
+		var html = false;
+	    string line = null;
+		var filetext = new StringBuilder();
+    	while((line = data_stream.read_line()) != null) {
+	        filetext.append(line);
+	        filetext.append_c('\n');
+			if (line.strip() != "") {
+				if (line.contains("<!DOCTYPE html")) {
+					html = true;
+				}
+			}
+	    }
+
+		var xmltext = "";
+		if (html) {
+			var doc = Html.Doc.read_doc(filetext.str, uri);
+
+			var ctx = new Xml.XPath.Context(doc);
+			var res = ctx.eval_expression(
+				"//link");
+
+			if (res != null && res->type == Xml.XPath.ObjectType.NODESET && res->nodesetval != null && res->nodesetval->length() != 0) {
+				for (var i = 0; i < res->nodesetval->length(); i++) {
+					var node = res->nodesetval->item(i);
+					if (
+						(node->get_prop("rel") == "alternate" && (node->get_prop("type") == "application/atom+xml" || node->get_prop("type") == "application/rss+xml"))
+						|| node->get_prop("rel") == "feed") {
+						var url = node->get_prop("href");
+						if (!url.has_prefix("http://") && !url.has_prefix("https://")) {
+							if (url.has_prefix("/")) {
+								var start = uri.index_of("://") + 3;
+								var end = uri.index_of("/", start);
+								url = uri.slice(0, end) + url;
+							} else {
+								url = uri + "/" + url;
+							}
+						}
+						source = url;
+						debug("Feed URL = " + url);
+						if (url != null) {
+							var xmlfile = File.new_for_uri(url);
+							var xml_data_stream = new DataInputStream(xmlfile.read());
+							var xmltextbuilder = new StringBuilder();
+							while((line = xml_data_stream.read_line()) != null) {
+								xmltextbuilder.append(line);
+								xmltextbuilder.append_c('\n');
+							}
+							xmltext = xmltextbuilder.str;
+							break;
+						}
+					}
+				}
+				if (xmltext == "") {
+					throw new FeedError.AUTODISCOVERY_FAILED("Autodiscovery failed: all <link> elements invalid");
+				}
+			} else {
+				throw new FeedError.AUTODISCOVERY_FAILED("Autodiscovery failed: no <link> element found");
+			}
+		} else {
+			xmltext = filetext.str;
+		}
+
+		this.from_text(xmltext);
 		if (this.source == null || this.source == "") {
-			this.source = uri;
+			this.source = source;
 		}
 	}
 }
