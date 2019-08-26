@@ -8,7 +8,7 @@ struct FeedItem {
 
 errordomain FeedError {
 	INVALID_DOCUMENT,
-	UNKNOWN_FORMAT
+	IOERR,
 }
 
 interface Feed : Object {
@@ -132,20 +132,24 @@ class XmlFeed: Object, Feed {
 	    this.items = items;
 	}
 
-	public XmlFeed.from_file(File file) {
+	public XmlFeed.from_file(File file) throws FeedError {
 		// Read file into `text`
-	    DataInputStream data_stream = new DataInputStream(file.read());
-	    string line = null;
 	    var text = new StringBuilder();
-	    while((line = data_stream.read_line()) != null) {
-	        text.append(line);
-	        text.append_c('\n');
-	    }
+		try {
+		    DataInputStream data_stream = new DataInputStream(file.read());
+		    string line = null;
+		    while((line = data_stream.read_line()) != null) {
+		        text.append(line);
+		        text.append_c('\n');
+		    }
+		} catch {
+			throw new FeedError.IOERR("Error opening '" + file.get_basename() + "'");
+		}
 
 	    var doc = Xml.Parser.parse_doc(text.str);
 	    Xml.Node* root = doc->get_root_element();
 	    if (root == null)
-	        throw new FeedError.INVALID_DOCUMENT("No root element");
+	        throw new FeedError.INVALID_DOCUMENT("Invalid document: no root element");
 	    switch (root->name) {
 	    case "rss":
 	        this.parse_rss(root);
@@ -154,11 +158,11 @@ class XmlFeed: Object, Feed {
 			this.parse_atom(root);
 	        break;
 	    default:
-	        throw new FeedError.UNKNOWN_FORMAT("root tag is <" + root->name + ">");
+	        throw new FeedError.INVALID_DOCUMENT("Invalid document: root tag is <" + root->name + ">");
 	    }
 	}
 
-	public XmlFeed(string uri) {
+	public XmlFeed(string uri) throws FeedError {
 		var file = File.new_for_uri(uri);
 		this.from_file(file);
 		if (this.source == null || this.source == "") {

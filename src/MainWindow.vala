@@ -41,7 +41,7 @@ class MainWindow : Gtk.ApplicationWindow {
 				try {
 					var feed = new XmlFeed(uri);
 					return feed;
-				} catch(Error err) {
+				} catch(FeedError err) {
 					this.show_error("Couldn't add feed");
 				}
 				break;

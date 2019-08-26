@@ -16,7 +16,7 @@ class NewsApp : Gtk.Application {
 			foreach (var url in this.sources.list()) {
 				window.add_feed(new XmlFeed(url));
 			}
-		} catch(Error err) {
+		} catch(FeedError err) {
 			window.show_error("Couldn't load sources");
 		}
 	}
@@ -45,7 +45,7 @@ class NewsApp : Gtk.Application {
 		foreach (var file in files) {
 			try {
 				((MainWindow)window).add_feed(new XmlFeed.from_file(file));
-			} catch(Error err) {
+			} catch(FeedError err) {
 				stderr.puts("Could not open file: " + file.get_basename() + "\n");
 				((MainWindow)window).show_error("Could not open file: " + file.get_basename());
 			}
