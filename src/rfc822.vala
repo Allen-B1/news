@@ -1,3 +1,4 @@
+/// Returns a date
 DateTime? parse_rfc822_date(string date) {
 	var pieces = new Gee.ArrayList<string>.wrap(date.split(" "));
 
@@ -81,6 +82,5 @@ DateTime? parse_rfc822_date(string date) {
 			zone = new TimeZone(pieces[4]);
 			break;
 	}
-	return new DateTime(zone, year, month, day, hour, minute, second);	
+	return new DateTime(zone, year, month, day, hour, minute, second);
 }
-

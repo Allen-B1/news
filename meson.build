@@ -17,7 +17,7 @@ executable(
 	'src/NewsHeaderBar.vala',
 	'src/NewsList.vala',
 	'src/NewsPanel.vala',
-	'src/NewsParse.vala',
+	'src/Feed.vala',
 	'src/NewsSourceList.vala',
 	'src/rfc822.vala',
     'src/Sources.vala',

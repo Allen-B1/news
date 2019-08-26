@@ -11,7 +11,7 @@ errordomain FeedError {
     UNKNOWN_FORMAT
 }
 
-abstract class Feed {
+interface Feed : Object {
     [Description(nick = "Feed items", blurb = "This is the list of feed entries.")]
     public abstract FeedItem[] items { get; protected set; }
     [Description(nick = "Feed title", blurb = "This is the title of the feed.")]
@@ -24,60 +24,18 @@ abstract class Feed {
     public abstract string? copyright { get; protected set; }
     [Description(nick = "Feed source", blurb = "This is the source of the feed.")]
     public abstract string source { get; protected set; }
-
-    public static Feed from_uri(string uri) throws Error {
-        var file = File.new_for_uri(uri);
-        var feed = Feed.from_file(file);
-        if (feed.source == null || feed.source == "") {
-            feed.source = uri;
-        }
-        return feed;
-    }
-
-    public static Feed from_file(File file) throws Error {
-        DataInputStream data_stream = new DataInputStream(file.read());
-
-        string line = null;
-        var text = new StringBuilder();
-        while((line = data_stream.read_line()) != null) {
-            text.append(line);
-            text.append_c('\n');
-        }
-
-        var doc = Xml.Parser.parse_doc(text.str);
-        Xml.Node* root = doc->get_root_element();
-        if (root == null)
-            throw new FeedError.INVALID_DOCUMENT("No root element");
-        Feed feed = null;
-        switch (root->name) {
-        case "rss":
-            feed = new RssFeed.from_xml(doc);
-            break;
-        case "feed":
-            feed = new AtomFeed.from_xml(doc);
-            break;
-        default:
-            throw new FeedError.UNKNOWN_FORMAT("root tag is <" + root->name + ">");
-        }
-
-        return feed;
-    }
 }
 
-class RssFeed : Feed {
-    public override string? copyright { get; protected set; default = null; }
-    public override string? about { get; protected set; default = null; }
-    public override string? title { get; protected set; default = null; }
-    public override string? link { get; protected set; default = null; }
-    public override FeedItem[] items { get; protected set; default = new FeedItem[0]; }
+class XmlFeed: Object, Feed {
+    public string? copyright { get; protected set; default = null; }
+    public string? about { get; protected set; default = null; }
+    public string? title { get; protected set; default = null; }
+    public string? link { get; protected set; default = null; }
+    public FeedItem[] items { get; protected set; default = new FeedItem[0]; }
 
-    public override string source { get; protected set; }
+    public string source { get; protected set; }
 
-    private RssFeed() {}
-
-    /* Creates feed from xml */
-    public RssFeed.from_xml(Xml.Doc* doc) {
-        Xml.Node* root = doc->get_root_element();
+	private void parse_rss(Xml.Node* root) {
         // find channel element
         var channel = root->children;
         for(; channel->name != "channel"; channel = channel->next);
@@ -127,22 +85,9 @@ class RssFeed : Feed {
             }
         }
         this.items = items;
-    }
-}
+	}
 
-class AtomFeed : Feed {
-    public override string? copyright { get; protected set; default = null; }
-    public override string? about { get; protected set; default = null; }
-    public override string? title { get; protected set; default = null; }
-    public override string? link { get; protected set; default = null; }
-    public override FeedItem[] items { get; protected set; default = new FeedItem[0]; }
-    public override string source { get; protected set; }
-
-    private AtomFeed() {}
-
-    public AtomFeed.from_xml(Xml.Doc* doc) {
-        Xml.Node* root = doc->get_root_element();
-
+	private void parse_atom(Xml.Node* root) {
         FeedItem[] items = new FeedItem[0];
         for(var child = root->children; child != null; child = child->next) {
             switch (child->name) {
@@ -176,7 +121,7 @@ class AtomFeed : Feed {
                         break;
                     case "published":
                     case "updated":
-                        item.pubDate = new DateTime.from_iso8601(childitem->get_content(), new TimeZone.utc ());
+                        item.pubDate = new DateTime.from_iso8601(childitem->get_content(), new TimeZone.utc());
                         break;
                     }
                 }
@@ -185,5 +130,39 @@ class AtomFeed : Feed {
             }
         }
         this.items = items;
-    }
+	}
+
+	public XmlFeed.from_file(File file) {
+		// Read file into `text`
+        DataInputStream data_stream = new DataInputStream(file.read());
+        string line = null;
+        var text = new StringBuilder();
+        while((line = data_stream.read_line()) != null) {
+            text.append(line);
+            text.append_c('\n');
+        }
+
+        var doc = Xml.Parser.parse_doc(text.str);
+        Xml.Node* root = doc->get_root_element();
+        if (root == null)
+            throw new FeedError.INVALID_DOCUMENT("No root element");
+        switch (root->name) {
+        case "rss":
+            this.parse_rss(root);
+            break;
+        case "feed":
+			this.parse_atom(root);
+            break;
+        default:
+            throw new FeedError.UNKNOWN_FORMAT("root tag is <" + root->name + ">");
+        }
+	}
+
+	public XmlFeed(string uri) {
+        var file = File.new_for_uri(uri);
+		this.from_file(file);
+        if (this.source == null || this.source == "") {
+            this.source = uri;
+        }
+	}
 }

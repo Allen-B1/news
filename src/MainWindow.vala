@@ -29,17 +29,17 @@ class MainWindow : Gtk.ApplicationWindow {
 		entry.margin_start = entry.margin_end = entry.margin_top = 12;
 		entry.placeholder_text = _("Feed URL");
 		dialog.get_content_area().add(entry);
-		
+
 		dialog.get_content_area().show_all();
 
 		/* Collect response */
 		int result = dialog.run();
-		string text = entry.text;
+		string uri = entry.text;
 		dialog.destroy();
 		switch(result) {
 			case Gtk.ResponseType.OK:
 				try {
-					var feed = Feed.from_uri(text);
+					var feed = new XmlFeed(uri);
                     return feed;
 				} catch(Error err) {
 					this.show_error("Couldn't add feed");
@@ -111,7 +111,7 @@ class MainWindow : Gtk.ApplicationWindow {
 
         headerbar.search.connect((query) => {
             try {
-                var feed = Feed.from_uri("https://news.google.com/news/rss/search/section/q/" + query + "?ned=us&gl=US&hl=en");
+                var feed = new XmlFeed("https://news.google.com/news/rss/search/section/q/" + query + "?ned=us&gl=US&hl=en");
                 this.add_feed(feed);
                 this.source_add(feed.source);
             } catch (Error err) {
