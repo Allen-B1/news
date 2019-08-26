@@ -1,9 +1,19 @@
 DateTime? parse_rfc822_date(string date) {
 	var pieces = new Gee.ArrayList<string>.wrap(date.split(" "));
+
+	if (pieces.size == 0) {
+		return null;
+	}
+
 	// if there is a day of the week, remove it
-	if(pieces[0][pieces[0].length - 1] == ',') {
+	if(pieces[0].length != 0 && pieces[0][pieces[0].length - 1] == ',') {
 		pieces.remove_at(0);
 	}
+
+	if (pieces.size != 5) {
+		return null;
+	}
+
 	var day = int.parse(pieces[0]);
 	int month = 1;
 	switch(pieces[1]) {

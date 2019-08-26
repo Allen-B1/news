@@ -59,6 +59,7 @@ abstract class Feed {
         default:
             throw new FeedError.UNKNOWN_FORMAT("root tag is <" + root->name + ">");
         }
+
         return feed;
     }
 }
@@ -87,41 +88,40 @@ class RssFeed : Feed {
         for(var child = channel->children; child != null; child = child->next) {
             switch(child->name) {
             case "title":
-                this.title = child->get_content();
+                this.title = child->get_content().strip();
                 break;
             case "description":
-                this.about = child->get_content();
+                this.about = child->get_content().strip();
                 break;
             case "link":
-                this.link = child->get_content();
+                this.link = child->get_content().strip();
                 break;
             case "copyright":
-                this.copyright = child->get_content();
+                this.copyright = child->get_content().strip();
                 break;
             case "item":
                 FeedItem item = FeedItem();
                 for(var childitem = child->children; childitem != null; childitem = childitem->next) {
                     switch(childitem->name) {
                     case "title":
-                        item.title = childitem->get_content().replace("&", "&amp;");
+                        item.title = childitem->get_content().replace("&", "&amp;").strip();
                         break;
                     case "link":
-                        item.link = childitem->get_content();
+                        item.link = childitem->get_content().strip();
                         break;
                     case "description":
-                        item.about = childitem->get_content();
+                        item.about = childitem->get_content().strip();
                         if(item.about.length == 0)
                             item.about = null;
                         break;
                     case "encoded":
-                        item.content = childitem->get_content();
+                        item.content = childitem->get_content().strip();
                         break;
                     case "pubDate":
-                        item.pubDate = parse_rfc822_date(childitem->get_content());
+                        item.pubDate = parse_rfc822_date(childitem->get_content().strip());
                         break;
                     }
                 }
-
                 items += item;
                 break;
             }
