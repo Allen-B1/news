@@ -302,4 +302,42 @@ class XmlFeed: Object, Feed {
 		}
 	}
 }
+
 // TODO: AggregateFeed []Feed
+class AggregateFeed : Object, Feed {
+	// TODO: Change design;;;;; also have a weak FeedItem[] items cache that is changed with every new set.
+	public Feed[] feeds { get; set; default = new Feed[0]; }
+
+	public string? title { get {
+		return "All";
+	}}
+	public string? link { get {return null;} }
+	public string? about { get {return "All of your feeds, in one place.";} }
+	public string? copyright { get {return null;} }
+	public string source { get {return "";} }
+
+	public size_t itemcount() {
+		size_t count = 0;
+		foreach (var feed in feeds) {
+			count += feed.itemcount();
+		}
+		return count;
+	}
+
+	public FeedItem item(size_t i) {
+		// TODO: Calculate!
+		foreach (var feed in feeds) {
+			if (i < feed.itemcount()) {
+				return feed.item(i);
+			} else {
+				i -= feed.itemcount();
+			}
+		}
+
+		// Deliberately
+		critical("item(i) where i > itemcount() called! Causing segfault...");
+		return this.feeds[this.feeds.length].item(0);
+	}
+
+	public AggregateFeed() {}
+}

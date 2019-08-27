@@ -6,6 +6,7 @@ class NewsSourceList : Gtk.Box {
 	private Granite.Widgets.SourceList sourcelist;
 	private Gtk.Toolbar toolbar;
 	private HashTable<Granite.Widgets.SourceList.Item, Feed> sources;
+	private AggregateFeed all_feed;
 
 	public NewsSourceList() {
 		this.orientation = Gtk.Orientation.VERTICAL;
@@ -24,6 +25,9 @@ class NewsSourceList : Gtk.Box {
 				this.feed_selected(feed);
 		});
 
+		this.all_feed = new AggregateFeed();
+		this.add_feed(this.all_feed);
+
 		this.toolbar = new Gtk.Toolbar();
 		var addbtn = new Gtk.ToolButton(null, _("Add"));
 		addbtn.icon_name = "list-add-symbolic";
@@ -36,8 +40,20 @@ class NewsSourceList : Gtk.Box {
 			this.feed_added();
 		});
 		rbtn.clicked.connect(() => {
+			if (this.active_feed == this.all_feed) {
+				return;
+			}
 			this.feed_removed(this.active_feed);
+			this.sources.remove(this.sourcelist.selected);
 			this.sourcelist.root.remove(this.sourcelist.selected);
+			for (var i = 0; i < this.all_feed.feeds.length; i++) {
+				if (this.active_feed == this.all_feed.feeds[i]) {
+				 	Gee.ArrayList<Feed> feeds = new Gee.ArrayList<Feed>.wrap(this.all_feed.feeds);
+					feeds.remove_at(i);
+					this.all_feed.feeds = feeds.to_array();
+					break;
+				}
+			}
 		});
 
 		this.pack_start(this.sourcelist, true, true);
@@ -49,6 +65,12 @@ class NewsSourceList : Gtk.Box {
 		this.sources[item] = feed;
 		this.sourcelist.root.add(item);
 		this.sourcelist.selected = item;
+
+		if (feed != this.all_feed) {
+			var feeds = this.all_feed.feeds;
+			feeds += feed;
+			this.all_feed.feeds = feeds;
+		}
 	}
 
 	public Feed? active_feed {
