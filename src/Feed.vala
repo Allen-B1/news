@@ -13,8 +13,9 @@ errordomain FeedError {
 }
 
 interface Feed : Object {
-	[Description(nick = "Feed items", blurb = "This is the list of feed entries.")]
-	public abstract FeedItem[] items { get; protected set; }
+	public abstract FeedItem item(size_t i);
+	public abstract size_t itemcount();
+
 	[Description(nick = "Feed title", blurb = "This is the title of the feed.")]
 	public abstract string? title { get; protected set; }
 	[Description(nick = "Feed link", blurb = "The website of the news source.")]
@@ -28,13 +29,22 @@ interface Feed : Object {
 }
 
 class XmlFeed: Object, Feed {
+	private FeedItem[] items = new FeedItem[0];
+
 	public string? copyright { get; protected set; default = null; }
 	public string? about { get; protected set; default = null; }
 	public string? title { get; protected set; default = null; }
 	public string? link { get; protected set; default = null; }
-	public FeedItem[] items { get; protected set; default = new FeedItem[0]; }
 
 	public string source { get; protected set; }
+
+	public FeedItem item(size_t i) {
+		return this.items[i];
+	}
+
+	public size_t itemcount() {
+		return this.items.length;
+	}
 
 	private void parse_rss(Xml.Node* root) {
 	    // find channel element
@@ -241,3 +251,4 @@ class XmlFeed: Object, Feed {
 		}
 	}
 }
+// TODO: AggregateFeed []Feed

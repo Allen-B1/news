@@ -13,7 +13,8 @@ class NewsList : Gtk.ScrolledWindow {
 				this.list.remove(item);
 			});
 
-			foreach(var item in _feed.items) {
+			for (var i = 0; i < _feed.itemcount(); i++) {
+				var item = _feed.item(i);
 				var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 				box.margin = 12;
 				box.halign = Gtk.Align.START;
@@ -58,7 +59,7 @@ class NewsList : Gtk.ScrolledWindow {
 
 		list.row_selected.connect((row) => {
 			if(row != null) {
-				this.item_selected(this.feed.items[row.get_index()]);
+				this.item_selected(this.feed.item(row.get_index()));
 			}
 		});
 	}
