@@ -17,26 +17,50 @@ interface Feed : Object {
 	public abstract size_t itemcount();
 
 	[Description(nick = "Feed title", blurb = "This is the title of the feed.")]
-	public abstract string? title { get; protected set; }
+	public abstract string? title { get; }
 	[Description(nick = "Feed link", blurb = "The website of the news source.")]
-	public abstract string? link { get; protected set; }
+	public abstract string? link { get; }
 	[Description(nick = "Feed information", blurb = "This is the description of the feed.")]
-	public abstract string? about { get; protected set; }
+	public abstract string? about { get; }
 	[Description(nick = "Copyright", blurb = "This is the copyright information of the feed.")]
-	public abstract string? copyright { get; protected set; }
+	public abstract string? copyright { get; }
 	[Description(nick = "Feed source", blurb = "This is the source of the feed.")]
-	public abstract string source { get; protected set; }
+	public abstract string source { get; }
 }
 
 class XmlFeed: Object, Feed {
 	private FeedItem[] items = new FeedItem[0];
 
-	public string? copyright { get; protected set; default = null; }
-	public string? about { get; protected set; default = null; }
-	public string? title { get; protected set; default = null; }
-	public string? link { get; protected set; default = null; }
+	private string? _copyright;
+	public string? copyright { get {
+		return _copyright;
+	}}
+	private string? _about;
+	public string? about { get {
+		return _about;
+	}}
+	private string? _title = null;
+	public string? title {
+		get {
+			if (this.source.contains("https://news.google.com/")) {
+				var dash_index = _title.index_of("-");
+				if (dash_index >= 0) {
+					_title = _title[dash_index+1:_title.length].strip();
+				}
+			}
+			return _title;
+		}
+	}
 
-	public string source { get; protected set; }
+	private string? _link;
+	public string? link { get {
+		return _link;
+	}}
+
+	private string _source;
+	public string source { get {
+			return _source;
+	}}
 
 	public FeedItem item(size_t i) {
 		return this.items[i];
@@ -57,16 +81,16 @@ class XmlFeed: Object, Feed {
 	    for(var child = channel->children; child != null; child = child->next) {
 	        switch(child->name) {
 	        case "title":
-	            this.title = child->get_content().strip();
+	            this._title = child->get_content().strip();
 	            break;
 	        case "description":
-	            this.about = child->get_content().strip();
+	            this._about = child->get_content().strip();
 	            break;
 	        case "link":
-	            this.link = child->get_content().strip();
+	            this._link = child->get_content().strip();
 	            break;
 	        case "copyright":
-	            this.copyright = child->get_content().strip();
+	            this._copyright = child->get_content().strip();
 	            break;
 	        case "item":
 	            FeedItem item = FeedItem();
@@ -103,16 +127,16 @@ class XmlFeed: Object, Feed {
 	    for(var child = root->children; child != null; child = child->next) {
 	        switch (child->name) {
 	        case "title":
-	            this.title = child->get_content();
+	            this._title = child->get_content();
 	            break;
 	        case "subtitle":
-	            this.about = child->get_content();
+	            this._about = child->get_content();
 	            break;
 	        case "link":
 	            if (child->get_prop("rel") == "self") {
-	                this.source = child->get_prop("href");
+	                this._source = child->get_prop("href");
 	            } else {
-	                this.link = child->get_prop("href");
+	                this._link = child->get_prop("href");
 	            }
 	            break;
 	        case "entry":
@@ -180,65 +204,92 @@ class XmlFeed: Object, Feed {
 
 	public XmlFeed(string uri) throws FeedError {
 		var source = uri;
-		var file = File.new_for_uri(uri);
-		var stream = file.read();
-	    var data_stream = new DataInputStream(stream);
-		var html = false;
-	    string line = null;
 		var filetext = new StringBuilder();
-    	while((line = data_stream.read_line()) != null) {
-	        filetext.append(line);
-	        filetext.append_c('\n');
-			if (line.strip() != "") {
-				if (line.contains("<!DOCTYPE html")) {
-					html = true;
+		var html = false;
+		try {
+			var file = File.new_for_uri(uri);
+			var stream = file.read();
+		    var data_stream = new DataInputStream(stream);
+			string line = null;
+	    	while((line = data_stream.read_line()) != null) {
+		        filetext.append(line);
+		        filetext.append_c('\n');
+				if (line.strip() != "") {
+					if (line.contains("<!DOCTYPE html") || line.contains("<!doctype html") || line.contains("<html")) {
+						html = true;
+					}
 				}
-			}
-	    }
+		    }
+		} catch (Error e) {
+			throw new FeedError.IOERR("Couldn't open '" + uri + "': " + e.message);
+		}
 
 		var xmltext = "";
 		if (html) {
-			var doc = Html.Doc.read_doc(filetext.str, uri);
-
-			var ctx = new Xml.XPath.Context(doc);
-			var res = ctx.eval_expression(
-				"//link");
-
-			if (res != null && res->type == Xml.XPath.ObjectType.NODESET && res->nodesetval != null && res->nodesetval->length() != 0) {
-				for (var i = 0; i < res->nodesetval->length(); i++) {
-					var node = res->nodesetval->item(i);
-					if (
-						(node->get_prop("rel") == "alternate" && (node->get_prop("type") == "application/atom+xml" || node->get_prop("type") == "application/rss+xml"))
-						|| node->get_prop("rel") == "feed") {
-						var url = node->get_prop("href");
-						if (!url.has_prefix("http://") && !url.has_prefix("https://")) {
-							if (url.has_prefix("/")) {
-								var start = uri.index_of("://") + 3;
-								var end = uri.index_of("/", start);
-								url = uri.slice(0, end) + url;
-							} else {
-								url = uri + "/" + url;
+			var filetext_str = filetext.str;
+			var link_index = 0;
+			while(true) {
+				link_index = filetext_str.index_of("<link", link_index+1);
+				if (link_index < 0) {
+					break;
+				}
+				var rel_index = filetext_str.index_of("rel=", link_index);
+				var href_index = filetext_str.index_of("href=", link_index);
+				if (rel_index < 0 || href_index < 0) {
+					continue;
+				}
+				var type_index = filetext_str.index_of("type=", link_index);
+				if (
+					(filetext_str.slice(rel_index, filetext_str.length).has_prefix("rel=\"alternate\"") &&
+						type_index >= 0 &&
+						(filetext_str.slice(type_index,filetext_str.length).has_prefix("type=\"application/atom+xml\"") ||
+							filetext_str.slice(type_index,filetext_str.length).has_prefix("type=\"application/rss+xml\"")
+						)
+					) || filetext_str.slice(rel_index,filetext_str.length).has_prefix("rel=\"feed\"")
+				) {
+					var quote_index = filetext_str.index_of("\"", href_index);
+					if (quote_index < 0) {
+						continue;
+					}
+					var quote_index2 = filetext_str.index_of("\"", quote_index+1);
+					if (quote_index2 < 0) {
+						continue;
+					}
+					var url = filetext_str.slice(quote_index+1, quote_index2);
+					debug("Relative Feed URL = " + url);
+					if (!url.has_prefix("http://") && !url.has_prefix("https://")) {
+						if (url.has_prefix("//")) {
+							var start = uri.index_of("://");
+							url = uri[0:start] + url;
+						} else if (url.has_prefix("/")) {
+							var start = uri.index_of("://") + 3;
+							var end = uri.index_of("/", start);
+							if (end < 0) {
+								end = uri.length;
 							}
-						}
-						source = url;
-						debug("Feed URL = " + url);
-						if (url != null) {
-							var xmlfile = File.new_for_uri(url);
-							var xml_data_stream = new DataInputStream(xmlfile.read());
-							var xmltextbuilder = new StringBuilder();
-							while((line = xml_data_stream.read_line()) != null) {
-								xmltextbuilder.append(line);
-								xmltextbuilder.append_c('\n');
-							}
-							xmltext = xmltextbuilder.str;
-							break;
+							url = uri.slice(0, end) + url;
+						} else {
+							url = uri + (uri.has_suffix("/") ? "" : "/") + url;
 						}
 					}
+
+					source = url;
+					debug("Absolute Feed URL = " + url);
+
+					// BUG: Hacker news responds with an HTTP error, probably due to the fact that there's 2 requests in a short time
+					var xmlfile = File.new_for_uri(url);
+					var xml_data_stream = new DataInputStream(xmlfile.read());
+					var xmltextbuilder = new StringBuilder();
+					string line = null;
+					while((line = xml_data_stream.read_line()) != null) {
+						xmltextbuilder.append(line);
+						xmltextbuilder.append_c('\n');
+					}
+					xmltext = xmltextbuilder.str;
+					break;
 				}
-				if (xmltext == "") {
-					throw new FeedError.AUTODISCOVERY_FAILED("Autodiscovery failed: all <link> elements invalid");
-				}
-			} else {
+			}
+			if (xmltext == "") {
 				throw new FeedError.AUTODISCOVERY_FAILED("Autodiscovery failed: no <link> element found");
 			}
 		} else {
@@ -246,8 +297,8 @@ class XmlFeed: Object, Feed {
 		}
 
 		this.from_text(xmltext);
-		if (this.source == null || this.source == "") {
-			this.source = source;
+		if (this._source == null || this._source == "") {
+			this._source = source;
 		}
 	}
 }
