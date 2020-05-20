@@ -42,11 +42,12 @@ class NewsSourceList : Gtk.Box {
 			if (this.active_feed == this.all_feed) {
 				return;
 			}
+			var active = this.active_feed;
 			this.feed_removed(this.active_feed);
 			this.sources.remove(this.sourcelist.selected);
 			this.sourcelist.root.remove(this.sourcelist.selected);
 			for (var i = 0; i < this.all_feed.feeds.length; i++) {
-				if (this.active_feed == this.all_feed.feeds[i]) {
+				if (active == this.all_feed.feeds[i]) {
 				 	Gee.ArrayList<Feed> feeds = new Gee.ArrayList<Feed>.wrap(this.all_feed.feeds);
 					feeds.remove_at(i);
 					this.all_feed.feeds = feeds.to_array();
