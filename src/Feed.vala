@@ -13,9 +13,7 @@ errordomain FeedError {
 }
 
 interface Feed : Object {
-	public abstract FeedItem item(size_t i);
-	public abstract size_t itemcount();
-
+	public abstract Gee.List<FeedItem?> items { get; }
 	[Description(nick = "Feed title", blurb = "This is the title of the feed.")]
 	public abstract string? title { get; }
 	[Description(nick = "Feed link", blurb = "The website of the news source.")]
@@ -29,7 +27,13 @@ interface Feed : Object {
 }
 
 class XmlFeed: Object, Feed {
-	private FeedItem[] items = new FeedItem[0];
+	private Gee.List<FeedItem?> _items = new Gee.ArrayList<FeedItem?>();
+
+	public Gee.List<FeedItem?> items {
+		get {
+			return this._items;
+		}
+	}
 
 	private string? _copyright;
 	public string? copyright { get {
@@ -62,20 +66,10 @@ class XmlFeed: Object, Feed {
 			return _source;
 	}}
 
-	public FeedItem item(size_t i) {
-		return this.items[i];
-	}
-
-	public size_t itemcount() {
-		return this.items.length;
-	}
-
 	private void parse_rss(Xml.Node* root) {
 	    // find channel element
 	    var channel = root->children;
 	    for(; channel->name != "channel"; channel = channel->next);
-
-	    FeedItem[] items = new FeedItem[0];
 
 	    // loop through elements
 	    for(var child = channel->children; child != null; child = child->next) {
@@ -115,11 +109,10 @@ class XmlFeed: Object, Feed {
 	                    break;
 	                }
 	            }
-	            items += item;
+	            this._items.add(item);
 	            break;
 	        }
 	    }
-	    this.items = items;
 	}
 
 	private void parse_atom(Xml.Node* root) {
@@ -160,11 +153,10 @@ class XmlFeed: Object, Feed {
 	                    break;
 	                }
 	            }
-	            items += item;
+	            this._items.add(item);
 	            break;
 	        }
 	    }
-	    this.items = items;
 	}
 
 	private XmlFeed.from_text(string text) throws FeedError {
@@ -303,9 +295,7 @@ class XmlFeed: Object, Feed {
 	}
 }
 
-// TODO: AggregateFeed []Feed
 class AggregateFeed : Object, Feed {
-	// TODO: Change design;;;;; also have a weak FeedItem[] items cache that is changed with every new set.
 	public Feed[] feeds { get; set; default = new Feed[0]; }
 
 	public string? title { get {
@@ -316,27 +306,17 @@ class AggregateFeed : Object, Feed {
 	public string? copyright { get {return null;} }
 	public string source { get {return "";} }
 
-	public size_t itemcount() {
-		size_t count = 0;
-		foreach (var feed in feeds) {
-			count += feed.itemcount();
-		}
-		return count;
-	}
+	private Gee.List<FeedItem?> _items = new Gee.ArrayList<FeedItem?>();
+	public Gee.List<FeedItem?> items {
+		get {
+			_items.clear();
 
-	public FeedItem item(size_t i) {
-		// TODO: Calculate!
-		foreach (var feed in feeds) {
-			if (i < feed.itemcount()) {
-				return feed.item(i);
-			} else {
-				i -= feed.itemcount();
+			foreach (var feed in feeds) {
+				_items.add_all(feed.items);
 			}
-		}
 
-		// Deliberately
-		critical("item(i) where i > itemcount() called! Causing segfault...");
-		return this.feeds[this.feeds.length].item(0);
+			return _items;
+		}
 	}
 
 	public AggregateFeed() {}
