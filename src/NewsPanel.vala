@@ -25,7 +25,7 @@ class NewsPanel : Gtk.Paned {
 		var webview = new WebKit.WebView();
 		var list = new NewsList();
 		list.item_selected.connect((item) => {
-			webview.load_uri(item.link);
+			webview.load_uri(item);
 		});
 
 		this.add1(list);

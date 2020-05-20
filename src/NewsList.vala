@@ -1,6 +1,8 @@
 /* Shows all entries of a Feed in a vertical list. */
 class NewsList : Gtk.ScrolledWindow {
 	private Gtk.ListBox list;
+	private Gtk.ToggleButton?[] comments;
+
 	private Feed _feed;
 	public Feed feed {
 		get {
@@ -13,11 +15,15 @@ class NewsList : Gtk.ScrolledWindow {
 				this.list.remove(item);
 			});
 
+			this.comments = new Gtk.ToggleButton[_feed.items.length];
+
 			for (var i = 0; i < _feed.items.length; i++) {
 				var item = _feed.items[i];
-				var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+				var box = new Gtk.Grid();
 				box.margin = 12;
-				box.halign = Gtk.Align.START;
+				box.hexpand = true;
+				box.hexpand_set = true;
+				box.column_homogeneous = true;
 
 				// Title
 				var title = new Gtk.Label(null);
@@ -28,15 +34,30 @@ class NewsList : Gtk.ScrolledWindow {
 				title.halign = Gtk.Align.START;
 				title.xalign = 0;
 				title.justify = Gtk.Justification.LEFT;
+				title.hexpand = true;
 
-				box.pack_start(title, false, false, 0);
+				box.attach(title, 0, 0, 2, 1);
 
 				if(item.pubDate != null) {
 					var pub_date_label = new Gtk.Label(Granite.DateTime.get_relative_datetime(item.pubDate));
 					pub_date_label.halign = Gtk.Align.START;
 					pub_date_label.xalign = 0;
 					pub_date_label.ellipsize = Pango.EllipsizeMode.END;
-					box.pack_end(pub_date_label, false, false, 0);
+					box.attach(pub_date_label, 0, 1);
+				}
+
+				if (item.linkComments != null) {
+					var comment = new Gtk.ToggleButton.with_label(_("Comments"));
+					comment.toggled.connect(() => {
+						if (comment.active) {
+							this.item_selected(item.linkComments);
+						} else {
+							this.item_selected(item.link);
+						}
+						this.list.select_row((Gtk.ListBoxRow)box.parent);
+					});
+					comments[i] = comment;
+					box.attach(comment, 1, 1);
 				}
 
 				this.list.add(box);
@@ -45,7 +66,7 @@ class NewsList : Gtk.ScrolledWindow {
 		}
 	}
 
-	public signal void item_selected(FeedItem item);
+	public signal void item_selected(string url);
 
 	public NewsList() {
 		this.vexpand = true;
@@ -59,7 +80,11 @@ class NewsList : Gtk.ScrolledWindow {
 
 		list.row_selected.connect((row) => {
 			if(row != null) {
-				this.item_selected(this.feed.items[row.get_index()]);
+				if (comments[row.get_index()] == null || !comments[row.get_index()].active) {
+					this.item_selected(this.feed.items[row.get_index()].link);
+				} else {
+					this.item_selected(this.feed.items[row.get_index()].linkComments);
+				}
 			}
 		});
 	}

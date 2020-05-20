@@ -1,7 +1,10 @@
 struct FeedItem {
 	string? title;
 	string? about;
+
 	string? link;
+	string? linkComments;
+
 	DateTime? pubDate;
 	string? content;
 }
@@ -71,7 +74,7 @@ class XmlFeed: Object, Feed {
 	    var channel = root->children;
 	    for(; channel->name != "channel"; channel = channel->next);
 
-		FeedItem[] items = new FeedItem[0];
+		var items = new FeedItem[0];
 
 	    // loop through elements
 	    for(var child = channel->children; child != null; child = child->next) {
@@ -98,6 +101,9 @@ class XmlFeed: Object, Feed {
 	                case "link":
 	                    item.link = childitem->get_content().strip();
 	                    break;
+					case "comments":
+						item.linkComments = childitem->get_content().strip();
+						break;
 	                case "description":
 	                    item.about = childitem->get_content().strip();
 	                    if(item.about.length == 0)
@@ -165,7 +171,7 @@ class XmlFeed: Object, Feed {
 
 	private XmlFeed.from_text(string text) throws FeedError {
 	    var doc = Xml.Parser.parse_doc(text);
-	    Xml.Node* root = doc->get_root_element();
+	    var root = doc->get_root_element();
 	    if (root == null)
 	        throw new FeedError.INVALID_DOCUMENT("Invalid document: no root element");
 	    switch (root->name) {
@@ -314,7 +320,7 @@ class AggregateFeed : Object, Feed {
 
 	public FeedItem[] items {
 		get {
-			Gee.List<FeedItem?> items = new Gee.ArrayList<FeedItem?>();
+			var items = new Gee.ArrayList<FeedItem?>();
 
 			foreach (var feed in feeds) {
 				foreach (var item in feed.items) {
@@ -330,7 +336,7 @@ class AggregateFeed : Object, Feed {
 				return -a.pubDate.compare(b.pubDate);
 			});
 
-			FeedItem[] real = new FeedItem[0];
+			var real = new FeedItem[0];
 			for (var i = 0; i < items.size; i++) {
 				real += items[i];
 			}
