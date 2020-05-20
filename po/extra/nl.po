@@ -1,0 +1,102 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-04 17:21+0200\n"
+"PO-Revision-Date: 2019-11-07 20:04+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl\n"
+
+#: data/com.github.allen-b1.news.desktop.in:3
+#: data/com.github.allen-b1.news.desktop.in:4
+#: data/com.github.allen-b1.news.appdata.xml.in:7
+msgid "News"
+msgstr "Nieuws"
+
+#: data/com.github.allen-b1.news.desktop.in:5
+#: data/com.github.allen-b1.news.appdata.xml.in:8
+msgid "Read Atom and RSS feeds"
+msgstr "Lees Atom- en RSS-feeds"
+
+#: data/com.github.allen-b1.news.desktop.in:7
+msgid "Atom;RSS;Feed;News;"
+msgstr "Atom;RSS;Feed;Nieuws;"
+
+#: data/com.github.allen-b1.news.desktop.in:9
+msgid "com.github.allen-b1.news"
+msgstr "com.github.allen-b1.news"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:9
+msgid "Allen B"
+msgstr "Allen B"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:16
+msgid "Read the contents of Atom and RSS feeds."
+msgstr "Lees de inhoud van Atom- en RSS-feeds."
+
+#: data/com.github.allen-b1.news.appdata.xml.in:17
+msgid "Supports RSS 2.0 and Atom only"
+msgstr "Ondersteunt alleen RSS2.0 en Atom"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:31
+msgid "Allowed opening a feed from the command line"
+msgstr "Je kunt nu een feed openen vanaf de opdrachtregel"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:32
+msgid "Added the ability to view feed information"
+msgstr "Je kunt nu feedinformatie bekijken"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:33
+msgid "Switched to relative date time strings (e.g. now, 5m ago)"
+msgstr "Overgeschakeld op relatieve datums (nu, 5m geleden, etc.)"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:34
+msgid "Toasts will show up instead of info bars"
+msgstr "Er worden nu hulpballonnen getoond i.p.v. informatiebalken"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:35
+msgid "Sources will stay after closing and reopening the app"
+msgstr "Bronnen blijven behouden na het heropenen van de toepassing"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:36
+msgid "Added support for Atom feeds"
+msgstr "Ondersteuning toegevoegd voor Atom-feeds"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:43
+msgid "Removed about dialog"
+msgstr "Over-venster verwijderd"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:44
+msgid "Change color of header bar"
+msgstr "Kleur van de titelbalk gewijzigd"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:45
+msgid "Feed entry titles always align to the left"
+msgstr "Feedtitels zijn nu altijd links uitgelijnd"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:46
+msgid "Added dates"
+msgstr "Datums toegevoegd"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:47
+msgid "Simplified \"Add RSS feed\" dialog"
+msgstr "Vereenvoudigd 'RSS-feed toevoegen'-venster"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:48
+msgid "Changed error reporting to info bars instead of dialogs"
+msgstr "Foutrapportage verloopt nu via informatiebalken in plaats van vensters"
+
+#: data/com.github.allen-b1.news.appdata.xml.in:49
+msgid "Simplified searching via Google News; added Ctrl+F shortcut"
+msgstr "Eenvoudiger zoeken via Google Nieuws, en Ctrl+F-sneltoets toegevoegd"
