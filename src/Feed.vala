@@ -46,7 +46,7 @@ class XmlFeed: Object, Feed {
 	private string? _title = null;
 	public string? title {
 		get {
-			if (this.source.contains("https://news.google.com/news/rss/?")) {
+			if (this.source.contains("https://news.google.com/rss?hl")) {
 				var dash_index = _title.index_of("-");
 				if (dash_index >= 0) {
 					_title = _title[dash_index+1:_title.length].strip();
@@ -286,7 +286,7 @@ class XmlFeed: Object, Feed {
 				}
 			}
 			if (xmltext == "") {
-				throw new FeedError.AUTODISCOVERY_FAILED("Autodiscovery failed: no <link> element found");
+				throw new FeedError.AUTODISCOVERY_FAILED("Autodiscovery failed");
 			}
 		} else {
 			xmltext = filetext.str;

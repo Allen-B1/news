@@ -33,6 +33,7 @@ class NewsSourceList : Gtk.Box {
 		var rbtn = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
 		this.toolbar.pack_start(addbtn);
 		this.toolbar.pack_start(rbtn);
+		this.toolbar.get_style_context().add_class (Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
 		addbtn.clicked.connect(() => {
 			this.feed_added();

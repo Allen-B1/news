@@ -18,9 +18,14 @@ class SourceKeeper {
 			}
 
 			var langs = Intl.get_language_names();
-			string lang = langs.length > 0 ? langs[0] : "en";
+			string lang = langs.length > 0 ? langs[0] : "en_US";
 
-			f.create(FileCreateFlags.NONE).write(("https://news.google.com/news/rss/?hl=" + lang + "\nhttps://news.ycombinator.com/rss\n").data);
+			// Spanish site is down
+			if (lang == "es_ES") {
+				lang = "es_MX";
+			}
+
+			f.create(FileCreateFlags.NONE).write(("https://news.ycombinator.com/rss\nhttps://news.google.com/rss?hl=" + lang.replace("_", "-")).data);
 		} catch (Error err) {
 			warning("SourceKeeper: " + err.message);
 		}

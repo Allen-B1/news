@@ -42,8 +42,7 @@ class MainWindow : Gtk.ApplicationWindow {
 					var feed = new XmlFeed(uri);
 					return feed;
 				} catch(FeedError err) {
-					debug(err.message);
-					this.show_error("Couldn't add feed");
+					this.show_error(err.message);
 				}
 				break;
 			case Gtk.ResponseType.CANCEL:
@@ -112,10 +111,19 @@ class MainWindow : Gtk.ApplicationWindow {
 
 		headerbar.search.connect((query) => {
 			try {
-				var feed = new XmlFeed("https://news.google.com/news/rss/search/section/q/" + query + "?ned=us&gl=US&hl=en");
+				var langs = Intl.get_language_names();
+				string lang = langs.length > 0 ? langs[0] : "en_US";
+
+				// Spanish site is down
+				if (lang == "es_ES") {
+					lang = "es_MX";
+				}
+
+				var feed = new XmlFeed("https://news.google.com/rss/search?hl=" + lang.replace("_", "-") + "&q=" + query);
 				this.add_feed(feed);
 				this.source_add(feed.source);
 			} catch (Error err) {
+				warning(err.message);
 				this.show_error("Couldn't reach Google News");
 			}
 		});
