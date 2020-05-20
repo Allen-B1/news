@@ -13,7 +13,7 @@ class NewsList : Gtk.ScrolledWindow {
 				this.list.remove(item);
 			});
 
-			for (var i = 0; i < _feed.items.size; i++) {
+			for (var i = 0; i < _feed.items.length; i++) {
 				var item = _feed.items[i];
 				var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 				box.margin = 12;

@@ -13,7 +13,7 @@ errordomain FeedError {
 }
 
 interface Feed : Object {
-	public abstract Gee.List<FeedItem?> items { get; }
+	public abstract FeedItem[] items { get; }
 	[Description(nick = "Feed title", blurb = "This is the title of the feed.")]
 	public abstract string? title { get; }
 	[Description(nick = "Feed link", blurb = "The website of the news source.")]
@@ -27,9 +27,9 @@ interface Feed : Object {
 }
 
 class XmlFeed: Object, Feed {
-	private Gee.List<FeedItem?> _items = new Gee.ArrayList<FeedItem?>();
+	private FeedItem[] _items = new FeedItem[0];
 
-	public Gee.List<FeedItem?> items {
+	public FeedItem[] items {
 		get {
 			return this._items;
 		}
@@ -71,6 +71,8 @@ class XmlFeed: Object, Feed {
 	    var channel = root->children;
 	    for(; channel->name != "channel"; channel = channel->next);
 
+		FeedItem[] items = new FeedItem[0];
+
 	    // loop through elements
 	    for(var child = channel->children; child != null; child = child->next) {
 	        switch(child->name) {
@@ -109,9 +111,10 @@ class XmlFeed: Object, Feed {
 	                    break;
 	                }
 	            }
-	            this._items.add(item);
+				items += item;
 	            break;
 	        }
+			this._items = items;
 	    }
 	}
 
@@ -153,10 +156,11 @@ class XmlFeed: Object, Feed {
 	                    break;
 	                }
 	            }
-	            this._items.add(item);
+	            items += item;
 	            break;
 	        }
 	    }
+		this._items = items;
 	}
 
 	private XmlFeed.from_text(string text) throws FeedError {
@@ -306,14 +310,31 @@ class AggregateFeed : Object, Feed {
 	public string? copyright { get {return null;} }
 	public string source { get {return "";} }
 
-	private Gee.List<FeedItem?> _items = new Gee.ArrayList<FeedItem?>();
-	public Gee.List<FeedItem?> items {
+	private FeedItem[] _items;
+
+	public FeedItem[] items {
 		get {
-			_items.clear();
+			Gee.List<FeedItem?> items = new Gee.ArrayList<FeedItem?>();
 
 			foreach (var feed in feeds) {
-				_items.add_all(feed.items);
+				foreach (var item in feed.items) {
+					items.add(item);
+				}
 			}
+
+			items.sort((a, b) => {
+				// res < 0 == a < b
+				if (a.pubDate == b.pubDate) return 0;
+				if (a.pubDate == null) return -1;
+				if (b.pubDate == null) return 1;
+				return -a.pubDate.compare(b.pubDate);
+			});
+
+			FeedItem[] real = new FeedItem[0];
+			for (var i = 0; i < items.size; i++) {
+				real += items[i];
+			}
+			_items = real;
 
 			return _items;
 		}
