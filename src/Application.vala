@@ -1,4 +1,4 @@
-class NewsApp : Gtk.Application {
+class NewsApp : Gtk.Application { 
 	public NewsApp () {
 		Object (
 			application_id: "com.github.allen-b1.news",

@@ -42,7 +42,7 @@ class XmlFeed: Object, Feed {
 	private string? _title = null;
 	public string? title {
 		get {
-			if (this.source.contains("https://news.google.com/")) {
+			if (this.source.contains("https://news.google.com/news/rss/?")) {
 				var dash_index = _title.index_of("-");
 				if (dash_index >= 0) {
 					_title = _title[dash_index+1:_title.length].strip();

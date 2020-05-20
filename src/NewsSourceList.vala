@@ -4,7 +4,7 @@ class NewsSourceList : Gtk.Box {
 	public signal void feed_added();
 
 	private Granite.Widgets.SourceList sourcelist;
-	private Gtk.Toolbar toolbar;
+	private Gtk.ActionBar toolbar;
 	private HashTable<Granite.Widgets.SourceList.Item, Feed> sources;
 	private AggregateFeed all_feed;
 
@@ -28,13 +28,11 @@ class NewsSourceList : Gtk.Box {
 		this.all_feed = new AggregateFeed();
 		this.add_feed(this.all_feed);
 
-		this.toolbar = new Gtk.Toolbar();
-		var addbtn = new Gtk.ToolButton(null, _("Add"));
-		addbtn.icon_name = "list-add-symbolic";
-		var rbtn = new Gtk.ToolButton(null, _("Remove"));
-		rbtn.icon_name = "list-remove-symbolic";
-		this.toolbar.insert(addbtn, 1);
-		this.toolbar.insert(rbtn, 1);
+		this.toolbar = new Gtk.ActionBar();
+		var addbtn = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
+		var rbtn = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
+		this.toolbar.pack_start(addbtn);
+		this.toolbar.pack_start(rbtn);
 
 		addbtn.clicked.connect(() => {
 			this.feed_added();
