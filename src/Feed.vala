@@ -312,7 +312,7 @@ class AggregateFeed : Object, Feed {
 		return "All";
 	}}
 	public string? link { get {return null;} }
-	public string? about { get {return "All of your feeds, in one place.";} }
+	public string? about { get {return "Aggregates all of your feeds.";} }
 	public string? copyright { get {return null;} }
 	public string source { get {return "";} }
 
