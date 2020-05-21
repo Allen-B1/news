@@ -27,7 +27,7 @@ class NewsList : Gtk.ScrolledWindow {
 
 				// Title
 				var title = new Gtk.Label(null);
-				title.set_markup("<b>" + Markup.escape_text(item.title) + "</b>");
+				title.set_markup("<b>" + Markup.escape_text(item.title).replace("&amp;", "&") + "</b>");
 
 				// Align to start
 				title.set_line_wrap(true);

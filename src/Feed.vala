@@ -80,16 +80,16 @@ class XmlFeed: Object, Feed {
 	    for(var child = channel->children; child != null; child = child->next) {
 	        switch(child->name) {
 	        case "title":
-	            this._title = child->get_content().strip();
+	            this._title = child->get_content().replace("&", "&amp;").strip();
 	            break;
 	        case "description":
-	            this._about = child->get_content().strip();
+	            this._about = child->get_content().replace("&", "&amp;").strip();
 	            break;
 	        case "link":
 	            this._link = child->get_content().strip();
 	            break;
 	        case "copyright":
-	            this._copyright = child->get_content().strip();
+	            this._copyright = child->get_content().replace("&", "&amp;").strip();
 	            break;
 	        case "item":
 	            FeedItem item = FeedItem();
@@ -105,7 +105,7 @@ class XmlFeed: Object, Feed {
 						item.linkComments = childitem->get_content().strip();
 						break;
 	                case "description":
-	                    item.about = childitem->get_content().strip();
+	                    item.about = childitem->get_content().replace("&", "&amp;").strip();
 	                    if(item.about.length == 0)
 	                        item.about = null;
 	                    break;
@@ -129,10 +129,10 @@ class XmlFeed: Object, Feed {
 	    for(var child = root->children; child != null; child = child->next) {
 	        switch (child->name) {
 	        case "title":
-	            this._title = child->get_content();
+	            this._title = child->get_content().replace("&", "&amp;").strip();
 	            break;
 	        case "subtitle":
-	            this._about = child->get_content();
+	            this._about = child->get_content().replace("&", "&amp;").strip();
 	            break;
 	        case "link":
 	            if (child->get_prop("rel") == "self") {
@@ -146,10 +146,10 @@ class XmlFeed: Object, Feed {
 	            for(var childitem = child->children; childitem != null; childitem = childitem->next) {
 	                switch(childitem->name) {
 	                case "title":
-	                    item.title = childitem->get_content();
+	                    item.title = childitem->get_content().replace("&", "&amp;").strip();
 	                    break;
 	                case "summary":
-	                    item.about = childitem->get_content();
+	                    item.about = childitem->get_content().replace("&", "&amp;").strip();
 	                    break;
 	                case "link":
 	                    if (item.link == null) {
