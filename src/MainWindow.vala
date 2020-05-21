@@ -15,42 +15,6 @@ class MainWindow : Gtk.ApplicationWindow {
 		this.errortoast.send_notification();
 	}
 
-	protected Feed? add_feed_dialog() {
-		var dialog = new Granite.MessageDialog.with_image_from_icon_name(_("Add feed"),  _("Enter the Atom or RSS feed url"), "dialog-question", Gtk.ButtonsType.NONE);
-
-		dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
-		dialog.add_button(_("Add"), Gtk.ResponseType.OK).get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
-
-		/* Create Entry */
-		var entry = new Gtk.Entry();
-		entry.activate.connect(() => {
-			dialog.response(Gtk.ResponseType.OK);
-		});
-		entry.margin_start = entry.margin_end = entry.margin_top = 12;
-		entry.placeholder_text = _("Feed URL");
-		dialog.get_content_area().add(entry);
-
-		dialog.get_content_area().show_all();
-
-		/* Collect response */
-		int result = dialog.run();
-		string uri = entry.text;
-		dialog.destroy();
-		switch(result) {
-			case Gtk.ResponseType.OK:
-				try {
-					var feed = new XmlFeed(uri);
-					return feed;
-				} catch(FeedError err) {
-					this.show_error(err.message);
-				}
-				break;
-			case Gtk.ResponseType.CANCEL:
-				break;
-		}
-		return null;
-	}
-
 	protected void show_feed_info(Feed feed) {
 		var dialog = new Gtk.Dialog.with_buttons(_("Feed information"), this, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, _("Close"), Gtk.ResponseType.ACCEPT, null);
 		dialog.border_width = 18;
@@ -90,7 +54,7 @@ class MainWindow : Gtk.ApplicationWindow {
 	}
 
 	construct {
-		this.default_width = 900;
+		this.default_width = 1100;
 		this.default_height = 700;
 
 		var headerbar = new NewsHeaderBar();
@@ -138,12 +102,8 @@ class MainWindow : Gtk.ApplicationWindow {
 		this.newssourcelist.feed_removed.connect((feed) => {
 			this.source_remove(feed.source);
 		});
-		this.newssourcelist.feed_added.connect(() => {
-			var feed = this.add_feed_dialog();
-			if (feed != null) {
-				this.add_feed(feed);
-				this.source_add(feed.source);
-			}
+		this.newssourcelist.feed_added.connect((feed) => {
+			this.source_add(feed.source);
 		});
 
 		var provider = new Gtk.CssProvider();

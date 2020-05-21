@@ -1,7 +1,7 @@
 class NewsSourceList : Gtk.Box {
 	public signal void feed_selected(Feed feed);
 	public signal void feed_removed(Feed feed);
-	public signal void feed_added();
+	public signal void feed_added(Feed feed);
 
 	private Granite.Widgets.SourceList sourcelist;
 	private Gtk.ActionBar toolbar;
@@ -29,15 +29,51 @@ class NewsSourceList : Gtk.Box {
 		this.add_feed(this.all_feed);
 
 		this.toolbar = new Gtk.ActionBar();
-		var addbtn = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
+
 		var rbtn = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
-		this.toolbar.pack_start(addbtn);
-		this.toolbar.pack_start(rbtn);
 		this.toolbar.get_style_context().add_class (Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
-		addbtn.clicked.connect(() => {
-			this.feed_added();
+		var addbtn = new Gtk.MenuButton();
+		addbtn.image = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
+
+		this.toolbar.pack_start(addbtn);
+		this.toolbar.pack_start(rbtn);
+
+		// Add button popover
+		var popoverBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+		var popoverEntry = new Gtk.Entry();
+		popoverEntry.placeholder_text = _("Feed URL");
+		popoverBox.add(popoverEntry);
+		var popoverBtn = new Gtk.Button.with_label(_("Add"));
+		popoverBox.add(popoverBtn);
+		popoverBox.margin = 12;
+		var popover = new Gtk.Popover(null);
+		popover.add(popoverBox);
+		popoverBox.show_all();
+		addbtn.popover = popover;
+
+		popoverEntry.changed.connect(() => {
+			if (popoverEntry.text.length == 0) {
+				popoverEntry.get_style_context().remove_class("error");
+			}
 		});
+		popoverEntry.activate.connect(() => {
+			popoverBtn.clicked();
+		});
+		popoverBtn.clicked.connect(() => {
+			try {
+				var feed = new XmlFeed(popoverEntry.text);
+				this.feed_added(feed);
+				this.add_feed(feed);
+				popover.popdown();
+				popoverEntry.get_style_context().remove_class("error");
+				popoverEntry.text = "";
+			} catch(FeedError err) {
+				warning(err.message);
+				popoverEntry.get_style_context().add_class("error");
+			}
+		});
+
 		rbtn.clicked.connect(() => {
 			if (this.active_feed == this.all_feed) {
 				return;
