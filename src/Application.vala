@@ -12,12 +12,12 @@ class NewsApp : Gtk.Application {
 	}
 
 	private void add_sources(MainWindow window) {
-		try {
-			foreach (var url in this.sources.list()) {
+		foreach (var url in this.sources.list()) {
+			try {
 				window.add_feed(new XmlFeed(url));
+			} catch(FeedError err) {
+				window.show_error("Couldn't load '" + url + "'");
 			}
-		} catch(FeedError err) {
-			window.show_error("Couldn't load sources");
 		}
 	}
 

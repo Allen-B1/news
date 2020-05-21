@@ -1,6 +1,5 @@
 class NewsHeaderBar : Gtk.HeaderBar {
 	public signal void search(string query);
-	public signal void view_info_clicked();
 
 	private Gtk.SearchEntry search_entry;
 
@@ -15,12 +14,6 @@ class NewsHeaderBar : Gtk.HeaderBar {
 			this.search_entry.text = "";
 		});
 		this.pack_end(this.search_entry);
-
-		var view_info_button = new Gtk.Button.from_icon_name("document-properties-symbolic");
-		view_info_button.clicked.connect(() => {
-			this.view_info_clicked();
-		});
-		this.pack_start(view_info_button);
 	}
 
 	public void focus_search() {

@@ -63,9 +63,14 @@ class SourceKeeper {
 
 		try {
 			var s = new DataInputStream(f.read());
+			var found = false;
 			for (string? line = ""; line != null; line = s.read_line()) {
 				if (line.length > 0 && line != url)
 					o += line + "\n";
+
+				// Don't remove duplicate source
+				if (line == url) found = true;
+				if (line == url && found) continue;
 			}
 
 			if (f.query_exists()) {
