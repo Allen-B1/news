@@ -13,8 +13,7 @@
       </screenshot>
   </screenshots>
   <description>
-    <p>Read the contents of Atom and RSS feeds.</p>
-    <p>Supports RSS 2.0 and Atom only</p>
+    <p>Read Atom and RSS feeds.</p>
   </description>
   <url type="homepage">https://github.com/allen-b1/news</url>
   <url type="bugtracker">https://github.com/allen-b1/news/issues/labels/bug</url>
@@ -25,6 +24,15 @@
   </custom>
 
   <releases>
+    <release version="1.4" date="2020-05-25">
+      <description>
+        <ul>
+          <li>Add "All" feed</li>
+          <li>Google News searches in your system language</li>
+          <li>UI updates</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3" date="2019-04-28">
       <description>
         <ul>
