@@ -149,7 +149,7 @@ namespace News.Widgets {
 
 		private void show_about_dialog() {
 			var dialog = new Gtk.Dialog.with_buttons(_("Feed information"), null, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, _("Close"), Gtk.ResponseType.ACCEPT, null);
-			dialog.border_width = 18;
+			dialog.border_width = 12;
 			dialog.get_content_area().spacing = 12;
 
 			var title = new Granite.HeaderLabel(feed.title);
