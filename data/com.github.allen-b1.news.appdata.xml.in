@@ -13,7 +13,7 @@
       </screenshot>
   </screenshots>
   <description>
-    <p>Read Atom and RSS feeds.</p>
+    <p>News lets you read and aggregate Atom and RSS feeds.</p>
   </description>
   <url type="homepage">https://github.com/allen-b1/news</url>
   <url type="bugtracker">https://github.com/allen-b1/news/issues/labels/bug</url>
@@ -27,9 +27,9 @@
     <release version="1.4" date="2020-05-25">
       <description>
         <ul>
-          <li>Add "All" feed</li>
-          <li>Google News searches in your system language</li>
           <li>UI updates</li>
+          <li>"All" feed now exists  - it combines all of your feeds into one</li>
+          <li>Google News searches in your system language</li>
         </ul>
       </description>
     </release>
