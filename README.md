@@ -15,8 +15,8 @@ A big thanks to [mirkobrombin](https://github.com/mirkobrombin) for designing th
 ```bash
 git clone https://github.com/allen-b1/news.git
 cd news
-meson . build
-cd build
+meson .build
+cd .build
 ninja
 ```
 
