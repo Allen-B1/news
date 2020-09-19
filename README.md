@@ -23,5 +23,5 @@ ninja
 To install:
 
 ```bash
-ninja install
+sudo ninja install
 ```
