@@ -12,6 +12,17 @@ A big thanks to [mirkobrombin](https://github.com/mirkobrombin) for designing th
 ![this one](data/com.github.allen-b1.news.svg)
 
 ## Building
+install dependencies (Ubuntu):
+  1. valac
+  2. gtk+-3.0
+  3. webkit2gtk-4.0
+  4. granite (libgranite-dev)
+  
+```bash
+sudo apt install valac gtk+-3.0 webkit2gtk-40 libgranite-dev
+```
+---
+
 ```bash
 git clone https://github.com/allen-b1/news.git
 cd news
