@@ -30,12 +30,16 @@ namespace News.Widgets {
 			this.add_feed(this.all_feed);
 
 			this.toolbar = new Gtk.ActionBar();
+			toolbar.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
-			var rbtn = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.BUTTON);
+			var rbtn = new Gtk.Button.from_icon_name("list-remove-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			this.toolbar.get_style_context().add_class (Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
 			var addbtn = new Gtk.MenuButton();
-			addbtn.image = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.BUTTON);
+			addbtn.image = new Gtk.Image.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			addbtn.always_show_image = true;
+			addbtn.label = _("Add RSS Feed...");
+			addbtn.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
 			this.toolbar.pack_start(addbtn);
 			this.toolbar.pack_start(rbtn);
